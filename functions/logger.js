@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 
 const logFilePath = path.join(__dirname, 'logs.json');
@@ -40,17 +40,17 @@ async function logAgentOutput({
   // Append to local logs.json file
   try {
     let logs = [];
-    if (fs.existsSync(logFilePath)) {
-      const content = fs.readFileSync(logFilePath, 'utf8');
-      try {
-        logs = JSON.parse(content);
-        if (!Array.isArray(logs)) logs = [];
-      } catch (e) {
-        logs = [];
-      }
+    try {
+      const content = await fs.readFile(logFilePath, 'utf8');
+      logs = JSON.parse(content);
+      if (!Array.isArray(logs)) logs = [];
+    } catch (e) {
+      // File might not exist or JSON might be invalid
+      logs = [];
     }
+
     logs.push(logEntry);
-    fs.writeFileSync(logFilePath, JSON.stringify(logs, null, 2));
+    await fs.writeFile(logFilePath, JSON.stringify(logs, null, 2));
   } catch (err) {
     console.error('Failed to write log to local file', err);
   }
