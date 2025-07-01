@@ -14,7 +14,7 @@ exports.handleNewUser = functions.firestore
     const userData = snap.data();
     const userId = context.params.userId;
 
-    const roadmap = generateRoadmap(userData);
+    const roadmap = generateRoadmap(userData, { userId, agentVersion: '1.0.0' });
     const resume = generateResumeSummary(userData);
     const opportunities = generateOpportunities(userData);
 
