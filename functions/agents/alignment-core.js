@@ -1,6 +1,3 @@
-const fs = require('fs');
-const path = require('path');
-
 function runAlignmentCheck({ agentName = 'unknown-agent', output, userData = {} }) {
   const flags = [];
   let notes = '';
@@ -33,27 +30,6 @@ function runAlignmentCheck({ agentName = 'unknown-agent', output, userData = {} 
 
   const alignmentPassed = flags.length === 0;
   const result = { alignmentPassed, flags, notes };
-
-  // Write log entry
-  const logPath = path.join(__dirname, '..', 'logs.json');
-  const logEntry = {
-    timestamp: new Date().toISOString(),
-    agentName,
-    alignmentPassed,
-    flags,
-    notes
-  };
-  let logs = [];
-  if (fs.existsSync(logPath)) {
-    try {
-      logs = JSON.parse(fs.readFileSync(logPath, 'utf8'));
-      if (!Array.isArray(logs)) logs = [];
-    } catch (e) {
-      logs = [];
-    }
-  }
-  logs.push(logEntry);
-  fs.writeFileSync(logPath, JSON.stringify(logs, null, 2));
 
   return result;
 }

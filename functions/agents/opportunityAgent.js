@@ -1,16 +1,19 @@
-const { runAlignmentCheck } = require('./alignment-core');
+const { executeAgent } = require('../utils/agent-wrapper');
 
-function generateOpportunities(userData) {
-  const opportunities = [
-    { title: 'Future Leaders Scholarship', link: 'https://example.com' },
-    { title: 'Tech for Impact Internship', link: 'https://example.com' },
-    { title: 'Equity Accelerator Program', link: 'https://example.com' }
-  ];
-
-  // Run alignment check and log result
-  runAlignmentCheck({ agentName: 'opportunity-agent', output: opportunities, userData });
-
-  return opportunities;
+async function generateOpportunities(userData, userId) {
+  return executeAgent({
+    agentName: 'opportunity-agent',
+    version: 'v1.0.2',
+    userId,
+    input: userData,
+    agentFunction: async () => {
+      return [
+        { title: 'Future Leaders Scholarship', link: 'https://example.com' },
+        { title: 'Tech for Impact Internship', link: 'https://example.com' },
+        { title: 'Equity Accelerator Program', link: 'https://example.com' }
+      ];
+    }
+  });
 }
 
 module.exports = { generateOpportunities };
