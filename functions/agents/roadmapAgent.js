@@ -1,16 +1,19 @@
-const { runAlignmentCheck } = require('./alignment-core');
+const { executeAgent } = require('../utils/agent-wrapper');
 
-function generateRoadmap(userData) {
-  const roadmap = [
-    { phase: 'Discover', description: 'Research scholarships and career paths.' },
-    { phase: 'Build', description: 'Create resume and develop key skills.' },
-    { phase: 'Launch', description: 'Apply to programs and prepare for interviews.' }
-  ];
-
-  // Run alignment check and log result
-  runAlignmentCheck({ agentName: 'roadmap-agent', output: roadmap, userData });
-
-  return roadmap;
+async function generateRoadmap(userData, userId) {
+  return executeAgent({
+    agentName: 'roadmap-agent',
+    version: 'v1.0.2',
+    userId,
+    input: userData,
+    agentFunction: async () => {
+      return [
+        { phase: 'Discover', description: 'Research scholarships and career paths.' },
+        { phase: 'Build', description: 'Create resume and develop key skills.' },
+        { phase: 'Launch', description: 'Apply to programs and prepare for interviews.' }
+      ];
+    }
+  });
 }
 
 module.exports = { generateRoadmap };

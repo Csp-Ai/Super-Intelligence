@@ -1,14 +1,17 @@
-const { runAlignmentCheck } = require('./alignment-core');
+const { executeAgent } = require('../utils/agent-wrapper');
 
-function generateResumeSummary(userData) {
-  const name = userData.fullName || 'User';
-  const outcome = userData.dreamOutcome || 'your desired goal';
-  const summary = `Hi, I'm ${name}. I aim to achieve ${outcome}. I bring strengths in leadership and adaptability.`;
-
-  // Run alignment check and log result
-  runAlignmentCheck({ agentName: 'resume-agent', output: summary, userData });
-
-  return summary;
+async function generateResumeSummary(userData, userId) {
+  return executeAgent({
+    agentName: 'resume-agent',
+    version: 'v1.0.2',
+    userId,
+    input: userData,
+    agentFunction: async (input) => {
+      const name = input.fullName || 'User';
+      const outcome = input.dreamOutcome || 'your desired goal';
+      return `Hi, I'm ${name}. I aim to achieve ${outcome}. I bring strengths in leadership and adaptability.`;
+    }
+  });
 }
 
 module.exports = { generateResumeSummary };
