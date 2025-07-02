@@ -19,11 +19,14 @@ else
   echo "Firebase CLI already authenticated"
 fi
 
+if grep -q "FIREBASE_" .env 2>/dev/null; then
+  echo "Environment setup detected."
+fi
+
 echo "Starting Firebase Hosting emulator..."
 firebase emulators:start --only hosting &
 EMULATOR_PID=$!
 
 echo "Launching frontend dev server..."
-cd frontend
 npm install >/dev/null 2>&1
 npm run dev
