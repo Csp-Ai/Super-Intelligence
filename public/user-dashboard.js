@@ -9,6 +9,8 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 let chart;
+let currentRun;
+let selectedRating = 0;
 
 function $(id) { return document.getElementById(id); }
 
@@ -66,14 +68,16 @@ function renderRuns(runs) {
   const grouped = groupRuns(runs, groupKey);
   const container = $('runsContainer');
   container.innerHTML = '';
+  const hasFilters = $('agentFilter').value || $('statusFilter').value || $('startDate').value || $('endDate').value;
+  $('emptyMsg').textContent = runs.length ? '' : (hasFilters ? 'No matches for filters' : 'No runs yet');
   Object.keys(grouped).forEach(k => {
     const details = document.createElement('details');
-    details.className = 'mb-4 bg-white p-2 border rounded';
+    details.className = 'mb-4 bg-white p-2 border rounded overflow-x-auto';
     const summary = document.createElement('summary');
     summary.textContent = `${k} (${grouped[k].length})`;
     details.appendChild(summary);
     const table = document.createElement('table');
-    table.className = 'min-w-full text-sm mt-2';
+    table.className = 'min-w-full text-sm mt-2 table-auto divide-y divide-gray-200';
     table.innerHTML = `<thead><tr>
         <th class="border px-2 py-1">Time</th>
         <th class="border px-2 py-1">Agent</th>
@@ -98,12 +102,72 @@ function renderRuns(runs) {
 }
 
 function showModal(run) {
+  currentRun = run;
   $('modalContent').textContent = JSON.stringify(run, null, 2);
+  $('feedbackSection').classList.add('hidden');
+  $('feedbackBtn').classList.remove('hidden');
+  $('feedbackComment').value = '';
+  selectedRating = 0;
+  initRating();
+  loadAverageRating();
   $('logModal').classList.remove('hidden');
+}
+
+function initRating() {
+  const container = $('ratingContainer');
+  container.innerHTML = '';
+  for (let i = 1; i <= 5; i++) {
+    const star = document.createElement('span');
+    star.textContent = '☆';
+    star.dataset.value = i;
+    star.className = 'text-2xl cursor-pointer';
+    star.addEventListener('click', () => setRating(i));
+    container.appendChild(star);
+  }
+}
+
+function setRating(val) {
+  selectedRating = val;
+  document.querySelectorAll('#ratingContainer span').forEach(el => {
+    el.textContent = Number(el.dataset.value) <= val ? '★' : '☆';
+  });
+}
+
+async function loadAverageRating() {
+  $('avgRating').textContent = '';
+  const user = auth.currentUser;
+  if (!user || !currentRun) return;
+  const snap = await db.collection('users').doc(user.uid)
+    .collection('agentRuns').doc(currentRun.id)
+    .collection('feedback').get();
+  if (!snap.empty) {
+    const sum = snap.docs.reduce((a,d) => a + (d.data().rating || 0), 0);
+    $('avgRating').textContent = `Average rating: ${(sum / snap.size).toFixed(1)} (${snap.size})`;
+  }
 }
 
 $('closeModal').addEventListener('click', () => {
   $('logModal').classList.add('hidden');
+});
+
+$('feedbackBtn').addEventListener('click', () => {
+  $('feedbackBtn').classList.add('hidden');
+  $('feedbackSection').classList.remove('hidden');
+});
+
+$('submitFeedback').addEventListener('click', async () => {
+  const user = auth.currentUser;
+  if (!user || !currentRun) return;
+  await db.collection('users').doc(user.uid)
+    .collection('agentRuns').doc(currentRun.id)
+    .collection('feedback').add({
+      rating: selectedRating,
+      comment: $('feedbackComment').value.trim(),
+      timestamp: new Date()
+    });
+  $('feedbackSection').classList.add('hidden');
+  $('feedbackBtn').classList.remove('hidden');
+  loadAverageRating();
 });
 
 async function loadRuns() {

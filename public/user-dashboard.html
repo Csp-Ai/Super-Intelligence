@@ -46,6 +46,7 @@
     </div>
     <div id="stats" class="mb-4"></div>
     <canvas id="usageChart" class="mb-4"></canvas>
+    <div id="emptyMsg" class="mb-4 text-center text-gray-500"></div>
     <div id="runsContainer"></div>
   </div>
 
@@ -53,7 +54,14 @@
     <div class="bg-white p-4 rounded w-11/12 md:w-2/3 lg:w-1/2 max-h-screen overflow-y-auto">
       <button id="closeModal" class="float-right text-red-600">X</button>
       <h2 class="text-xl font-semibold mb-2">Run Details</h2>
-      <div id="modalContent" class="text-sm whitespace-pre-wrap"></div>
+      <div id="modalContent" class="text-sm whitespace-pre-wrap mb-4"></div>
+      <div id="feedbackSection" class="hidden mb-4">
+        <p id="avgRating" class="text-sm text-gray-600 mb-1"></p>
+        <div class="flex items-center mb-2" id="ratingContainer"></div>
+        <textarea id="feedbackComment" class="w-full border p-2 mb-2" rows="3" placeholder="Leave a comment"></textarea>
+        <button id="submitFeedback" class="bg-blue-600 text-white px-3 py-1 rounded">Submit</button>
+      </div>
+      <button id="feedbackBtn" class="bg-green-600 text-white px-3 py-1 rounded">Give Feedback</button>
     </div>
   </div>
 
