@@ -19,6 +19,7 @@ async function loadData() {
   renderFailing(anomaliesSnap.docs);
   renderCommits(commitSnap.docs);
   renderActivity(anomaliesSnap.docs);
+  loadCoverage();
 }
 
 function renderSummary(agentDocs) {
@@ -61,6 +62,27 @@ function renderCommits(commitDocs) {
     const div = document.createElement('div');
     div.textContent = `${data.sha} - ${data.author} - ${data.timestamp}`;
     commits.appendChild(div);
+  });
+}
+
+async function loadCoverage() {
+  try {
+    const res = await fetch('ci-report.json');
+    if (!res.ok) return;
+    const data = await res.json();
+    renderCoverage(data);
+  } catch (_) {
+    // ignore
+  }
+}
+
+function renderCoverage(list) {
+  const coverage = document.getElementById('coverage');
+  coverage.innerHTML = '<h2 class="text-xl font-semibold mb-2">CI Coverage</h2>';
+  list.forEach(item => {
+    const div = document.createElement('div');
+    div.textContent = `${item.agent} - ${item.status}`;
+    coverage.appendChild(div);
   });
 }
 

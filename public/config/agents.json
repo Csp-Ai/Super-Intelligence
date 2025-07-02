@@ -9,7 +9,11 @@
     "docsUrl": "../functions/agents/roadmapAgent.js",
     "sourcePath": "functions/agents/roadmapAgent.js",
     "updatedAt": "2025-07-02T02:27:43.913Z",
-    "createdAt": "2025-07-02T02:27:43.913Z"
+    "createdAt": "2025-07-02T02:27:43.913Z",
+    "tags": [
+      "utility"
+    ],
+    "lifecycle": "stable"
   },
   "resume-agent": {
     "name": "resume-agent",
@@ -21,7 +25,11 @@
     "docsUrl": "../functions/agents/resumeAgent.js",
     "sourcePath": "functions/agents/resumeAgent.js",
     "updatedAt": "2025-07-02T02:27:43.913Z",
-    "createdAt": "2025-07-02T02:27:43.913Z"
+    "createdAt": "2025-07-02T02:27:43.913Z",
+    "tags": [
+      "utility"
+    ],
+    "lifecycle": "stable"
   },
   "opportunity-agent": {
     "name": "opportunity-agent",
@@ -33,7 +41,11 @@
     "docsUrl": "../functions/agents/opportunityAgent.js",
     "sourcePath": "functions/agents/opportunityAgent.js",
     "updatedAt": "2025-07-02T02:27:43.913Z",
-    "createdAt": "2025-07-02T02:27:43.913Z"
+    "createdAt": "2025-07-02T02:27:43.913Z",
+    "tags": [
+      "utility"
+    ],
+    "lifecycle": "stable"
   },
   "anomaly-agent": {
     "name": "anomaly-agent",
@@ -45,7 +57,11 @@
     "docsUrl": "../functions/agents/anomalyAgent.js",
     "sourcePath": "functions/agents/anomalyAgent.js",
     "updatedAt": "2025-07-02T02:27:43.913Z",
-    "createdAt": "2025-07-02T02:27:43.913Z"
+    "createdAt": "2025-07-02T02:27:43.913Z",
+    "tags": [
+      "monitor"
+    ],
+    "lifecycle": "stable"
   },
   "insights-agent": {
     "name": "insights-agent",
@@ -57,7 +73,11 @@
     "docsUrl": "../functions/agents/insightsAgent.js",
     "sourcePath": "functions/agents/insightsAgent.js",
     "updatedAt": "2025-07-02T02:27:43.913Z",
-    "createdAt": "2025-07-02T02:27:43.913Z"
+    "createdAt": "2025-07-02T02:27:43.913Z",
+    "tags": [
+      "analytics"
+    ],
+    "lifecycle": "stable"
   },
   "trends-agent": {
     "name": "trends-agent",
@@ -69,11 +89,15 @@
     "docsUrl": "../functions/agents/trendsAgent.js",
     "sourcePath": "functions/agents/trendsAgent.js",
     "updatedAt": "2025-07-02T02:27:43.913Z",
-    "createdAt": "2025-07-02T02:27:43.913Z"
+    "createdAt": "2025-07-02T02:27:43.913Z",
+    "tags": [
+      "analytics"
+    ],
+    "lifecycle": "stable"
   },
   "alignment-core": {
     "name": "alignment-core",
-    "description": "",
+    "description": "TBD",
     "version": "v1.0.0",
     "lastRunStatus": "unknown",
     "agentType": "utility",
@@ -81,6 +105,10 @@
     "docsUrl": "../functions/agents/alignment-core.js",
     "sourcePath": "functions/agents/alignment-core.js",
     "createdAt": "2025-07-02T02:27:29.171Z",
-    "updatedAt": "2025-07-02T02:27:43.913Z"
+    "updatedAt": "2025-07-02T02:27:43.913Z",
+    "tags": [
+      "utility"
+    ],
+    "lifecycle": "stable"
   }
 }

@@ -1,0 +1,30 @@
+[
+  {
+    "agent": "roadmap-agent",
+    "status": "tested"
+  },
+  {
+    "agent": "resume-agent",
+    "status": "tested"
+  },
+  {
+    "agent": "opportunity-agent",
+    "status": "tested"
+  },
+  {
+    "agent": "anomaly-agent",
+    "status": "failing"
+  },
+  {
+    "agent": "insights-agent",
+    "status": "tested"
+  },
+  {
+    "agent": "trends-agent",
+    "status": "failing"
+  },
+  {
+    "agent": "alignment-core",
+    "status": "missing"
+  }
+]
