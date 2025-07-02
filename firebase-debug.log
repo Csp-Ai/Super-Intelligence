@@ -1,0 +1,41 @@
+[debug] [2025-07-02T06:24:24.034Z] ----------------------------------------------------------------------
+[debug] [2025-07-02T06:24:24.036Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js projects:list
+[debug] [2025-07-02T06:24:24.036Z] CLI Version:   14.9.0
+[debug] [2025-07-02T06:24:24.037Z] Platform:      win32
+[debug] [2025-07-02T06:24:24.037Z] Node Version:  v22.16.0
+[debug] [2025-07-02T06:24:24.037Z] Time:          Tue Jul 01 2025 23:24:24 GMT-0700 (Mountain Standard Time)
+[debug] [2025-07-02T06:24:24.037Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-07-02T06:24:24.184Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-07-02T06:24:24.184Z] > authorizing via signed-in user (dance@hybriddancers.com)
+[debug] [2025-07-02T06:24:24.187Z] Checked if tokens are valid: false, expires at: 1750729679945
+[debug] [2025-07-02T06:24:24.187Z] Checked if tokens are valid: false, expires at: 1750729679945
+[debug] [2025-07-02T06:24:24.187Z] > refreshing access token with scopes: []
+[debug] [2025-07-02T06:24:24.188Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-07-02T06:24:24.188Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-07-02T06:24:24.488Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2025-07-02T06:24:24.489Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-07-02T06:24:24.489Z] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-07-02T06:24:24.849Z] FirebaseError: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+    at invalidCredentialError (C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\auth.js:167:12)
+    at refreshTokens (C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\auth.js:556:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async getAccessToken (C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:42:18)
+    at async Client.addAuthHeader (C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:169:21)
+    at async Client.request (C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:120:34)
+    at async getProjectPage (C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:267:17)
+    at async getFirebaseProjectPage (C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:284:23)
+    at async listFirebaseProjects (C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:315:29)
+    at async Command.actionFn (C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\projects-list.js:51:20)
+[error] 
+[error] Error: Failed to list Firebase projects. See firebase-debug.log for more info.
