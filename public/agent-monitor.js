@@ -20,6 +20,7 @@ let runs = [];
 let unsubscribeRuns = null;
 const stepListeners = {};
 const syncStreams = {};
+let currentRunId = null;
 
 function statusIcon(run) {
   if (run.status === 'running') {
@@ -62,6 +63,7 @@ async function openModal(runId) {
   const runRef = db.collection('users').doc(userId).collection('agentRuns').doc(runId);
   const content = document.getElementById('modalContent');
   content.innerHTML = '';
+  currentRunId = runId;
   try {
     const stepsSnap = await runRef.collection('steps').orderBy('timestamp').get();
     const steps = stepsSnap.docs.map(d => d.data());
@@ -81,6 +83,8 @@ async function openModal(runId) {
 
 document.getElementById('closeModal').addEventListener('click', () => {
   document.getElementById('timelineModal').classList.add('hidden');
+  if (currentRunId) stopAgentSync(currentRunId);
+  currentRunId = null;
 });
 
 function updateAgentFilter() {
@@ -158,6 +162,24 @@ document.getElementById('googleBtn').addEventListener('click', async () => {
 document.getElementById('logoutBtn').addEventListener('click', async () => {
   await auth.signOut();
 });
+
+async function triggerReplay() {
+  if (!currentRunId) return;
+  const speed = parseFloat(document.getElementById('replaySpeed').value) || 1;
+  try {
+    const token = await auth.currentUser.getIdToken();
+    await fetch('/replayAgentRun', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ runId: currentRunId, speed })
+    });
+    listenAgentSync({ id: currentRunId });
+  } catch (err) {
+    console.error('replay failed', err);
+  }
+}
+
+document.getElementById('replayBtn').addEventListener('click', triggerReplay);
 
 function listenSteps(run) {
   if (stepListeners[run.id]) return;
