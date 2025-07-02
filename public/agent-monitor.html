@@ -50,6 +50,12 @@
     <div class="bg-white p-4 rounded w-11/12 md:w-2/3 lg:w-1/2 max-h-screen overflow-y-auto">
       <button id="closeModal" class="float-right text-red-600">X</button>
       <h2 class="text-xl font-semibold mb-2">Run Timeline</h2>
+      <div id="replayControls" class="hidden space-x-2 mb-2">
+        <button id="replayStart" class="bg-blue-600 text-white px-2 py-1 rounded text-xs">Start</button>
+        <button id="replayPause" class="bg-yellow-600 text-white px-2 py-1 rounded text-xs">Pause</button>
+        <button id="replayResume" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Resume</button>
+        <button id="replayStep" class="bg-gray-600 text-white px-2 py-1 rounded text-xs">Step</button>
+      </div>
       <div id="modalContent" class="text-sm"></div>
     </div>
   </div>

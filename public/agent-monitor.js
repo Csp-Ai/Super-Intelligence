@@ -20,6 +20,7 @@ let runs = [];
 let unsubscribeRuns = null;
 const stepListeners = {};
 const syncStreams = {};
+let currentReplay = null;
 
 function statusIcon(run) {
   if (run.status === 'running') {
@@ -62,6 +63,7 @@ async function openModal(runId) {
   const runRef = db.collection('users').doc(userId).collection('agentRuns').doc(runId);
   const content = document.getElementById('modalContent');
   content.innerHTML = '';
+  document.getElementById('replayControls').classList.add('hidden');
   try {
     const stepsSnap = await runRef.collection('steps').orderBy('timestamp').get();
     const steps = stepsSnap.docs.map(d => d.data());
@@ -81,6 +83,8 @@ async function openModal(runId) {
 
 document.getElementById('closeModal').addEventListener('click', () => {
   document.getElementById('timelineModal').classList.add('hidden');
+  document.getElementById('replayControls').classList.add('hidden');
+  currentReplay = null;
 });
 
 function updateAgentFilter() {
@@ -120,8 +124,13 @@ function renderRuns() {
         ${statusIcon(run)}
         ${run.phase ? `<span class="text-xs text-gray-600">${run.phase}</span>` : ''}
         ${run.alignment && run.alignment.passed !== undefined ? `<span class="text-xs ${run.alignment.passed ? 'text-green-600' : 'text-red-600'}">${run.alignment.passed ? 'aligned' : 'flagged'}</span>` : ''}
+        <button class="text-blue-600 underline text-xs replay-btn" data-id="${run.id}">Replay</button>
       </div>`;
     div.addEventListener('click', () => openModal(run.id));
+    div.querySelector('.replay-btn').addEventListener('click', ev => {
+      ev.stopPropagation();
+      openReplay(run.id);
+    });
     container.appendChild(div);
   });
   if (document.getElementById('autoScroll').checked) {
@@ -158,6 +167,11 @@ document.getElementById('googleBtn').addEventListener('click', async () => {
 document.getElementById('logoutBtn').addEventListener('click', async () => {
   await auth.signOut();
 });
+
+document.getElementById('replayStart').addEventListener('click', () => sendReplay('start'));
+document.getElementById('replayPause').addEventListener('click', () => sendReplay('pause'));
+document.getElementById('replayResume').addEventListener('click', () => sendReplay('resume'));
+document.getElementById('replayStep').addEventListener('click', () => sendReplay('step'));
 
 function listenSteps(run) {
   if (stepListeners[run.id]) return;
@@ -210,6 +224,23 @@ function stopAgentSync(id) {
     syncStreams[id].close();
     delete syncStreams[id];
   }
+}
+
+function sendReplay(action) {
+  if (!currentReplay) return;
+  auth.currentUser.getIdToken().then(token => {
+    fetch('/replayAgentRun', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ runId: currentReplay, action })
+    }).catch(err => console.error('replay failed', err));
+  });
+}
+
+async function openReplay(runId) {
+  currentReplay = runId;
+  await openModal(runId);
+  document.getElementById('replayControls').classList.remove('hidden');
 }
 
 function processSnapshot(snapshot) {

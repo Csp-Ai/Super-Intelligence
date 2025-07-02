@@ -4,6 +4,7 @@ const path = require('path');
 const { runAlignmentCheck } = require('../agents/alignment-core');
 const { createStepLogger } = require('./step-logger');
 const { publish } = require('./agent-sync');
+const { createSnapshotStore } = require('./snapshot-store');
 
 async function executeAgent({
   agentName = 'unknown-agent',
@@ -41,14 +42,18 @@ async function executeAgent({
 
   const runId = runRef?.id || `local-${Date.now()}`;
   const logStep = createStepLogger({ userId, runId, agentName });
+  const saveSnapshot = createSnapshotStore({ userId, runId });
   await logStep({ stepType: 'start', input });
+  await saveSnapshot(0, { status: 'running', input });
   try {
     await publish(runId, { status: 'running', stepType: 'start' });
   } catch (_) {}
 
   const steps = [];
+  let stepIndex = 1;
   const addStep = (type, data = {}) => {
     steps.push({ type, timestamp: new Date().toISOString(), ...data });
+    saveSnapshot(stepIndex++, { steps: [...steps] });
   };
   addStep('plan', { input });
 
@@ -61,14 +66,17 @@ async function executeAgent({
     output = await agentFunction(input, addStep);
     addStep('generate', { output });
     await logStep({ stepType: 'execute', input, output, durationMs: Date.now() - execStart });
+    await saveSnapshot(stepIndex++, { steps: [...steps], output });
 
     alignment = runAlignmentCheck({ agentName, output, userData: input });
     await logStep({ stepType: 'alignment', input: output, output: alignment });
+    await saveSnapshot(stepIndex++, { steps: [...steps], alignment });
   } catch (err) {
     addStep('error', { message: err.message });
     alignment.notes = err.message;
     errorMsg = err.message;
     await logStep({ stepType: 'error', input, output: err.message });
+    await saveSnapshot(stepIndex++, { steps: [...steps], error: err.message });
   }
 
   const status = alignment.alignmentPassed && !errorMsg ? 'success' : 'error';
@@ -129,6 +137,7 @@ async function executeAgent({
   try {
     await publish(runId, { status, stepType: 'complete' });
   } catch (_) {}
+  await saveSnapshot(stepIndex++, { status, output, steps: [...steps] });
 
   if (status === 'error') {
     return { error: errorMsg || 'Output did not pass alignment checks.' };

@@ -1,0 +1,108 @@
+const admin = require('firebase-admin');
+const functions = require('firebase-functions');
+const fs = require('fs');
+const path = require('path');
+const { publish } = require('./utils/agent-sync');
+
+const sessions = {};
+
+function loadLocal(runId) {
+  const localPath = path.join(__dirname, 'snapshots.json');
+  if (!fs.existsSync(localPath)) return [];
+  try {
+    const data = JSON.parse(fs.readFileSync(localPath, 'utf8'));
+    return data[runId] || [];
+  } catch (_) {
+    return [];
+  }
+}
+
+async function loadSnapshots(userId, runId) {
+  if (process.env.LOCAL_AGENT_RUN) {
+    return loadLocal(runId);
+  }
+  try {
+    const db = admin.firestore();
+    const snap = await db
+      .collection('users')
+      .doc(userId)
+      .collection('agentRuns')
+      .doc(runId)
+      .collection('snapshots')
+      .orderBy('timestamp')
+      .get();
+    return snap.docs.map(d => d.data());
+  } catch (err) {
+    console.error('loadSnapshots error', err.message);
+    return loadLocal(runId);
+  }
+}
+
+function runLoop(runId) {
+  const session = sessions[runId];
+  if (!session || session.paused) return;
+  if (session.index >= session.snapshots.length) {
+    delete sessions[runId];
+    return;
+  }
+  const snap = session.snapshots[session.index++];
+  publish(runId, { replay: true, ...snap.state });
+  setTimeout(() => runLoop(runId), 500);
+}
+
+exports.replayAgentRun = functions.https.onRequest(async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  const authHeader = req.headers.authorization || '';
+  const match = authHeader.match(/^Bearer (.+)$/);
+  if (!match) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
+  }
+
+  const { runId, action = 'start' } = req.body || {};
+  if (!runId) {
+    res.status(400).json({ error: 'Missing runId' });
+    return;
+  }
+
+  try {
+    const decoded = await admin.auth().verifyIdToken(match[1]);
+    const userId = decoded.uid;
+    if (action === 'start') {
+      const snaps = await loadSnapshots(userId, runId);
+      sessions[runId] = { snapshots: snaps, index: 0, paused: false };
+      runLoop(runId);
+      res.json({ status: 'started' });
+    } else if (action === 'pause') {
+      if (sessions[runId]) sessions[runId].paused = true;
+      res.json({ status: 'paused' });
+    } else if (action === 'resume') {
+      if (sessions[runId]) {
+        sessions[runId].paused = false;
+        runLoop(runId);
+      }
+      res.json({ status: 'resumed' });
+    } else if (action === 'step') {
+      const session = sessions[runId];
+      if (session) {
+        session.paused = true;
+        if (session.index < session.snapshots.length) {
+          const snap = session.snapshots[session.index++];
+          await publish(runId, { replay: true, ...snap.state });
+        }
+      }
+      res.json({ status: 'stepped' });
+    } else {
+      res.status(400).json({ error: 'Invalid action' });
+    }
+  } catch (err) {
+    console.error('replayAgentRun error', err);
+    res.status(500).json({ error: err.message });
+  }
+});
