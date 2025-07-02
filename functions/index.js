@@ -14,9 +14,9 @@ exports.handleNewUser = functions.firestore
     const userData = snap.data();
     const userId = context.params.userId;
 
-    const roadmap = generateRoadmap(userData, { userId, agentVersion: '1.0.0' });
-    const resume = generateResumeSummary(userData);
-    const opportunities = generateOpportunities(userData);
+    const roadmap = await generateRoadmap(userData, userId);
+    const resume = await generateResumeSummary(userData, userId);
+    const opportunities = await generateOpportunities(userData, userId);
 
     await db.collection('users').doc(userId).collection('roadmap').add({ roadmap });
     await db.collection('users').doc(userId).collection('resume').add({ summary: resume });
