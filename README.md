@@ -88,6 +88,14 @@ Inspired by principles from:
    firebase login --reauth
    ```
 
+### CI Deploys
+
+1. Generate a token locally using `firebase login:ci`.
+2. Store it as `FIREBASE_TOKEN` in GitHub Actions secrets or as
+   `firebase-ci-token` in Cloud Build's Secret Manager.
+3. The CI workflow injects this token so `firebase deploy` runs without
+   interactive login. If the token expires, re-run the command above.
+
 ### Debug Console
 
 Developers can review recent agent activity through `/debug.html` once
