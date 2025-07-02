@@ -1,5 +1,7 @@
 # 🧠 Super-Intelligence
 
+[![Firebase CI/CD](https://github.com/yourusername/Super-Intelligence/actions/workflows/firebase.yml/badge.svg)](https://github.com/yourusername/Super-Intelligence/actions/workflows/firebase.yml)
+
 **Building ethical, human-centered superintelligence to empower individuals and transform global systems.**
 
 ---
