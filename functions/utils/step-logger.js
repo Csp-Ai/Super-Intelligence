@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const fs = require('fs');
 const path = require('path');
+const { publish } = require('./agent-sync');
 
 function createStepLogger({ userId = 'unknown', runId = '', agentName = 'agent' }) {
   const localPath = path.join(__dirname, '..', 'steps.json');
@@ -41,6 +42,12 @@ function createStepLogger({ userId = 'unknown', runId = '', agentName = 'agent' 
       } catch (err) {
         console.error('step log failed', err.message);
       }
+    }
+
+    try {
+      await publish(runId, { stepType, input, output, durationMs });
+    } catch (err) {
+      console.error('AgentSync publish error', err.message);
     }
   };
 }

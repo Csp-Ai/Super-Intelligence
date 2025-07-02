@@ -60,4 +60,5 @@ exports.getTrends = trends.getTrends;
 
 exports.updateAgentState = require('./ops/updateAgentState').updateAgentState;
 exports.logCommit = require('./ops/logCommit').logCommit;
+exports.agentSyncSubscribe = require('./ops/agentSyncSubscribe').agentSyncSubscribe;
 
