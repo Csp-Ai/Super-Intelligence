@@ -1,0 +1,6 @@
+{
+  "online": { "manual": false, "description": "Agent is running normally." },
+  "offline": { "manual": false, "description": "Agent is not responding or disabled." },
+  "under-review": { "manual": true, "description": "Agent is under investigation for issues." },
+  "deprecated": { "manual": true, "description": "Agent is no longer maintained." }
+}

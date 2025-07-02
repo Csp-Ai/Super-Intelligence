@@ -58,3 +58,6 @@ const trends = require('./agents/trendsAgent');
 exports.updateTrendsCron = trends.updateTrendsCron;
 exports.getTrends = trends.getTrends;
 
+exports.updateAgentState = require('./ops/updateAgentState').updateAgentState;
+exports.logCommit = require('./ops/logCommit').logCommit;
+

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevOps Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="devops.css">
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+</head>
+<body class="bg-gray-50 p-4">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">DevOps Dashboard</h1>
+    <div id="loginSection" class="mb-4">
+      <input id="email" class="border p-2 mr-2" placeholder="Email">
+      <input id="password" type="password" class="border p-2 mr-2" placeholder="Password">
+      <button id="loginBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
+      <p id="loginStatus" class="text-sm mt-2"></p>
+    </div>
+    <div id="content" class="hidden">
+      <div class="mb-4">
+        <button id="refreshBtn" class="bg-gray-200 px-2 py-1 rounded">Refresh</button>
+        <button id="logoutBtn" class="ml-4 bg-red-500 text-white px-2 py-1 rounded">Logout</button>
+      </div>
+      <div id="summary" class="mb-4"></div>
+      <div id="recent" class="mb-6"></div>
+      <div id="failing" class="mb-6"></div>
+      <div id="commits" class="mb-6"></div>
+      <div id="activity" class="mb-6"></div>
+    </div>
+  </div>
+  <script src="devops.js"></script>
+</body>
+</html>

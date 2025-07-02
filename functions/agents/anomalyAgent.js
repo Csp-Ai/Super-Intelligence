@@ -131,6 +131,19 @@ async function detectAnomalies() {
 
   for (const anom of anomalies) {
     await admin.firestore().collection('anomalies').add(anom);
+    const state = anom.type === 'agent-offline' ? 'offline' : 'under-review';
+    await admin
+      .firestore()
+      .collection('agents')
+      .doc(anom.agent)
+      .collection('lifecycle')
+      .doc(state)
+      .set({ timestamp: anom.timestamp }, { merge: true });
+    await admin
+      .firestore()
+      .collection('agents')
+      .doc(anom.agent)
+      .set({ currentState: state }, { merge: true });
     if (process.env.ANOMALY_WEBHOOK && anom.severity === 'high') {
       try {
         await fetch(process.env.ANOMALY_WEBHOOK, {
