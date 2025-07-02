@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+const { broadcast } = require('./agent-sync-ws');
 
 let agentId = 'unknown-agent';
 const listeners = {};
@@ -29,6 +30,7 @@ async function publish(runId, payload = {}) {
     if (!localStore[runId]) localStore[runId] = [];
     localStore[runId].push(data);
     (listeners[runId] || []).forEach(cb => cb(decryptPayload(data)));
+    broadcast(runId, decryptPayload(data));
     return;
   }
 
@@ -53,6 +55,7 @@ async function publish(runId, payload = {}) {
   }
 
   await attempt();
+  broadcast(runId, decryptPayload(data));
 }
 
 function subscribe(runId, callback) {
