@@ -1,8 +1,9 @@
 const admin = require('firebase-admin');
+process.env.LOCAL_AGENT_RUN = '1';
 const { runAnomalyDetection } = require('./agents/anomalyAgent');
 
 try {
-  admin.initializeApp();
+  admin.initializeApp({ projectId: 'demo' });
 } catch (e) {
   // ignore if already initialized
 }

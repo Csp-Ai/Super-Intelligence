@@ -1,3 +1,4 @@
+process.env.LOCAL_AGENT_RUN = '1';
 const { aggregateRuns } = require('./agents/insightsAgent');
 const fs = require('fs');
 const path = require('path');

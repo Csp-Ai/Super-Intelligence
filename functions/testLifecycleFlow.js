@@ -1,8 +1,9 @@
 const admin = require('firebase-admin');
+process.env.LOCAL_AGENT_RUN = '1';
 const { updateAgentState } = require('./ops/updateAgentState');
 
 try {
-  admin.initializeApp();
+  admin.initializeApp({ projectId: 'demo' });
 } catch (e) {
   // ignore
 }

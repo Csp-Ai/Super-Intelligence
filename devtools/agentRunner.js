@@ -1,6 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const minimist = require('minimist');
+const admin = require('firebase-admin');
+
+try {
+  admin.initializeApp();
+} catch (_) {}
+
+process.env.LOCAL_AGENT_RUN = '1';
 
 const args = minimist(process.argv.slice(2));
 const agentId = args.agent || process.env.AGENT;

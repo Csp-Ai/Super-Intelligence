@@ -46,6 +46,7 @@ function getWeekNumber(date) {
 }
 
 async function computeUserTrends(userId) {
+  if (process.env.LOCAL_AGENT_RUN) return {};
   const db = admin.firestore();
   const snap = await db.collection('users').doc(userId).collection('agentRuns').get();
   const runs = snap.docs.map(d => d.data());
@@ -72,6 +73,7 @@ async function computeUserTrends(userId) {
 }
 
 async function computeGlobalTrends() {
+  if (process.env.LOCAL_AGENT_RUN) return {};
   const db = admin.firestore();
   const snap = await db.collectionGroup('agentRuns').get();
   const runs = snap.docs.map(d => d.data());
