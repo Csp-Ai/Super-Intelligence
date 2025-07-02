@@ -1,0 +1,16 @@
+{
+  "name": "super-intelligence-app",
+  "version": "1.0.0",
+  "description": "Local server for Firebase Hosting",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "dependencies": {
+    "firebase": "^9.6.10",
+    "firebase-admin": "^11.0.0"
+  }
+}
