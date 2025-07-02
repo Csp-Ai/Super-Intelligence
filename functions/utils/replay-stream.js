@@ -3,6 +3,46 @@ const fs = require('fs');
 const path = require('path');
 const { publish } = require('./agent-sync');
 
+const replayLogPath = path.join(__dirname, '..', 'replayLogs.json');
+
+function writeLocal(runId, entry) {
+  let logs = {};
+  if (fs.existsSync(replayLogPath)) {
+    try {
+      logs = JSON.parse(fs.readFileSync(replayLogPath, 'utf8'));
+      if (typeof logs !== 'object' || logs === null) logs = {};
+    } catch (_) {
+      logs = {};
+    }
+  }
+  if (!logs[runId]) logs[runId] = [];
+  logs[runId].push(entry);
+  fs.writeFileSync(replayLogPath, JSON.stringify(logs, null, 2));
+}
+
+async function logReplayEvent({ userId, runId, event, params = {}, state = {}, error }) {
+  const entry = {
+    timestamp: new Date().toISOString(),
+    event,
+    params,
+    state
+  };
+  if (error) entry.error = error;
+
+  if (process.env.LOCAL_AGENT_RUN) {
+    writeLocal(runId, { userId, ...entry });
+    return;
+  }
+  const db = admin.firestore();
+  await db
+    .collection('users')
+    .doc(userId)
+    .collection('agentRuns')
+    .doc(runId)
+    .collection('logs')
+    .add(entry);
+}
+
 class ReplayStream {
   constructor(runId, opts = {}) {
     this.runId = runId;
@@ -100,4 +140,4 @@ class ReplayStream {
   }
 }
 
-module.exports = { ReplayStream };
+module.exports = { ReplayStream, logReplayEvent };

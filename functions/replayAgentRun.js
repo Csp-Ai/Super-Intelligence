@@ -3,7 +3,7 @@ const functions = require('firebase-functions');
 const fs = require('fs');
 const path = require('path');
 const { publish } = require('./utils/agent-sync');
-const { ReplayStream } = require('./utils/replay-stream');
+const { ReplayStream, logReplayEvent } = require('./utils/replay-stream');
 
 const sessions = {};
 
@@ -51,6 +51,58 @@ function runLoop(runId) {
   setTimeout(() => runLoop(runId), 500);
 }
 
+async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = false }) {
+  let result;
+  let error;
+  try {
+    if (isAdmin && action === 'stream') {
+      const stream = new ReplayStream(runId, { speed: Number(speed) || 1 });
+      stream.play().catch(err => console.error('replay error', err));
+      result = { status: 'streaming' };
+    } else if (action === 'start') {
+      const snaps = await loadSnapshots(userId, runId);
+      sessions[runId] = { snapshots: snaps, index: 0, paused: false };
+      runLoop(runId);
+      result = { status: 'started' };
+    } else if (action === 'pause') {
+      if (sessions[runId]) sessions[runId].paused = true;
+      result = { status: 'paused' };
+    } else if (action === 'resume') {
+      if (sessions[runId]) {
+        sessions[runId].paused = false;
+        runLoop(runId);
+      }
+      result = { status: 'resumed' };
+    } else if (action === 'step') {
+      const session = sessions[runId];
+      if (session) {
+        session.paused = true;
+        if (session.index < session.snapshots.length) {
+          const snap = session.snapshots[session.index++];
+          await publish(runId, { replay: true, ...snap.state });
+        }
+      }
+      result = { status: 'stepped' };
+    } else {
+      throw new Error('Invalid action');
+    }
+    return result;
+  } catch (err) {
+    error = err.message;
+    throw err;
+  } finally {
+    const session = sessions[runId];
+    const state = session
+      ? { index: session.index, paused: session.paused, total: session.snapshots?.length }
+      : {};
+    try {
+      await logReplayEvent({ userId, runId, event: action, params: { speed }, state, error });
+    } catch (e) {
+      console.error('replay log failed', e.message);
+    }
+  }
+}
+
 exports.replayAgentRun = functions.https.onRequest(async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -80,45 +132,20 @@ exports.replayAgentRun = functions.https.onRequest(async (req, res) => {
       return;
     }
 
-    // Run ReplayStream for admins
-    if (allowed.includes(decoded.email) && action === 'stream') {
-      const stream = new ReplayStream(runId, { speed: Number(speed) || 1 });
-      stream.play().catch(err => console.error('replay error', err));
-      return res.json({ status: 'streaming' });
-    }
-
-    // Otherwise fallback to snapshot session replay
     const userId = decoded.uid;
-    if (action === 'start') {
-      const snaps = await loadSnapshots(userId, runId);
-      sessions[runId] = { snapshots: snaps, index: 0, paused: false };
-      runLoop(runId);
-      res.json({ status: 'started' });
-    } else if (action === 'pause') {
-      if (sessions[runId]) sessions[runId].paused = true;
-      res.json({ status: 'paused' });
-    } else if (action === 'resume') {
-      if (sessions[runId]) {
-        sessions[runId].paused = false;
-        runLoop(runId);
-      }
-      res.json({ status: 'resumed' });
-    } else if (action === 'step') {
-      const session = sessions[runId];
-      if (session) {
-        session.paused = true;
-        if (session.index < session.snapshots.length) {
-          const snap = session.snapshots[session.index++];
-          await publish(runId, { replay: true, ...snap.state });
-        }
-      }
-      res.json({ status: 'stepped' });
-    } else {
-      res.status(400).json({ error: 'Invalid action' });
-    }
+    const result = await handleReplayAction({
+      userId,
+      runId,
+      action,
+      speed,
+      isAdmin: allowed.includes(decoded.email)
+    });
+    res.json(result);
   } catch (err) {
     console.error('replayAgentRun error', err);
     res.status(500).json({ error: err.message });
   }
 });
+
+exports.handleReplayAction = handleReplayAction;
 
