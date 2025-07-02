@@ -13,8 +13,16 @@
   <div class="container">
     <h1>Opportunity Dashboard</h1>
     <div id="roadmap" class="roadmap"></div>
+    <button onclick="toggleInsights('roadmap-agent')" class="insights-btn">View Insights</button>
+    <div id="roadmap-agentInsights" class="insights hidden"></div>
+
     <div id="resume" class="resume"></div>
+    <button onclick="toggleInsights('resume-agent')" class="insights-btn">View Insights</button>
+    <div id="resume-agentInsights" class="insights hidden"></div>
+
     <div id="opportunities" class="opportunities"></div>
+    <button onclick="toggleInsights('opportunity-agent')" class="insights-btn">View Insights</button>
+    <div id="opportunity-agentInsights" class="insights hidden"></div>
   </div>
   <script src="dashboard.js"></script>
 </body>

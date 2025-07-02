@@ -45,6 +45,41 @@ function renderOpportunities(list = []) {
   container.appendChild(grid);
 }
 
+function renderInsights(agent, data) {
+  const container = document.getElementById(`${agent}Insights`);
+  container.innerHTML = '';
+  if (!data) {
+    container.textContent = 'No insights available';
+    return;
+  }
+  const wrapper = document.createElement('div');
+  Object.keys(data).forEach(key => {
+    const card = document.createElement('div');
+    card.className = 'metric-card';
+    card.innerHTML = `<strong>${key}</strong><div>${data[key]}</div>`;
+    wrapper.appendChild(card);
+  });
+  if (data.failureRate && data.failureRate > 0.25) {
+    const alert = document.createElement('div');
+    alert.className = 'alert';
+    alert.textContent = '⚠️ High failure rate';
+    wrapper.appendChild(alert);
+  }
+  container.appendChild(wrapper);
+}
+
+function toggleInsights(agent) {
+  const container = document.getElementById(`${agent}Insights`);
+  container.classList.toggle('hidden');
+  if (!container.dataset.loaded) {
+    const userId = getUserId();
+    db.collection('users').doc(userId).collection('insights').doc(agent).get().then(doc => {
+      renderInsights(agent, doc.exists ? doc.data() : null);
+      container.dataset.loaded = 'true';
+    });
+  }
+}
+
 function initDashboard() {
   const userId = getUserId();
   if (!userId) return alert('No user ID provided');

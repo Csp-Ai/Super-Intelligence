@@ -9,6 +9,6 @@
     "firebase-functions": "^3.20.1"
   },
   "scripts": {
-    "test": "node testRoadmapAgent.js && node testResumeAgent.js && node testOpportunityAgent.js && node testOnboardingFlow.js"
+    "test": "node testRoadmapAgent.js && node testResumeAgent.js && node testOpportunityAgent.js && node testOnboardingFlow.js && node testInsightsAgent.js"
   }
 }
