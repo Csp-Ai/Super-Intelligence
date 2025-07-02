@@ -50,3 +50,6 @@ exports.retryAgentRun = require('./retryAgentRun').retryAgentRun;
 const insights = require('./agents/insightsAgent');
 exports.updateInsightsCron = insights.updateInsightsCron;
 exports.getInsights = insights.getInsights;
+
+const anomalies = require('./agents/anomalyAgent');
+exports.anomalyCron = anomalies.anomalyCron;
