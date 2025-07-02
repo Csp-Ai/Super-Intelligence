@@ -47,3 +47,6 @@ exports.getLogs = functions.https.onRequest(async (req, res) => {
 });
 
 exports.retryAgentRun = require('./retryAgentRun').retryAgentRun;
+const insights = require('./agents/insightsAgent');
+exports.updateInsightsCron = insights.updateInsightsCron;
+exports.getInsights = insights.getInsights;
