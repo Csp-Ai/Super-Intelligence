@@ -1,0 +1,32 @@
+name: Update AGENTS Directory
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'config/agents.json'
+      - 'scripts/generateAgentsMd.js'
+      - '.github/workflows/agents-md.yml'
+
+jobs:
+  update-agents-md:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Generate AGENTS.md
+        run: node scripts/generateAgentsMd.js
+      - name: Commit AGENTS.md
+        run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add AGENTS.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update AGENTS.md"
+            git push
+          fi
