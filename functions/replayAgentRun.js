@@ -93,10 +93,14 @@ async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = 
   } finally {
     const session = sessions[runId];
     const state = session
-      ? { index: session.index, paused: session.paused, total: session.snapshots?.length }
+      ? {
+          currentStep: session.index,
+          paused: session.paused,
+          total: session.snapshots?.length
+        }
       : {};
     try {
-      await logReplayEvent({ userId, runId, event: action, params: { speed }, state, error });
+      await logReplayEvent({ userId, runId, action, params: { speed }, state, error });
     } catch (e) {
       console.error('replay log failed', e.message);
     }
