@@ -84,6 +84,13 @@ allowlist defined by `functions.config().debug.allowlist`. It fetches
 log entries from the `getLogs` Cloud Function and presents them in a
 filterable, auto-refreshing table grouped by agent.
 
+### AgentHub Console
+
+`/agent-hub.html` offers a registry-driven view of all agents with links
+to their docs and actions to re-run them. The registry is stored in
+`config/agents.json` and mirrored under `public/config/agents.json` for
+hosting.
+
 ---
 
 ## 🙌 Contributing

@@ -1,0 +1,86 @@
+{
+  "roadmap-agent": {
+    "name": "roadmap-agent",
+    "description": "Generates personalized milestone plans for users",
+    "version": "v1.0.2",
+    "lastRunStatus": "unknown",
+    "agentType": "utility",
+    "enabled": true,
+    "docsUrl": "../functions/agents/roadmapAgent.js",
+    "sourcePath": "functions/agents/roadmapAgent.js",
+    "updatedAt": "2025-07-02T02:27:43.913Z",
+    "createdAt": "2025-07-02T02:27:43.913Z"
+  },
+  "resume-agent": {
+    "name": "resume-agent",
+    "description": "Creates short resume or LinkedIn summaries",
+    "version": "v1.0.3",
+    "lastRunStatus": "unknown",
+    "agentType": "utility",
+    "enabled": true,
+    "docsUrl": "../functions/agents/resumeAgent.js",
+    "sourcePath": "functions/agents/resumeAgent.js",
+    "updatedAt": "2025-07-02T02:27:43.913Z",
+    "createdAt": "2025-07-02T02:27:43.913Z"
+  },
+  "opportunity-agent": {
+    "name": "opportunity-agent",
+    "description": "Matches grants, internships and jobs",
+    "version": "v1.0.3",
+    "lastRunStatus": "unknown",
+    "agentType": "utility",
+    "enabled": true,
+    "docsUrl": "../functions/agents/opportunityAgent.js",
+    "sourcePath": "functions/agents/opportunityAgent.js",
+    "updatedAt": "2025-07-02T02:27:43.913Z",
+    "createdAt": "2025-07-02T02:27:43.913Z"
+  },
+  "anomaly-agent": {
+    "name": "anomaly-agent",
+    "description": "Detects unusual behavior across user runs",
+    "version": "v1.0.0",
+    "lastRunStatus": "unknown",
+    "agentType": "monitor",
+    "enabled": true,
+    "docsUrl": "../functions/agents/anomalyAgent.js",
+    "sourcePath": "functions/agents/anomalyAgent.js",
+    "updatedAt": "2025-07-02T02:27:43.913Z",
+    "createdAt": "2025-07-02T02:27:43.913Z"
+  },
+  "insights-agent": {
+    "name": "insights-agent",
+    "description": "Aggregates agent analytics and metrics",
+    "version": "v1.0.0",
+    "lastRunStatus": "unknown",
+    "agentType": "analytics",
+    "enabled": true,
+    "docsUrl": "../functions/agents/insightsAgent.js",
+    "sourcePath": "functions/agents/insightsAgent.js",
+    "updatedAt": "2025-07-02T02:27:43.913Z",
+    "createdAt": "2025-07-02T02:27:43.913Z"
+  },
+  "trends-agent": {
+    "name": "trends-agent",
+    "description": "Computes usage trends across all agents",
+    "version": "v1.0.0",
+    "lastRunStatus": "unknown",
+    "agentType": "analytics",
+    "enabled": true,
+    "docsUrl": "../functions/agents/trendsAgent.js",
+    "sourcePath": "functions/agents/trendsAgent.js",
+    "updatedAt": "2025-07-02T02:27:43.913Z",
+    "createdAt": "2025-07-02T02:27:43.913Z"
+  },
+  "alignment-core": {
+    "name": "alignment-core",
+    "description": "",
+    "version": "v1.0.0",
+    "lastRunStatus": "unknown",
+    "agentType": "utility",
+    "enabled": true,
+    "docsUrl": "../functions/agents/alignment-core.js",
+    "sourcePath": "functions/agents/alignment-core.js",
+    "createdAt": "2025-07-02T02:27:29.171Z",
+    "updatedAt": "2025-07-02T02:27:43.913Z"
+  }
+}
