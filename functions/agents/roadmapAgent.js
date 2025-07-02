@@ -1,6 +1,6 @@
 const { executeAgent } = require('../utils/agent-wrapper');
 
-async function generateRoadmap(userData, userId) {
+async function generateRoadmap(userData, userId = 'unknown') {
   return executeAgent({
     agentName: 'roadmap-agent',
     version: 'v1.0.2',
@@ -17,3 +17,4 @@ async function generateRoadmap(userData, userId) {
 }
 
 module.exports = { generateRoadmap };
+
