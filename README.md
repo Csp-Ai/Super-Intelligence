@@ -76,6 +76,18 @@ Inspired by principles from:
 
 > ⚠️ Setup instructions and sample data coming soon.
 
+### Local Development
+
+1. Install dependencies in the `functions` directory: `npm install`
+2. Run tests from the repo root:
+   ```bash
+   npm test --silent
+   ```
+3. If the Firebase emulator reports authentication errors, re-authenticate using:
+   ```bash
+   firebase login --reauth
+   ```
+
 ### Debug Console
 
 Developers can review recent agent activity through `/debug.html` once

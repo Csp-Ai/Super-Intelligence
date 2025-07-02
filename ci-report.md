@@ -9,7 +9,7 @@
 ❌ alignment-core - missing  
 
 ## Firebase Hosting
-- Endpoint: N/A (firebase deploy failed due to authentication failure)
+- Endpoint: localhost:5000 (emulator)
 
 ## Build
-- 2025-07-02: Added `app.yaml` for Cloud Build and attempted emulator auth reauth.
+- 2025-07-02: Added `app.yaml` for Cloud Build and reauthenticated emulator with `firebase login --reauth`.
