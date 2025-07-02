@@ -17,3 +17,6 @@
 
 ## Local Launch Tools
 - 2025-07-02: Added `start-dev.sh` to automatically log in via `firebase login:ci` and run the frontend with the Hosting emulator.
+
+## Local Launch Fixes
+- 2025-07-02: ✅ Added placeholder `dev` script and environment check in `start-dev.sh`.
