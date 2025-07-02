@@ -76,6 +76,14 @@ Inspired by principles from:
 
 > ⚠️ Setup instructions and sample data coming soon.
 
+### Debug Console
+
+Developers can review recent agent activity through `/debug.html` once
+deployed. The page authenticates with Firebase Auth and checks an email
+allowlist defined by `functions.config().debug.allowlist`. It fetches
+log entries from the `getLogs` Cloud Function and presents them in a
+filterable, auto-refreshing table grouped by agent.
+
 ---
 
 ## 🙌 Contributing
