@@ -1,15 +1,24 @@
+const assert = require('assert');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const functionsTest = require('firebase-functions-test')({ projectId: 'demo' });
+
 // Stub firebase-admin before requiring functions
+const logsStore = {};
 const adminStub = {
   initializeApp: () => {},
   auth: () => ({ verifyIdToken: async () => ({ uid: 'user1', email: 'admin@example.com' }) }),
   firestore: () => ({
     collection: () => ({
       doc: () => ({
-        collection: () => ({
-          doc: () => ({ get: async () => ({ exists: true }) })
+        collection: name => ({
+          doc: () => ({ get: async () => ({ exists: true }) }),
+          add: async entry => {
+            const key = `logs-${name}`;
+            if (!logsStore[key]) logsStore[key] = [];
+            logsStore[key].push(entry);
+          }
         }),
         get: async () => ({ exists: true })
       })
@@ -66,12 +75,16 @@ function renderTimeline(steps) {
   const timeline = document.getElementById('timeline');
   let lastUpdateDelay = 0;
 
-  const es = new EventSource(`http://localhost:3050/agentSyncSubscribe?runId=${runId}&token=dummy`);
+  const es = new EventSource(
+    `http://localhost:3050/agentSyncSubscribe?runId=${runId}&token=dummy`
+  );
   let received = 0;
+  const expected = ['plan', 'execute'];
   const timeout = setTimeout(() => {
     console.error('No step received within timeout');
     es.close();
     server.close();
+    functionsTest.cleanup();
     process.exit(1);
   }, 2000);
 
@@ -83,8 +96,9 @@ function renderTimeline(steps) {
     timeline.innerHTML = '';
     timeline.appendChild(renderTimeline(steps));
     lastUpdateDelay = Date.now() - start;
+    assert.strictEqual(step.type, expected[received]);
     received++;
-    if (received === 2) {
+    if (received === expected.length) {
       clearTimeout(timeout);
       es.close();
       server.close();
@@ -93,13 +107,26 @@ function renderTimeline(steps) {
       if (!lastItem.querySelector('span') || !lastItem.querySelector('div')) {
         throw new Error('Timeline entry missing visual elements');
       }
+
+      // verify replay log structure
+      const logPath = path.join(__dirname, '../functions/replayLogs.json');
+      const rawLogs = fs.readFileSync(logPath, 'utf8');
+      const logs = JSON.parse(rawLogs)[runId];
+      assert.ok(Array.isArray(logs) && logs.length > 0);
+      assert.strictEqual(logs[0].event, 'stream');
+      assert.strictEqual(logs[0].params.speed, 2);
+
       console.log('E2E replay test passed');
+      functionsTest.cleanup();
     }
   };
 
   await fetch('http://localhost:3050/replayAgentRun', {
     method: 'POST',
-    headers: { 'Authorization': 'Bearer fake', 'Content-Type': 'application/json' },
+    headers: {
+      Authorization: 'Bearer fake',
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({ runId, action: 'stream', speed: 2 })
   });
 })();
