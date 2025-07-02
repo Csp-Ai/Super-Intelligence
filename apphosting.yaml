@@ -1,0 +1,5 @@
+runtime: nodejs18
+entrypoint: node index.js
+handlers:
+  - source: '/**'
+    public: 'public'
