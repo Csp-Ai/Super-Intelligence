@@ -3,6 +3,7 @@ const functions = require('firebase-functions');
 const fs = require('fs');
 const path = require('path');
 const { publish } = require('./utils/agent-sync');
+const { ReplayStream } = require('./utils/replay-stream');
 
 const sessions = {};
 
@@ -65,14 +66,28 @@ exports.replayAgentRun = functions.https.onRequest(async (req, res) => {
     return;
   }
 
-  const { runId, action = 'start' } = req.body || {};
-  if (!runId) {
-    res.status(400).json({ error: 'Missing runId' });
-    return;
-  }
-
   try {
     const decoded = await admin.auth().verifyIdToken(match[1]);
+
+    // Optional email allowlist for admin-triggered ReplayStream
+    const allowed = (functions.config().debug && functions.config().debug.allowlist)
+      ? functions.config().debug.allowlist.split(',')
+      : ['admin@example.com'];
+
+    const { runId, action = 'start', speed = 1 } = req.body || {};
+    if (!runId) {
+      res.status(400).json({ error: 'Missing runId' });
+      return;
+    }
+
+    // Run ReplayStream for admins
+    if (allowed.includes(decoded.email) && action === 'stream') {
+      const stream = new ReplayStream(runId, { speed: Number(speed) || 1 });
+      stream.play().catch(err => console.error('replay error', err));
+      return res.json({ status: 'streaming' });
+    }
+
+    // Otherwise fallback to snapshot session replay
     const userId = decoded.uid;
     if (action === 'start') {
       const snaps = await loadSnapshots(userId, runId);
@@ -106,3 +121,4 @@ exports.replayAgentRun = functions.https.onRequest(async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
