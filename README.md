@@ -122,6 +122,12 @@ to their docs and actions to re-run them. The registry is stored in
 `config/agents.json` and mirrored under `public/config/agents.json` for
 hosting.
 
+## Firebase Project Info
+
+- **Project Name:** Super Intelligence  
+- **Project ID:** `super-intelligence-7b653`  
+- **Project Number:** `170923536461`
+
 ---
 
 ## 🙌 Contributing
