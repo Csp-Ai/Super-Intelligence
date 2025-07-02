@@ -53,3 +53,8 @@ exports.getInsights = insights.getInsights;
 
 const anomalies = require('./agents/anomalyAgent');
 exports.anomalyCron = anomalies.anomalyCron;
+
+const trends = require('./agents/trendsAgent');
+exports.updateTrendsCron = trends.updateTrendsCron;
+exports.getTrends = trends.getTrends;
+

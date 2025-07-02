@@ -26,6 +26,7 @@ document.getElementById('fetchBtn').addEventListener('click', async () => {
     const roadmapSnap = await userRef.collection('roadmap').limit(1).get();
     const resumeSnap = await userRef.collection('resume').limit(1).get();
     const oppSnap = await userRef.collection('opportunities').limit(1).get();
+    const trendSnap = await userRef.collection('trends').doc('summary').get();
     const runSnap = await userRef.collection('agentRuns').orderBy('timestamp', 'desc').limit(1).get();
 
     if (!roadmapSnap.empty) {
@@ -44,6 +45,12 @@ document.getElementById('fetchBtn').addEventListener('click', async () => {
       renderOpportunities(oppSnap.docs[0].data().opportunities || []);
     } else {
       renderOpportunities([]);
+    }
+
+    if (trendSnap.exists) {
+      renderTips(trendSnap.data());
+    } else {
+      renderTips(null);
     }
 
     if (!runSnap.empty) {
@@ -106,3 +113,26 @@ function renderOpportunities(list) {
   });
   container.appendChild(ul);
 }
+
+function renderTips(data) {
+  const container = document.getElementById('tipsContent');
+  container.innerHTML = '';
+  if (!data || !Array.isArray(data.suggestions)) {
+    container.innerHTML = '<p>No tips available.</p>';
+    return;
+  }
+  const ul = document.createElement('ul');
+  ul.className = 'list-disc ml-5';
+  data.suggestions.forEach(tip => {
+    const li = document.createElement('li');
+    li.textContent = tip;
+    ul.appendChild(li);
+  });
+  container.appendChild(ul);
+}
+
+document.getElementById('toggleTips').addEventListener('click', () => {
+  const content = document.getElementById('tipsContent');
+  content.classList.toggle('hidden');
+});
+
