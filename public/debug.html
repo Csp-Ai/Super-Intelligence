@@ -24,12 +24,15 @@
         Filter:
         <select id="statusFilter" class="border p-1">
           <option value="">All</option>
-          <option value="pass">Success</option>
-          <option value="fail">Errors</option>
+          <option value="success">Success</option>
+          <option value="error">Errors</option>
         </select>
       </label>
       <label class="ml-4">
         <input type="checkbox" id="liveReload" class="mr-1">Live reload
+      </label>
+      <label class="ml-4">
+        <input type="checkbox" id="rerunFailed" class="mr-1">Re-run Failed Agents
       </label>
       <button id="refreshBtn" class="ml-4 bg-gray-200 px-2 py-1 rounded">Refresh</button>
       <button id="logoutBtn" class="ml-4 bg-red-500 text-white px-2 py-1 rounded">Logout</button>

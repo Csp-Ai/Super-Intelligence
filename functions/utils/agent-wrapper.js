@@ -9,15 +9,17 @@ async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', u
 
   let output;
   let alignment = { alignmentPassed: false, flags: ['agent_error'], notes: '' };
+  let errorMsg = '';
 
   try {
     output = await agentFunction(input);
     alignment = runAlignmentCheck({ agentName, output, userData: input });
   } catch (err) {
     alignment.notes = err.message;
+    errorMsg = err.message;
   }
 
-  const status = alignment.alignmentPassed ? 'pass' : 'fail';
+  const status = alignment.alignmentPassed && !errorMsg ? 'success' : 'error';
   const timestamp = new Date().toISOString();
   const outputSummary = typeof output === 'string' ? output.slice(0, 100) : JSON.stringify(output).slice(0, 100);
 
@@ -35,6 +37,19 @@ async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', u
   try {
     const db = admin.firestore();
     await db.collection('logs').add(logEntry);
+    await db
+      .collection('users')
+      .doc(userId)
+      .collection('agentRuns')
+      .add({
+        agentName,
+        timestamp,
+        input,
+        output,
+        status,
+        error: errorMsg,
+        resolved: status === 'success'
+      });
   } catch (e) {
     console.error('Failed to write log to Firestore:', e.message);
   }
@@ -58,8 +73,8 @@ async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', u
     console.error('Failed to write local log:', e.message);
   }
 
-  if (status === 'fail') {
-    return { error: 'Output did not pass alignment checks.' };
+  if (status === 'error') {
+    return { error: errorMsg || 'Output did not pass alignment checks.' };
   }
 
   return output;

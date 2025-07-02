@@ -10,6 +10,30 @@ const auth = firebase.auth();
 const allowedEmails = ["admin@example.com"];
 let liveInterval = null;
 
+async function attemptRetry(logs) {
+  const retryToggle = document.getElementById('rerunFailed');
+  if (!retryToggle || !retryToggle.checked) return;
+  const user = auth.currentUser;
+  if (!user) return;
+  const failed = logs.filter(l => l.status === 'error');
+  for (const entry of failed) {
+    try {
+      const token = await user.getIdToken();
+      const url = `https://us-central1-${firebaseConfig.projectId}.cloudfunctions.net/retryAgentRun`;
+      await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          userId: entry.userId || entry.user,
+          agentName: entry.agentName || entry.agent
+        })
+      });
+    } catch (err) {
+      console.error('retry failed', err);
+    }
+  }
+}
+
 async function fetchLogs() {
   const user = auth.currentUser;
   if (!user) return;
@@ -18,7 +42,9 @@ async function fetchLogs() {
     const url = `https://us-central1-${firebaseConfig.projectId}.cloudfunctions.net/getLogs`;
     const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
     const data = await res.json();
-    renderLogs(Array.isArray(data) ? data : []);
+    const list = Array.isArray(data) ? data : [];
+    renderLogs(list);
+    attemptRetry(list);
   } catch (err) {
     console.error('Failed to load logs', err);
   }
@@ -99,6 +125,10 @@ document.getElementById('liveReload').addEventListener('change', e => {
   } else {
     clearInterval(liveInterval);
   }
+});
+
+document.getElementById('rerunFailed').addEventListener('change', () => {
+  fetchLogs();
 });
 
 auth.onAuthStateChanged(user => {
