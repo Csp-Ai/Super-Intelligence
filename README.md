@@ -93,7 +93,7 @@ Inspired by principles from:
 To run Firebase Hosting locally and start the frontend app:
 
 ```bash
-./scripts/start-dev.sh
+./start-dev.sh
 ```
 If you're not logged into Firebase, it will prompt you.
 
