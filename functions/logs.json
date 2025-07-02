@@ -8,6 +8,39 @@
     "outputSummary": { "roadmap": [] }
   },
   {
+    "timestamp": "2023-01-02T00:00:00.000Z",
+    "agentName": "resume-agent",
+    "agentVersion": "1.0.3",
+    "userId": "sample-user",
+    "inputSummary": {
+      "fullName": "Sample User"
+    },
+    "outputSummary": "Hi, I'm Sample User. I aim to achieve your desired goal. I bring strengths in leadership and adaptability."
+  },
+  {
+    "agent": "resume-agent",
+    "version": "v1.0.3",
+    "user": "test-user",
+    "status": "pass",
+    "alignment": {
+      "passed": true,
+      "flags": []
+    },
+    "timestamp": "2025-07-02T01:27:47.384Z",
+    "outputSummary": "Hi, I'm Test Runner. I aim to achieve land an amazing role. I bring strengths in leadership and adaptability."
+  },
+  {
+    "timestamp": "2025-07-02T01:27:47.670Z",
+    "agentName": "resume-agent",
+    "agentVersion": "v1.0.3",
+    "userId": "test-user",
+    "inputSummary": {
+      "fullName": "Test Runner",
+      "dreamOutcome": "land an amazing role"
+    },
+    "outputSummary": "Hi, I'm Test Runner. I aim to achieve land an amazing role. I bring strengths in leadership and adaptability."
+  },
+  {
     "timestamp": "2023-01-01T00:00:00.000Z",
     "agentName": "opportunity-agent",
     "agentVersion": "1.0.0",
