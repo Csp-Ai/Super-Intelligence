@@ -7,14 +7,28 @@ async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', u
   const start = new Date();
   console.log(`[${start.toISOString()}] Starting ${agentName}`);
 
+  // Collect granular execution steps for debugging and visualization
+  const steps = [];
+  const addStep = (type, data = {}) => {
+    steps.push({
+      type,
+      timestamp: new Date().toISOString(),
+      ...data
+    });
+  };
+  addStep('plan', { input });
+
   let output;
   let alignment = { alignmentPassed: false, flags: ['agent_error'], notes: '' };
   let errorMsg = '';
 
   try {
-    output = await agentFunction(input);
+    // allow agent functions to push additional steps via callback
+    output = await agentFunction(input, addStep);
+    addStep('generate', { output });
     alignment = runAlignmentCheck({ agentName, output, userData: input });
   } catch (err) {
+    addStep('error', { message: err.message });
     alignment.notes = err.message;
     errorMsg = err.message;
   }
@@ -30,7 +44,8 @@ async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', u
     status,
     alignment: { passed: alignment.alignmentPassed, flags: alignment.flags },
     timestamp,
-    outputSummary
+    outputSummary,
+    steps
   };
 
   // Firestore logging
@@ -48,7 +63,8 @@ async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', u
         output,
         status,
         error: errorMsg,
-        resolved: status === 'success'
+        resolved: status === 'success',
+        steps
       });
   } catch (e) {
     console.error('Failed to write log to Firestore:', e.message);
