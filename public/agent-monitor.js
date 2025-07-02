@@ -26,6 +26,7 @@ let timelineSteps = [];
 let activeStep = -1;
 const statusEl = document.getElementById('replayStatus');
 const replayLogCache = {};
+const adminEmails = ['admin@example.com'];
 
 // === Replay Log UI ===
 async function loadReplayLogs(runId) {
@@ -60,9 +61,42 @@ async function showReplayLogs(runId) {
   renderReplayLogs(logs);
 }
 
+async function loadReplaySummary(runId) {
+  if (!auth || !auth.currentUser) return null;
+  const doc = await db
+    .collection('users')
+    .doc(auth.currentUser.uid)
+    .collection('agentRuns')
+    .doc(runId)
+    .collection('replaySummary')
+    .doc('summary')
+    .get();
+  return doc.exists ? doc.data() : null;
+}
+
+function renderReplaySummary(data) {
+  const container = document.getElementById('replaySummary');
+  container.innerHTML = '';
+  if (!data) return;
+  const keys = ['totalSteps','actionCount','durationMs','errorCount'];
+  keys.forEach(k => {
+    const div = document.createElement('div');
+    div.textContent = `${k}: ${data[k]}`;
+    container.appendChild(div);
+  });
+}
+
+async function showReplaySummary(runId) {
+  const data = await loadReplaySummary(runId);
+  renderReplaySummary(data);
+}
+
+window.showReplaySummary = showReplaySummary;
+
 window.showReplayLogs = showReplayLogs;
 window.openTimelineModal = async function(runId) {
   await showReplayLogs(runId);
+  await showReplaySummary(runId);
 };
 
 // === Timeline UI ===
@@ -107,6 +141,18 @@ async function sendReplayAction(runId, action, speed = 1) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ runId, action, speed })
+  });
+}
+
+async function triggerSummary(runId) {
+  const user = auth.currentUser;
+  if (!user) return;
+  const token = await user.getIdToken();
+  const url = `https://us-central1-${firebaseConfig.projectId}.cloudfunctions.net/summarizeReplayLogs`;
+  await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ runId })
   });
 }
 
@@ -174,4 +220,20 @@ document.getElementById('replayResume').addEventListener('click', () => {
 document.getElementById('replayStep').addEventListener('click', () => {
   const runId = new URLSearchParams(location.search).get('runId');
   if (runId) sendReplayAction(runId, 'step');
+});
+
+document.getElementById('regenSummaryBtn').addEventListener('click', async () => {
+  const runId = new URLSearchParams(location.search).get('runId');
+  if (!runId) return;
+  await triggerSummary(runId);
+  await showReplaySummary(runId);
+});
+
+auth.onAuthStateChanged(user => {
+  const btn = document.getElementById('regenSummaryBtn');
+  if (user && user.email && adminEmails.includes(user.email)) {
+    btn.classList.remove('hidden');
+  } else {
+    btn.classList.add('hidden');
+  }
 });

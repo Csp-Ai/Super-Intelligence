@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { publish } = require('./utils/agent-sync');
 const { ReplayStream, logReplayEvent } = require('./utils/replay-stream');
+const { computeReplaySummary } = require('./summarizeReplayLogs');
 
 const sessions = {};
 
@@ -43,7 +44,12 @@ function runLoop(runId) {
   const session = sessions[runId];
   if (!session || session.paused) return;
   if (session.index >= session.snapshots.length) {
+    const uid = session.userId;
     delete sessions[runId];
+    if (!session.summaryGenerated) {
+      computeReplaySummary(runId, uid).catch(err => console.error('summary fail', err));
+      session.summaryGenerated = true;
+    }
     return;
   }
   const snap = session.snapshots[session.index++];
@@ -61,7 +67,7 @@ async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = 
       result = { status: 'streaming' };
     } else if (action === 'start') {
       const snaps = await loadSnapshots(userId, runId);
-      sessions[runId] = { snapshots: snaps, index: 0, paused: false };
+      sessions[runId] = { snapshots: snaps, index: 0, paused: false, userId, summaryGenerated: false };
       runLoop(runId);
       result = { status: 'started' };
     } else if (action === 'pause') {
@@ -103,6 +109,10 @@ async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = 
       await logReplayEvent({ userId, runId, action, params: { speed }, state, error });
     } catch (e) {
       console.error('replay log failed', e.message);
+    }
+    if (session && session.index >= session.snapshots.length && !session.summaryGenerated) {
+      session.summaryGenerated = true;
+      computeReplaySummary(runId, session.userId).catch(err => console.error('summary fail', err));
     }
   }
 }
