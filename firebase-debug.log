@@ -107,3 +107,30 @@ For CI servers and headless environments, generate a new token with firebase log
     at async Command.actionFn (C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\projects-list.js:51:20)
 [error] 
 [error] Error: Failed to list Firebase projects. See firebase-debug.log for more info.
+[debug] [2025-07-02T06:34:57.561Z] ----------------------------------------------------------------------
+[debug] [2025-07-02T06:34:57.563Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ponce\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js login:ci --no-localhost
+[debug] [2025-07-02T06:34:57.563Z] CLI Version:   14.9.0
+[debug] [2025-07-02T06:34:57.563Z] Platform:      win32
+[debug] [2025-07-02T06:34:57.563Z] Node Version:  v22.16.0
+[debug] [2025-07-02T06:34:57.564Z] Time:          Tue Jul 01 2025 23:34:57 GMT-0700 (Mountain Standard Time)
+[debug] [2025-07-02T06:34:57.564Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-07-02T06:34:57.707Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"project"}
+[warn] !  Authenticating with a `login:ci` token is deprecated and will be removed in a future major version of `firebase-tools`. Instead, use a service account key with `GOOGLE_APPLICATION_CREDENTIALS`: https://cloud.google.com/docs/authentication/getting-started 
+[debug] [2025-07-02T06:34:57.712Z] >>> [apiv2][query] POST https://auth.firebase.tools/attest [none]
+[debug] [2025-07-02T06:34:57.712Z] >>> [apiv2][body] POST https://auth.firebase.tools/attest {"session_id":"992d6252-c8a9-411f-b681-8472d09caab3"}
+[debug] [2025-07-02T06:34:58.181Z] <<< [apiv2][status] POST https://auth.firebase.tools/attest 200
+[debug] [2025-07-02T06:34:58.181Z] <<< [apiv2][body] POST https://auth.firebase.tools/attest {"token":"DVLINRsrISCsMdnogXegwjTThV-nWUd6rawVQCWJWhs"}
+[info] 
+[info] To sign in to the Firebase CLI:
+[info] 
+[info] 1. Take note of your session ID:
+[info] 
+[info]    992D6
+[info] 
+[info] 2. Visit the URL below on any device and follow the instructions to get your code:
+[info] 
+[info]    https://auth.firebase.tools/login?code_challenge=b-bB7R6SDISTY1A11-G7Og0E7GxKhEM5OVIbSctsTUo&session=992d6252-c8a9-411f-b681-8472d09caab3&attest=DVLINRsrISCsMdnogXegwjTThV-nWUd6rawVQCWJWhs
+[info] 
+[info] 3. Paste or enter the authorization code below once you have it:
+[info] 
