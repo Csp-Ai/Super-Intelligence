@@ -1,6 +1,18 @@
 # Ignore node modules
 functions/node_modules/
 
+# Replay artifacts
+functions/replayLogs.json
+functions/steps.json
+functions/snapshots.json
+
+# Credentials
+serviceAccount.json
+**/serviceAccount.json
+
+# Test logs
+tests/**/*.log
+
 # Logs
 npm-debug.log*
 
@@ -8,3 +20,4 @@ npm-debug.log*
 .env
 
 node_modules/
+

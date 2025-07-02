@@ -44,10 +44,14 @@ const server = app.listen(3050, () => console.log('Test server running'));
 // Prepare sample steps for ReplayStream
 const runId = 'test-run';
 const stepsPath = path.join(__dirname, '../functions/steps.json');
-fs.writeFileSync(stepsPath, JSON.stringify([
+const stepsData = [
   { runId, stepType: 'plan', timestamp: new Date().toISOString() },
   { runId, stepType: 'execute', timestamp: new Date(Date.now() + 100).toISOString() }
-], null, 2));
+];
+if (process.env.INJECT_NO_STEP) {
+  delete stepsData[1].stepType;
+}
+fs.writeFileSync(stepsPath, JSON.stringify(stepsData, null, 2));
 
 const dom = new JSDOM('<div id="timeline"></div>');
 const document = dom.window.document;
@@ -98,6 +102,10 @@ function renderTimeline(steps) {
     lastUpdateDelay = Date.now() - start;
     assert.strictEqual(step.type, expected[received]);
     received++;
+    if (process.env.INJECT_DISCONNECT && received === 1) {
+      es.close();
+      return;
+    }
     if (received === expected.length) {
       clearTimeout(timeout);
       es.close();

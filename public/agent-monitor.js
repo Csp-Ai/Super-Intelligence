@@ -25,8 +25,22 @@ let replaySource = null;
 let timelineSteps = [];
 let activeStep = -1;
 const statusEl = document.getElementById('replayStatus');
+const errorEl = document.getElementById('errorBanner');
 const replayLogCache = {};
+window.persistReplayLogs = false;
 const adminEmails = ['admin@example.com'];
+
+function showError(msg) {
+  if (!errorEl) return;
+  errorEl.textContent = msg;
+  errorEl.classList.remove('hidden');
+}
+
+function clearError() {
+  if (!errorEl) return;
+  errorEl.textContent = '';
+  errorEl.classList.add('hidden');
+}
 
 // === Replay Log UI ===
 async function loadReplayLogs(runId) {
@@ -92,7 +106,6 @@ async function showReplaySummary(runId) {
 }
 
 window.showReplaySummary = showReplaySummary;
-
 window.showReplayLogs = showReplayLogs;
 window.openTimelineModal = async function(runId) {
   await showReplayLogs(runId);
@@ -132,7 +145,7 @@ function updateTimeline() {
   }
 }
 
-async function sendReplayAction(runId, action, speed = 1) {
+async function sendReplayAction(runId, action, speed = 1, opts = {}) {
   const user = auth.currentUser;
   if (!user) return;
   const token = await user.getIdToken();
@@ -140,7 +153,7 @@ async function sendReplayAction(runId, action, speed = 1) {
   await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ runId, action, speed })
+    body: JSON.stringify({ runId, action, speed, persist: window.persistReplayLogs || opts.persist, message: opts.message })
   });
 }
 
@@ -166,11 +179,17 @@ async function startReplay() {
   updateTimeline();
   if (statusEl) statusEl.textContent = 'Starting...';
   if (replaySource) replaySource.close();
+  if (!auth.currentUser) {
+    showError('Not authenticated');
+    sendReplayAction(runId, 'error', 1, { message: 'no auth' });
+    return;
+  }
   await sendReplayAction(runId, 'stream', speed);
   const token = await auth.currentUser.getIdToken();
   const esUrl = `https://us-central1-${firebaseConfig.projectId}.cloudfunctions.net/agentSyncSubscribe?runId=${runId}&token=${token}`;
   replaySource = new EventSource(esUrl);
   replaySource.onmessage = evt => {
+    clearError();
     const data = JSON.parse(evt.data);
     if (data.type === 'replay-state') {
       activeStep = data.index - 1;
@@ -178,6 +197,9 @@ async function startReplay() {
         statusEl.textContent = `${data.status} (${data.index}/${data.total})`;
       }
       updateTimeline();
+    } else if (!data.stepType && !data.type) {
+      showError('Invalid stream data');
+      sendReplayAction(runId, 'error', 1, { message: 'missing stepType' });
     } else {
       const step = { type: data.stepType || data.type, timestamp: data.timestamp };
       timelineSteps.push(step);
@@ -185,7 +207,9 @@ async function startReplay() {
     }
   };
   replaySource.onerror = () => {
+    showError('Stream disconnected');
     if (statusEl) statusEl.textContent = 'disconnected';
+    sendReplayAction(runId, 'error', 1, { message: 'sse disconnect' });
   };
 }
 
@@ -222,6 +246,11 @@ document.getElementById('replayStep').addEventListener('click', () => {
   if (runId) sendReplayAction(runId, 'step');
 });
 
+document.getElementById('persistLogsBtn').addEventListener('click', () => {
+  window.persistReplayLogs = true;
+  showError('Logs will be persisted');
+});
+
 document.getElementById('regenSummaryBtn').addEventListener('click', async () => {
   const runId = new URLSearchParams(location.search).get('runId');
   if (!runId) return;
@@ -237,3 +266,4 @@ auth.onAuthStateChanged(user => {
     btn.classList.add('hidden');
   }
 });
+

@@ -57,7 +57,8 @@ function runLoop(runId) {
   setTimeout(() => runLoop(runId), 500);
 }
 
-async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = false }) {
+async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = false, persist = false, message }) {
+  if (process.env.LOCAL_AGENT_RUN) persist = true;
   let result;
   let error;
   try {
@@ -89,6 +90,9 @@ async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = 
         }
       }
       result = { status: 'stepped' };
+    } else if (action === 'error') {
+      await logReplayEvent({ userId, runId, action: 'client-error', params: { message }, state: {}, error: message, persist });
+      result = { status: 'logged' };
     } else {
       throw new Error('Invalid action');
     }
@@ -106,7 +110,7 @@ async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = 
         }
       : {};
     try {
-      await logReplayEvent({ userId, runId, action, params: { speed }, state, error });
+      await logReplayEvent({ userId, runId, action, params: { speed }, state, error, persist });
     } catch (e) {
       console.error('replay log failed', e.message);
     }
@@ -140,7 +144,7 @@ exports.replayAgentRun = functions.https.onRequest(async (req, res) => {
       ? functions.config().debug.allowlist.split(',')
       : ['admin@example.com'];
 
-    const { runId, action = 'start', speed = 1 } = req.body || {};
+    const { runId, action = 'start', speed = 1, persist = false, message } = req.body || {};
     if (!runId) {
       res.status(400).json({ error: 'Missing runId' });
       return;
@@ -152,7 +156,9 @@ exports.replayAgentRun = functions.https.onRequest(async (req, res) => {
       runId,
       action,
       speed,
-      isAdmin: allowed.includes(decoded.email)
+      isAdmin: allowed.includes(decoded.email),
+      persist,
+      message
     });
     res.json(result);
   } catch (err) {
