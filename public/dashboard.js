@@ -8,6 +8,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 const statusEl = document.getElementById('status');
+const offlineEl = document.getElementById('offlineFlag');
 
 document.getElementById('fetchBtn').addEventListener('click', async () => {
   const userId = document.getElementById('userIdInput').value.trim();
@@ -25,6 +26,7 @@ document.getElementById('fetchBtn').addEventListener('click', async () => {
     const roadmapSnap = await userRef.collection('roadmap').limit(1).get();
     const resumeSnap = await userRef.collection('resume').limit(1).get();
     const oppSnap = await userRef.collection('opportunities').limit(1).get();
+    const runSnap = await userRef.collection('agentRuns').orderBy('timestamp', 'desc').limit(1).get();
 
     if (!roadmapSnap.empty) {
       renderRoadmap(roadmapSnap.docs[0].data().roadmap || []);
@@ -42,6 +44,17 @@ document.getElementById('fetchBtn').addEventListener('click', async () => {
       renderOpportunities(oppSnap.docs[0].data().opportunities || []);
     } else {
       renderOpportunities([]);
+    }
+
+    if (!runSnap.empty) {
+      const ts = runSnap.docs[0].data().timestamp;
+      if (ts && Date.now() - new Date(ts).getTime() > 3 * 24 * 60 * 60 * 1000) {
+        offlineEl.classList.remove('hidden');
+      } else {
+        offlineEl.classList.add('hidden');
+      }
+    } else {
+      offlineEl.classList.remove('hidden');
     }
 
     statusEl.textContent = 'Data loaded successfully.';
