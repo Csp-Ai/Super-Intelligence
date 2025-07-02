@@ -14,3 +14,4 @@
 ## Build
 - 2025-07-02: Added `app.yaml` for Cloud Build and reauthenticated emulator with `firebase login --reauth`.
 - 2025-07-02: Configured CI to use `FIREBASE_TOKEN` for non-interactive `firebase deploy`.
+- 2025-07-02: Added `scripts/start-dev.sh` for unified local Firebase and frontend startup.

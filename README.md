@@ -88,6 +88,17 @@ Inspired by principles from:
    firebase login --reauth
    ```
 
+### Launching Local Dev Environment
+
+To run Firebase Hosting locally and start the frontend app:
+
+```bash
+./scripts/start-dev.sh
+```
+If you're not logged into Firebase, it will prompt you.
+
+On CI, auth is handled via `FIREBASE_TOKEN`.
+
 ### CI Deploys
 
 1. Generate a token locally using `firebase login:ci`.
