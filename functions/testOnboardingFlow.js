@@ -1,3 +1,4 @@
+process.env.LOCAL_AGENT_RUN = '1';
 const { formatAgentInput } = require('./onboardUser');
 const { generateRoadmap } = require('./agents/roadmapAgent');
 const { generateResumeSummary } = require('./agents/resumeAgent');

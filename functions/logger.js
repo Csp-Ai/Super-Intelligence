@@ -30,11 +30,13 @@ async function logAgentOutput({
   };
 
   // Write to Firestore collection 'logs'
-  try {
-    const db = admin.firestore();
-    await db.collection('logs').add(logEntry);
-  } catch (err) {
-    console.error('Failed to write log to Firestore', err);
+  if (!process.env.LOCAL_AGENT_RUN) {
+    try {
+      const db = admin.firestore();
+      await db.collection('logs').add(logEntry);
+    } catch (err) {
+      console.error('Failed to write log to Firestore', err);
+    }
   }
 
   // Append to local logs.json file

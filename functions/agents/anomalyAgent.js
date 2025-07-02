@@ -6,6 +6,7 @@ const functions = require('firebase-functions');
  * @returns {Promise<Array>} List of anomaly objects saved
  */
 async function detectAnomalies() {
+  if (process.env.LOCAL_AGENT_RUN) return [];
   const db = admin.firestore();
   const users = await db.collection('users').get();
   const anomalies = [];

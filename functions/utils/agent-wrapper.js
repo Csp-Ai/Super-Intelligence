@@ -2,19 +2,49 @@ const admin = require('firebase-admin');
 const fs = require('fs');
 const path = require('path');
 const { runAlignmentCheck } = require('../agents/alignment-core');
+const { createStepLogger } = require('./step-logger');
 
-async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', userId = 'unknown', input = {}, agentFunction }) {
-  const start = new Date();
-  console.log(`[${start.toISOString()}] Starting ${agentName}`);
+async function executeAgent({
+  agentName = 'unknown-agent',
+  version = 'v1.0.0',
+  userId = 'unknown',
+  input = {},
+  agentFunction
+}) {
+  const startTime = Date.now();
+  const startIso = new Date(startTime).toISOString();
+  console.log(`[${startIso}] Starting ${agentName}`);
 
-  // Collect granular execution steps for debugging and visualization
+  let db, runRef;
+  if (!process.env.LOCAL_AGENT_RUN) {
+    try {
+      if (!admin.apps.length) {
+        admin.initializeApp();
+      }
+      db = admin.firestore();
+      runRef = await db.collection('users').doc(userId).collection('agentRuns').add({
+        agentName,
+        version,
+        input,
+        timestamp: startIso,
+        status: 'running'
+      });
+    } catch (err) {
+      console.error('Failed to create run doc', err.message);
+      process.env.LOCAL_AGENT_RUN = '1';
+      runRef = { id: `local-${Date.now()}` };
+    }
+  } else {
+    runRef = { id: `local-${Date.now()}` };
+  }
+
+  const runId = runRef?.id || `local-${Date.now()}`;
+  const logStep = createStepLogger({ userId, runId, agentName });
+  await logStep({ stepType: 'start', input });
+
   const steps = [];
   const addStep = (type, data = {}) => {
-    steps.push({
-      type,
-      timestamp: new Date().toISOString(),
-      ...data
-    });
+    steps.push({ type, timestamp: new Date().toISOString(), ...data });
   };
   addStep('plan', { input });
 
@@ -23,19 +53,25 @@ async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', u
   let errorMsg = '';
 
   try {
-    // allow agent functions to push additional steps via callback
+    const execStart = Date.now();
     output = await agentFunction(input, addStep);
     addStep('generate', { output });
+    await logStep({ stepType: 'execute', input, output, durationMs: Date.now() - execStart });
+
     alignment = runAlignmentCheck({ agentName, output, userData: input });
+    await logStep({ stepType: 'alignment', input: output, output: alignment });
   } catch (err) {
     addStep('error', { message: err.message });
     alignment.notes = err.message;
     errorMsg = err.message;
+    await logStep({ stepType: 'error', input, output: err.message });
   }
 
   const status = alignment.alignmentPassed && !errorMsg ? 'success' : 'error';
-  const timestamp = new Date().toISOString();
-  const outputSummary = typeof output === 'string' ? output.slice(0, 100) : JSON.stringify(output).slice(0, 100);
+  const endIso = new Date().toISOString();
+  const outputSummary = typeof output === 'string'
+    ? output.slice(0, 100)
+    : JSON.stringify(output).slice(0, 100);
 
   const logEntry = {
     agent: agentName,
@@ -43,31 +79,27 @@ async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', u
     user: userId,
     status,
     alignment: { passed: alignment.alignmentPassed, flags: alignment.flags },
-    timestamp,
+    timestamp: endIso,
     outputSummary,
     steps
   };
 
   // Firestore logging
-  try {
-    const db = admin.firestore();
-    await db.collection('logs').add(logEntry);
-    await db
-      .collection('users')
-      .doc(userId)
-      .collection('agentRuns')
-      .add({
-        agentName,
-        timestamp,
-        input,
-        output,
-        status,
-        error: errorMsg,
-        resolved: status === 'success',
-        steps
-      });
-  } catch (e) {
-    console.error('Failed to write log to Firestore:', e.message);
+  if (!process.env.LOCAL_AGENT_RUN) {
+    try {
+      await db.collection('logs').add(logEntry);
+      if (runRef) {
+        await runRef.set({
+          output,
+          status,
+          error: errorMsg,
+          resolved: status === 'success',
+          timestamp: endIso
+        }, { merge: true });
+      }
+    } catch (e) {
+      console.error('Failed to write log to Firestore:', e.message);
+    }
   }
 
   // Local fallback logging
@@ -89,6 +121,8 @@ async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', u
     console.error('Failed to write local log:', e.message);
   }
 
+  await logStep({ stepType: 'complete', output, durationMs: Date.now() - startTime });
+
   if (status === 'error') {
     return { error: errorMsg || 'Output did not pass alignment checks.' };
   }
@@ -97,3 +131,4 @@ async function executeAgent({ agentName = 'unknown-agent', version = 'v1.0.0', u
 }
 
 module.exports = { executeAgent };
+
