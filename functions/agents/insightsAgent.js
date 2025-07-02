@@ -111,6 +111,8 @@ async function computeGlobalInsights() {
   const metrics = aggregateRuns(runs);
   for (const [agentName, data] of Object.entries(metrics)) {
     await db.collection('global').doc('insights').collection('agents').doc(agentName).set(data, { merge: true });
+    await db.collection('agents').doc(agentName).collection('lifecycle').doc('online').set({ timestamp: new Date().toISOString() }, { merge: true });
+    await db.collection('agents').doc(agentName).set({ currentState: 'online' }, { merge: true });
   }
   return metrics;
 }

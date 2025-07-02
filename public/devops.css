@@ -1,0 +1,6 @@
+#activity div,
+#commits div,
+#failing div,
+#recent div {
+  @apply border-b py-1;
+}
