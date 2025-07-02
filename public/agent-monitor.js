@@ -11,6 +11,7 @@ try {
   auth = firebase.auth();
   db = firebase.firestore();
   db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
+  auth.signInAnonymously().catch(() => {});
 } catch (err) {
   console.error('Firebase init failed', err);
 }
@@ -18,6 +19,7 @@ try {
 let runs = [];
 let unsubscribeRuns = null;
 const stepListeners = {};
+const syncStreams = {};
 
 function statusIcon(run) {
   if (run.status === 'running') {
@@ -180,6 +182,36 @@ function listenSteps(run) {
   });
 }
 
+async function listenAgentSync(run) {
+  if (syncStreams[run.id]) return;
+  const token = await auth.currentUser.getIdToken();
+  const url = `/agentSyncSubscribe?runId=${run.id}&token=${token}`;
+  const es = new EventSource(url);
+  es.onmessage = ev => {
+    try {
+      const data = JSON.parse(ev.data);
+      const idx = runs.findIndex(r => r.id === run.id);
+      if (idx > -1) {
+        if (data.status) runs[idx].status = data.status;
+        if (data.stepType || data.type) runs[idx].phase = data.stepType || data.type;
+        renderRuns();
+      }
+    } catch (_) {}
+  };
+  es.onerror = () => {
+    es.close();
+    delete syncStreams[run.id];
+  };
+  syncStreams[run.id] = es;
+}
+
+function stopAgentSync(id) {
+  if (syncStreams[id]) {
+    syncStreams[id].close();
+    delete syncStreams[id];
+  }
+}
+
 function processSnapshot(snapshot) {
   const offline = snapshot.metadata.fromCache && !snapshot.metadata.hasPendingWrites;
   document.getElementById('offlineMsg').classList.toggle('hidden', !offline);
@@ -198,9 +230,13 @@ function processSnapshot(snapshot) {
     }
     if (data.status === 'running') {
       listenSteps(data);
-    } else if (stepListeners[data.id]) {
-      stepListeners[data.id]();
-      delete stepListeners[data.id];
+      listenAgentSync(data);
+    } else {
+      if (stepListeners[data.id]) {
+        stepListeners[data.id]();
+        delete stepListeners[data.id];
+      }
+      stopAgentSync(data.id);
     }
     setTimeout(() => {
       const r = runs.find(x => x.id === data.id);
@@ -217,6 +253,8 @@ function startListening() {
   if (unsubscribeRuns) unsubscribeRuns();
   Object.values(stepListeners).forEach(fn => fn());
   for (const k in stepListeners) delete stepListeners[k];
+  Object.values(syncStreams).forEach(es => es.close());
+  for (const k in syncStreams) delete syncStreams[k];
   runs = [];
   const userId = auth.currentUser.uid;
   const q = db
@@ -238,6 +276,8 @@ auth.onAuthStateChanged(user => {
     unsubscribeRuns = null;
     Object.values(stepListeners).forEach(fn => fn());
     for (const k in stepListeners) delete stepListeners[k];
+    Object.values(syncStreams).forEach(es => es.close());
+    for (const k in syncStreams) delete syncStreams[k];
     runs = [];
     renderRuns();
     document.getElementById('loginSection').classList.remove('hidden');

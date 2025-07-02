@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { runAlignmentCheck } = require('../agents/alignment-core');
 const { createStepLogger } = require('./step-logger');
+const { publish } = require('./agent-sync');
 
 async function executeAgent({
   agentName = 'unknown-agent',
@@ -41,6 +42,9 @@ async function executeAgent({
   const runId = runRef?.id || `local-${Date.now()}`;
   const logStep = createStepLogger({ userId, runId, agentName });
   await logStep({ stepType: 'start', input });
+  try {
+    await publish(runId, { status: 'running', stepType: 'start' });
+  } catch (_) {}
 
   const steps = [];
   const addStep = (type, data = {}) => {
@@ -122,6 +126,9 @@ async function executeAgent({
   }
 
   await logStep({ stepType: 'complete', output, durationMs: Date.now() - startTime });
+  try {
+    await publish(runId, { status, stepType: 'complete' });
+  } catch (_) {}
 
   if (status === 'error') {
     return { error: errorMsg || 'Output did not pass alignment checks.' };
