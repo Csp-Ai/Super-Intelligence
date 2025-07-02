@@ -13,6 +13,7 @@
 <body class="bg-gray-100">
   <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Agent Run History</h1>
+
     <div id="loginSection" class="mb-4">
       <input id="email" class="border p-2 mr-2" placeholder="Email">
       <input id="password" type="password" class="border p-2 mr-2" placeholder="Password">
@@ -20,32 +21,46 @@
       <button id="googleBtn" class="bg-red-600 text-white px-4 py-2 rounded">Google</button>
       <p id="loginStatus" class="text-sm mt-2"></p>
     </div>
+
     <div id="controls" class="hidden mb-4">
       <div class="mb-2">
         <label class="mr-2">Agent</label>
         <select id="agentFilter" class="border p-1 mr-4"></select>
+
         <label class="mr-2">Status</label>
         <select id="statusFilter" class="border p-1 mr-4">
           <option value="">All</option>
           <option value="success">Success</option>
           <option value="error">Error</option>
+          <option value="running">Running</option>
           <option value="warning">Warning</option>
         </select>
+
+        <label class="mr-2">Tag</label>
+        <input id="tagFilter" class="border p-1 mr-4" placeholder="tag">
+
         <label class="mr-2">From</label>
         <input id="startDate" type="date" class="border p-1 mr-2">
+
         <label class="mr-2">To</label>
         <input id="endDate" type="date" class="border p-1 mr-4">
+
         <label class="mr-2">Group By</label>
         <select id="groupBy" class="border p-1 mr-4">
           <option value="agent">Agent</option>
           <option value="task">Task</option>
         </select>
+
         <button id="refreshBtn" class="bg-gray-200 px-2 py-1 rounded">Refresh</button>
+        <button id="downloadBtn" class="ml-2 bg-blue-500 text-white px-2 py-1 rounded">Download JSON</button>
         <button id="logoutBtn" class="ml-4 bg-red-500 text-white px-2 py-1 rounded">Logout</button>
       </div>
     </div>
+
     <div id="stats" class="mb-4"></div>
     <canvas id="usageChart" class="mb-4"></canvas>
+
+    <div id="loadingSpinner" class="hidden text-center py-4">Loading...</div>
     <div id="emptyMsg" class="mb-4 text-center text-gray-500"></div>
     <div id="runsContainer"></div>
   </div>
@@ -55,12 +70,14 @@
       <button id="closeModal" class="float-right text-red-600">X</button>
       <h2 class="text-xl font-semibold mb-2">Run Details</h2>
       <div id="modalContent" class="text-sm whitespace-pre-wrap mb-4"></div>
+
       <div id="feedbackSection" class="hidden mb-4">
         <p id="avgRating" class="text-sm text-gray-600 mb-1"></p>
         <div class="flex items-center mb-2" id="ratingContainer"></div>
         <textarea id="feedbackComment" class="w-full border p-2 mb-2" rows="3" placeholder="Leave a comment"></textarea>
         <button id="submitFeedback" class="bg-blue-600 text-white px-3 py-1 rounded">Submit</button>
       </div>
+
       <button id="feedbackBtn" class="bg-green-600 text-white px-3 py-1 rounded">Give Feedback</button>
     </div>
   </div>
