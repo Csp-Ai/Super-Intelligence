@@ -20,7 +20,7 @@ function writeLocal(runId, entry) {
   fs.writeFileSync(replayLogPath, JSON.stringify(logs, null, 2));
 }
 
-async function logReplayEvent({ userId, runId, action, params = {}, state = {}, error }) {
+async function logReplayEvent({ userId, runId, action, params = {}, state = {}, error, persist = false }) {
   const entry = {
     timestamp: new Date().toISOString(),
     action,
@@ -28,6 +28,7 @@ async function logReplayEvent({ userId, runId, action, params = {}, state = {}, 
     state
   };
   if (error) entry.error = error;
+  if (persist) entry.persist = true;
 
   if (process.env.LOCAL_AGENT_RUN) {
     console.log('REPLAY EVENT', action, entry);
