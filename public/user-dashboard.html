@@ -29,8 +29,11 @@
           <option value="">All</option>
           <option value="success">Success</option>
           <option value="error">Error</option>
+          <option value="running">Running</option>
           <option value="warning">Warning</option>
         </select>
+        <label class="mr-2">Tag</label>
+        <input id="tagFilter" class="border p-1 mr-4" placeholder="tag">
         <label class="mr-2">From</label>
         <input id="startDate" type="date" class="border p-1 mr-2">
         <label class="mr-2">To</label>
@@ -41,11 +44,13 @@
           <option value="task">Task</option>
         </select>
         <button id="refreshBtn" class="bg-gray-200 px-2 py-1 rounded">Refresh</button>
+        <button id="downloadBtn" class="ml-2 bg-blue-500 text-white px-2 py-1 rounded">Download JSON</button>
         <button id="logoutBtn" class="ml-4 bg-red-500 text-white px-2 py-1 rounded">Logout</button>
       </div>
     </div>
     <div id="stats" class="mb-4"></div>
     <canvas id="usageChart" class="mb-4"></canvas>
+    <div id="loadingSpinner" class="hidden text-center py-4">Loading...</div>
     <div id="runsContainer"></div>
   </div>
 
