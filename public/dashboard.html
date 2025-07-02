@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Output Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-2xl font-semibold mb-4">Central Agent Dashboard</h1>
+    <div class="mb-4">
+      <input id="userIdInput" type="text" placeholder="Enter user ID" class="border p-2 w-64 mr-2">
+      <button id="fetchBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Fetch</button>
+      <span id="status" class="ml-4 text-sm"></span>
+    </div>
+    <div id="roadmap" class="mb-6"></div>
+    <div id="resume" class="mb-6"></div>
+    <div id="opportunities" class="mb-6"></div>
+  </div>
+  <script src="dashboard.js"></script>
+</body>
+</html>
