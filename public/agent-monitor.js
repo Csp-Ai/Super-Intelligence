@@ -22,5 +22,37 @@ const stepListeners = {};
 const syncStreams = {};
 let currentReplay = null;
 
+async function loadReplayLogs(runId) {
+  if (!auth || !auth.currentUser) return [];
+  const snap = await db
+    .collection('users')
+    .doc(auth.currentUser.uid)
+    .collection('agentRuns')
+    .doc(runId)
+    .collection('logs')
+    .orderBy('timestamp')
+    .get();
+  return snap.docs.map(d => d.data());
+}
+
+function renderReplayLogs(logs) {
+  const container = document.getElementById('replayLogs');
+  container.innerHTML = '';
+  logs.forEach(l => {
+    const div = document.createElement('div');
+    const params = l.params ? JSON.stringify(l.params) : '';
+    const err = l.error ? ` - Error: ${l.error}` : '';
+    div.textContent = `${l.timestamp} - ${l.event} ${params}${err}`;
+    container.appendChild(div);
+  });
+}
+
+async function showReplayLogs(runId) {
+  const logs = await loadReplayLogs(runId);
+  renderReplayLogs(logs);
+}
+
+window.showReplayLogs = showReplayLogs;
+
 // ... rest of the code continues unchanged
 
