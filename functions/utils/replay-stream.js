@@ -50,6 +50,9 @@ class ReplayStream {
     this.speed = opts.speed || 1;
     this.annotations = [];
     this._stop = false;
+    this.paused = false;
+    this.index = 0;
+    this.total = 0;
   }
 
   async _fetchCollection(ref) {
@@ -115,15 +118,37 @@ class ReplayStream {
     return entry;
   }
 
+  async _emitState(extra = {}) {
+    try {
+      await publish(this.runId, {
+        type: 'replay-state',
+        index: this.index,
+        total: this.total,
+        paused: this.paused,
+        _replay: true,
+        ...extra
+      });
+    } catch (_) {}
+  }
+
   stop() {
     this._stop = true;
+    this.paused = true;
+    this._emitState({ status: 'paused' }).catch(() => {});
   }
 
   async play() {
     const timeline = await this._loadTimeline();
+    this.total = timeline.length;
+    this.index = 0;
+    this.paused = false;
+    await this._emitState({ status: 'running' });
     let prev = null;
     for (const item of timeline) {
-      if (this._stop) break;
+      if (this._stop) {
+        await this._emitState({ status: 'paused' });
+        break;
+      }
       if (prev) {
         const diff = new Date(item.timestamp) - new Date(prev.timestamp);
         if (diff > 0) {
@@ -135,7 +160,13 @@ class ReplayStream {
         ...item.data,
         _replay: true
       });
+      this.index++;
+      await this._emitState({ status: 'running' });
       prev = item;
+    }
+    if (!this._stop) {
+      this.paused = false;
+      await this._emitState({ status: 'completed' });
     }
     return this.annotations;
   }
