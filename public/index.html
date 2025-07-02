@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-md mx-auto bg-white p-4 shadow">
+    <h1 class="text-xl mb-4">Get Started</h1>
+    <input id="name" class="border p-2 w-full mb-2" placeholder="Full name" />
+    <input id="email" class="border p-2 w-full mb-2" placeholder="Email" />
+    <input id="password" type="password" class="border p-2 w-full mb-2" placeholder="Password" />
+    <input id="dream" class="border p-2 w-full mb-2" placeholder="Dream outcome" />
+    <input id="skills" class="border p-2 w-full mb-4" placeholder="Skills (comma separated)" />
+    <button id="signupBtn" class="bg-blue-600 text-white px-4 py-2 rounded w-full mb-2">Sign Up</button>
+    <button id="googleBtn" class="bg-red-600 text-white px-4 py-2 rounded w-full">Sign Up with Google</button>
+    <p id="status" class="text-sm mt-2"></p>
+  </div>
+  <script src="onboarding.js"></script>
+</body>
+</html>
