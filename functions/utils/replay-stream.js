@@ -20,16 +20,17 @@ function writeLocal(runId, entry) {
   fs.writeFileSync(replayLogPath, JSON.stringify(logs, null, 2));
 }
 
-async function logReplayEvent({ userId, runId, event, params = {}, state = {}, error }) {
+async function logReplayEvent({ userId, runId, action, params = {}, state = {}, error }) {
   const entry = {
     timestamp: new Date().toISOString(),
-    event,
+    action,
     params,
     state
   };
   if (error) entry.error = error;
 
   if (process.env.LOCAL_AGENT_RUN) {
+    console.log('REPLAY EVENT', action, entry);
     writeLocal(runId, { userId, ...entry });
     return;
   }
@@ -39,7 +40,7 @@ async function logReplayEvent({ userId, runId, event, params = {}, state = {}, e
     .doc(userId)
     .collection('agentRuns')
     .doc(runId)
-    .collection('logs')
+    .collection('replayLogs')
     .add(entry);
 }
 

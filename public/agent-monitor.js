@@ -21,18 +21,21 @@ let unsubscribeRuns = null;
 const stepListeners = {};
 const syncStreams = {};
 let currentReplay = null;
+const replayLogCache = {};
 
 async function loadReplayLogs(runId) {
+  if (replayLogCache[runId]) return replayLogCache[runId];
   if (!auth || !auth.currentUser) return [];
   const snap = await db
     .collection('users')
     .doc(auth.currentUser.uid)
     .collection('agentRuns')
     .doc(runId)
-    .collection('logs')
-    .orderBy('timestamp')
+    .collection('replayLogs')
+    .orderBy('timestamp', 'desc')
     .get();
-  return snap.docs.map(d => d.data());
+  replayLogCache[runId] = snap.docs.map(d => d.data());
+  return replayLogCache[runId];
 }
 
 function renderReplayLogs(logs) {
@@ -42,7 +45,7 @@ function renderReplayLogs(logs) {
     const div = document.createElement('div');
     const params = l.params ? JSON.stringify(l.params) : '';
     const err = l.error ? ` - Error: ${l.error}` : '';
-    div.textContent = `${l.timestamp} - ${l.event} ${params}${err}`;
+    div.textContent = `${l.timestamp} - ${l.action} ${params}${err}`;
     container.appendChild(div);
   });
 }
@@ -53,6 +56,12 @@ async function showReplayLogs(runId) {
 }
 
 window.showReplayLogs = showReplayLogs;
+
+async function openTimelineModal(runId) {
+  await showReplayLogs(runId);
+}
+
+window.openTimelineModal = openTimelineModal;
 
 // ... rest of the code continues unchanged
 
