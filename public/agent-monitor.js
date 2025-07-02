@@ -28,17 +28,27 @@ const statusEl = document.getElementById('replayStatus');
 const errorEl = document.getElementById('errorBanner');
 const replayLogCache = {};
 window.persistReplayLogs = false;
+// List of emails allowed to access admin-only controls
 const adminEmails = ['admin@example.com'];
 
-function showError(msg) {
+// Display an error or system message in the banner
+// type: 'error' (red) or 'system' (yellow)
+function showError(msg, type = 'error') {
   if (!errorEl) return;
   errorEl.textContent = msg;
-  errorEl.classList.remove('hidden');
+  errorEl.classList.remove('hidden', 'bg-red-200', 'text-red-800', 'bg-yellow-200', 'text-yellow-800');
+  if (type === 'system') {
+    errorEl.classList.add('bg-yellow-200', 'text-yellow-800');
+  } else {
+    errorEl.classList.add('bg-red-200', 'text-red-800');
+  }
 }
 
+// Clear and hide the error banner
 function clearError() {
   if (!errorEl) return;
   errorEl.textContent = '';
+  errorEl.classList.remove('bg-red-200', 'text-red-800', 'bg-yellow-200', 'text-yellow-800');
   errorEl.classList.add('hidden');
 }
 
@@ -246,9 +256,17 @@ document.getElementById('replayStep').addEventListener('click', () => {
   if (runId) sendReplayAction(runId, 'step');
 });
 
+// Toggle whether replay logs should be persisted to Firestore
 document.getElementById('persistLogsBtn').addEventListener('click', () => {
-  window.persistReplayLogs = true;
-  showError('Logs will be persisted');
+  window.persistReplayLogs = !window.persistReplayLogs;
+  const btn = document.getElementById('persistLogsBtn');
+  if (window.persistReplayLogs) {
+    btn.textContent = 'Persist Logs \u2713';
+    showError('Logs will be persisted', 'system');
+  } else {
+    btn.textContent = 'Persist Logs';
+    showError('Logs will NOT be persisted', 'system');
+  }
 });
 
 document.getElementById('regenSummaryBtn').addEventListener('click', async () => {
@@ -258,6 +276,7 @@ document.getElementById('regenSummaryBtn').addEventListener('click', async () =>
   await showReplaySummary(runId);
 });
 
+// Show admin controls only for authenticated admin users
 auth.onAuthStateChanged(user => {
   const btn = document.getElementById('regenSummaryBtn');
   if (user && user.email && adminEmails.includes(user.email)) {
