@@ -11,6 +11,9 @@ export default defineConfig(({ mode }) => {
     esbuild: {
       loader: 'jsx',
       include: /src\/.*\.[jt]sx?$/
+    },
+    preview: {
+      allowedHosts: ['super-intelligence-170923536461.europe-west1.run.app']
     }
   }
 })
