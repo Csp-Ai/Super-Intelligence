@@ -5,6 +5,8 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 import { signInWithGoogle } from "./auth";
 import { app } from "./firebase";
 import CanvasNetwork from "./components/CanvasNetwork";
+import AgentSyncPanel from "./components/AgentSyncPanel";
+import useAgentSync from "./hooks/useAgentSync";
 import OnboardingOverlay from "./components/OnboardingOverlay";
 import SectionNav from "./components/SectionNav";
 import AgentCard from "./components/AgentCard";
@@ -50,6 +52,7 @@ function App() {
   const [registry, setRegistry] = useState([]);
   const [showAnomaliesFor, setShowAnomaliesFor] = useState(null);
   const [showLifecycleFor, setShowLifecycleFor] = useState(null);
+  const syncEvents = useAgentSync('demo-run');
 
   useEffect(() => {
     fetch('/config/agents.json')
@@ -198,7 +201,14 @@ function App() {
         <InsightsChart />
 
         <button onClick={() => triggerPulse("core")}>Trigger Core Pulse</button>
-        <CanvasNetwork ref={canvasRef} agents={agents} width={500} height={300} />
+        <CanvasNetwork
+          ref={canvasRef}
+          agents={agents}
+          width={500}
+          height={300}
+          events={syncEvents}
+        />
+        <AgentSyncPanel events={syncEvents} />
       </div>
     </DashboardDataProvider>
   );

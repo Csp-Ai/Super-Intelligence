@@ -12,10 +12,11 @@ export function useDebounce(fn, delay) {
 
 import { forwardRef } from 'react';
 
-const CanvasNetwork = forwardRef(function CanvasNetwork({ width = 600, height = 400, agents = [] }, ref) {
+const CanvasNetwork = forwardRef(function CanvasNetwork({ width = 600, height = 400, agents = [], events = [] }, ref) {
   const canvasRef = useRef(null);
   // Agents are stored in a ref to avoid re-renders
   const agentsRef = useRef([]);
+  const connectionsRef = useRef([]);
 
   // Initialize agent data only once
   useEffect(() => {
@@ -23,6 +24,14 @@ const CanvasNetwork = forwardRef(function CanvasNetwork({ width = 600, height = 
       ...agent,
       pulse: 0,
     }));
+    // initialize connections
+    const conns = [];
+    for (let i = 0; i < agents.length; i++) {
+      for (let j = i + 1; j < agents.length; j++) {
+        conns.push({ from: agents[i].id, to: agents[j].id, pulse: 0 });
+      }
+    }
+    connectionsRef.current = conns;
   }, [agents]);
 
   const requestRef = useRef();
@@ -48,17 +57,18 @@ const CanvasNetwork = forwardRef(function CanvasNetwork({ width = 600, height = 
     ctx.fillRect(0, 0, width, height);
 
     // draw connection lines with pulse intensity
-    agentsRef.current.forEach((agent, i) => {
-      for (let j = i + 1; j < agentsRef.current.length; j++) {
-        const target = agentsRef.current[j];
-        const activity = Math.max(agent.pulse, target.pulse);
-        ctx.beginPath();
-        ctx.strokeStyle = `rgba(0,255,220,${activity / 20})`;
-        ctx.lineWidth = activity > 0 ? 2 : 1;
-        ctx.moveTo(agent.x, agent.y);
-        ctx.lineTo(target.x, target.y);
-        ctx.stroke();
-      }
+    connectionsRef.current.forEach(conn => {
+      const from = agentsRef.current.find(a => a.id === conn.from);
+      const to = agentsRef.current.find(a => a.id === conn.to);
+      if (!from || !to) return;
+      const activity = conn.pulse;
+      ctx.beginPath();
+      ctx.strokeStyle = `rgba(0,255,220,${activity / 20})`;
+      ctx.lineWidth = activity > 0 ? 2 : 1;
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+      ctx.stroke();
+      if (conn.pulse > 0) conn.pulse -= 0.3;
     });
 
     agentsRef.current.forEach(agent => {
@@ -100,6 +110,22 @@ const CanvasNetwork = forwardRef(function CanvasNetwork({ width = 600, height = 
   useEffect(() => {
     canvasRef.current.updateActivity = debouncedActivity;
   }, [debouncedActivity]);
+
+  // React to incoming AgentSync events
+  useEffect(() => {
+    if (!events.length) return;
+    const data = events[0];
+    const fromId = data._agentId;
+    if (fromId) {
+      debouncedActivity(fromId);
+      connectionsRef.current.forEach(conn => {
+        if (conn.from === fromId || conn.to === fromId) {
+          const important = /model|strategy/i.test(data.stepType || data.type || '');
+          conn.pulse = important ? 20 : 10;
+        }
+      });
+    }
+  }, [events, debouncedActivity]);
 
   return <canvas ref={canvasRef} width={width} height={height} />;
 });
