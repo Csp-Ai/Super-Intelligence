@@ -29,22 +29,27 @@ jobs:
           npm config delete https-proxy || true
           sed -i '/http-proxy/d;/https-proxy/d' .npmrc || true
       - name: Install dependencies
-        run: npm --prefix functions install
+        working-directory: functions
+        run: npm install
       - name: Build functions
-        run: npm --prefix functions run build
+        working-directory: functions
+        run: npm run build
       - name: Run tests
         working-directory: functions
         run: npm test
       - name: Verify start script
-        run: timeout 3 npm --prefix functions start || true
+        working-directory: functions
+        run: timeout 3 npm start || true
       - uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ env.PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - name: Deploy to Cloud Run
+        working-directory: functions
         run: |
           gcloud run deploy $SERVICE_NAME \
-            --source functions \
+            --source . \
             --region us-central1 \
             --project $PROJECT_ID \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --build-env-vars "GOOGLE_ENTRYPOINT=${{ env.GOOGLE_ENTRYPOINT }}"
