@@ -1,8 +1,7 @@
 process.env.LOCAL_AGENT_RUN = '1';
 const { formatAgentInput } = require('./onboardUser');
-const { generateRoadmap } = require('./agents/roadmapAgent');
-const { generateResumeSummary } = require('./agents/resumeAgent');
-const { generateOpportunities } = require('./agents/opportunityAgent');
+const { runAgentFlow } = require('../core/agentFlowEngine');
+const flows = require('../flows');
 
 (async () => {
   const input = formatAgentInput({
@@ -11,10 +10,8 @@ const { generateOpportunities } = require('./agents/opportunityAgent');
     dreamOutcome: 'be legendary',
     skills: 'coding,design'
   });
-  const roadmap = await generateRoadmap(input, 'test-user');
-  const resume = await generateResumeSummary(input, 'test-user');
-  const opps = await generateOpportunities(input, 'test-user');
-  console.log('roadmap', roadmap);
-  console.log('resume', resume);
-  console.log('opportunities', opps);
+  const result = await runAgentFlow(flows.onboarding, { userId: 'test-user', input });
+  console.log('roadmap', result.roadmap);
+  console.log('resume', result.resume);
+  console.log('opportunities', result.opportunities);
 })();
