@@ -33,16 +33,47 @@ const CanvasNetwork = forwardRef(function CanvasNetwork({ width = 600, height = 
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, width, height);
 
+    // background gradient
+    const gradient = ctx.createRadialGradient(
+      width / 2,
+      height / 2,
+      0,
+      width / 2,
+      height / 2,
+      Math.max(width, height) / 1.2
+    );
+    gradient.addColorStop(0, '#1b0d3f');
+    gradient.addColorStop(1, '#050017');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+
+    // draw connection lines with pulse intensity
+    agentsRef.current.forEach((agent, i) => {
+      for (let j = i + 1; j < agentsRef.current.length; j++) {
+        const target = agentsRef.current[j];
+        const activity = Math.max(agent.pulse, target.pulse);
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(0,255,220,${activity / 20})`;
+        ctx.lineWidth = activity > 0 ? 2 : 1;
+        ctx.moveTo(agent.x, agent.y);
+        ctx.lineTo(target.x, target.y);
+        ctx.stroke();
+      }
+    });
+
     agentsRef.current.forEach(agent => {
-      // draw node
+      ctx.save();
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = '#a855f7';
       ctx.beginPath();
-      ctx.fillStyle = '#4f46e5'; // indigo-600
+      ctx.fillStyle = '#7c3aed';
       ctx.arc(agent.x, agent.y, 6, 0, Math.PI * 2);
       ctx.fill();
-      // draw pulse if active
+      ctx.restore();
+
       if (agent.pulse > 0) {
         ctx.beginPath();
-        ctx.strokeStyle = 'rgba(99,102,241,' + agent.pulse / 20 + ')';
+        ctx.strokeStyle = `rgba(0,255,220,${agent.pulse / 20})`;
         ctx.lineWidth = 2;
         ctx.arc(agent.x, agent.y, 6 + agent.pulse, 0, Math.PI * 2);
         ctx.stroke();
