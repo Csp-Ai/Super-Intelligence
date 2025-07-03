@@ -8,6 +8,7 @@ import CanvasNetwork from "./components/CanvasNetwork";
 import OnboardingOverlay from "./components/OnboardingOverlay";
 import SectionNav from "./components/SectionNav";
 import AgentCard from "./components/AgentCard";
+import TrendsPanel from "./components/TrendsPanel";
 import { DashboardDataProvider } from "./context/DashboardDataContext";
 
 const sections = {
@@ -143,6 +144,8 @@ function App() {
           );
         })}
       </div>
+
+      <TrendsPanel />
 
       <button onClick={() => triggerPulse("core")}>Trigger Core Pulse</button>
       <CanvasNetwork ref={canvasRef} agents={agents} width={500} height={300} />
