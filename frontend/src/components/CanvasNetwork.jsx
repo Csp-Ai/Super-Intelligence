@@ -118,9 +118,15 @@ const CanvasNetwork = forwardRef(function CanvasNetwork({ width = 600, height = 
     const fromId = data._agentId;
     if (fromId) {
       debouncedActivity(fromId);
+      const targetId = data.targetAgent;
       connectionsRef.current.forEach(conn => {
-        if (conn.from === fromId || conn.to === fromId) {
-          const important = /model|strategy/i.test(data.stepType || data.type || '');
+        if (
+          conn.from === fromId ||
+          conn.to === fromId ||
+          (targetId && ((conn.from === fromId && conn.to === targetId) || (conn.from === targetId && conn.to === fromId)))
+        ) {
+          const important =
+            /model|strategy/i.test(data.stepType || data.type || '') || targetId;
           conn.pulse = important ? 20 : 10;
         }
       });

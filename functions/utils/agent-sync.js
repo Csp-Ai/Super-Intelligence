@@ -5,6 +5,9 @@ let agentId = 'unknown-agent';
 const listeners = {};
 const localStore = {};
 
+// Store strategy sync logs locally when running in LOCAL_AGENT_RUN
+const localLogs = [];
+
 function registerAgent(id) {
   agentId = id || agentId;
 }
@@ -19,6 +22,23 @@ function decryptPayload(data) {
   return data;
 }
 
+async function logSyncMessage({ sourceAgent, targetAgent, strategySummary, timestamp }) {
+  if (!targetAgent || !strategySummary) return;
+  const entry = { sourceAgent, targetAgent, strategySummary, timestamp };
+
+  if (process.env.LOCAL_AGENT_RUN) {
+    localLogs.push(entry);
+    return;
+  }
+
+  try {
+    const db = admin.firestore();
+    await db.collection('agentSyncLogs').add(entry);
+  } catch (err) {
+    console.error('AgentSync log failed', err.message);
+  }
+}
+
 async function publish(runId, payload = {}) {
   const data = {
     ...encryptPayload(payload),
@@ -31,6 +51,12 @@ async function publish(runId, payload = {}) {
     localStore[runId].push(data);
     (listeners[runId] || []).forEach(cb => cb(decryptPayload(data)));
     broadcast(runId, decryptPayload(data));
+    await logSyncMessage({
+      sourceAgent: agentId,
+      targetAgent: payload.targetAgent,
+      strategySummary: payload.strategySummary,
+      timestamp: data._timestamp
+    });
     return;
   }
 
@@ -56,6 +82,12 @@ async function publish(runId, payload = {}) {
 
   await attempt();
   broadcast(runId, decryptPayload(data));
+  await logSyncMessage({
+    sourceAgent: agentId,
+    targetAgent: payload.targetAgent,
+    strategySummary: payload.strategySummary,
+    timestamp: data._timestamp
+  });
 }
 
 function subscribe(runId, callback) {
