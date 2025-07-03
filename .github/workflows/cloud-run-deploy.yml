@@ -10,6 +10,7 @@ jobs:
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
       SERVICE_NAME: node-backend
+      GOOGLE_REGION: us-central1
       GOOGLE_ENTRYPOINT: "npm --prefix functions start"
     steps:
       - uses: actions/checkout@v3
@@ -54,3 +55,10 @@ jobs:
             --timeout=300s \
             --allow-unauthenticated \
             --build-env-vars "GOOGLE_ENTRYPOINT=${{ env.GOOGLE_ENTRYPOINT }}"
+      - name: Verify Cloud Run healthcheck
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.SERVICE_NAME }}-${{ env.GOOGLE_REGION }}.a.run.app/healthcheck.html)
+          if [ "$status" != "200" ]; then
+            echo "Healthcheck failed with status $status"
+            exit 1
+          fi
