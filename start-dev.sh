@@ -26,6 +26,19 @@ if ! java -version >/dev/null 2>&1; then
 fi
 
 echo "Launching development environment..."
-npm install >/dev/null 2>&1
-npm install --prefix functions >/dev/null 2>&1
+
+if [ ! -d node_modules ]; then
+  echo "Installing root npm packages..."
+  npm ci >/dev/null 2>&1
+else
+  echo "Root packages already installed"
+fi
+
+if [ ! -d functions/node_modules ]; then
+  echo "Installing functions npm packages..."
+  npm ci --prefix functions >/dev/null 2>&1
+else
+  echo "Functions packages already installed"
+fi
+
 npm run dev
