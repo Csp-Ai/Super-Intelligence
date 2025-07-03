@@ -135,6 +135,14 @@ running:
 firebase deploy
 ```
 
+### Running `index.js` in Production
+
+When deploying the Node server (for example via App Engine) you must provide
+Firebase credentials for `firebase-admin`. Place a `serviceAccount.json` file in
+the repository root or set the `GOOGLE_APPLICATION_CREDENTIALS` environment
+variable to point at your service account file. The file name is already listed
+in `.gitignore` so your credentials won't be committed.
+
 ### Debug Console
 
 Developers can review recent agent activity through `/debug.html` once
