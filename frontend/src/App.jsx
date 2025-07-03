@@ -1,6 +1,11 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { getFirestore, collection, onSnapshot } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  getDocs
+} from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { signInWithGoogle } from "./auth";
 import { app } from "./firebase";
@@ -23,6 +28,8 @@ import OpportunityCard from "./components/OpportunityCard";
 import BoardPanel from "./components/BoardPanel";
 import MentorPanel from "./components/MentorPanel";
 import GuardianPanel from "./components/GuardianPanel";
+
+import useAgentPreferences from "./hooks/useAgentPreferences";
 
 import { DashboardDataProvider } from "./context/DashboardDataContext";
 
@@ -61,22 +68,38 @@ function App() {
 
   const [agents, setAgents] = useState([]);
   const [registry, setRegistry] = useState([]);
+  const [prefs, togglePref] = useAgentPreferences();
   const [showAnomaliesFor, setShowAnomaliesFor] = useState(null);
   const [showLifecycleFor, setShowLifecycleFor] = useState(null);
   const syncEvents = useAgentSync('demo-run');
 
   useEffect(() => {
-    fetch('/config/agents.json')
-      .then(res => res.json())
-      .then(data => setRegistry(Object.values(data)))
-      .catch(err => console.error('failed to load agents', err));
+    const fetchRegistry = async () => {
+      try {
+        const snap = await getDocs(collection(getFirestore(app), 'agents'));
+        if (!snap.empty) {
+          setRegistry(
+            snap.docs.map(d => ({ name: d.id, ...d.data() }))
+          );
+          return;
+        }
+      } catch (err) {
+        console.warn('firestore registry fetch failed', err);
+      }
+      fetch('/config/agents.json')
+        .then(res => res.json())
+        .then(data => setRegistry(Object.values(data)))
+        .catch(err => console.error('failed to load agents', err));
+    };
+    fetchRegistry();
   }, []);
 
   useEffect(() => {
-    if (registry.length) {
-      setAgents(layoutAgents(registry.map(r => r.name)));
+    const list = registry.filter(r => prefs[r.name] !== false);
+    if (list.length) {
+      setAgents(layoutAgents(list.map(r => r.name)));
     }
-  }, [registry]);
+  }, [registry, prefs]);
 
   useEffect(() => {
     const completed = localStorage.getItem('demoOverlayComplete');
@@ -160,7 +183,7 @@ function App() {
         </AnimatePresence>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-          {registry.map(reg => {
+          {registry.filter(r => prefs[r.name] !== false).map(reg => {
             const live = agents.find(a => a.id === reg.name) || {};
             const metrics = {
               activity: live.activity || 0,
@@ -174,6 +197,8 @@ function App() {
                 status={reg.lastRunStatus}
                 state={live.currentState}
                 anomalyScore={live.anomalyScore}
+                enabled={prefs[reg.name] !== false}
+                onToggle={() => togglePref(reg.name)}
                 onTrain={() => trainAgent(reg.name)}
                 onViewAnomalies={() => setShowAnomaliesFor(reg.name)}
                 onStatusClick={() => setShowLifecycleFor(reg.name)}
@@ -184,12 +209,12 @@ function App() {
 
         <div className="mb-4">
           <h2 className="font-semibold mb-2">Agent Outputs</h2>
-          <ResumeCard />
-          <RoadmapCard />
-          <OpportunityCard />
+          {prefs['resume-agent'] !== false && <ResumeCard />}
+          {prefs['roadmap-agent'] !== false && <RoadmapCard />}
+          {prefs['opportunity-agent'] !== false && <OpportunityCard />}
         </div>
 
-        {showAnomaliesFor && (
+        {showAnomaliesFor && prefs[showAnomaliesFor] !== false && (
           <div>
             <AnomalyPanel agentId={showAnomaliesFor} />
             <button
@@ -201,7 +226,7 @@ function App() {
           </div>
         )}
 
-        {showLifecycleFor && (
+        {showLifecycleFor && prefs[showLifecycleFor] !== false && (
           <div className="overlay-backdrop">
             <div className="overlay-panel">
               <LifecycleTimeline agentId={showLifecycleFor} />
@@ -215,10 +240,10 @@ function App() {
           </div>
         )}
 
-        <TrendsPanel />
-        <InsightsPanel />
+        {prefs['trends-agent'] !== false && <TrendsPanel />}
+        {prefs['insights-agent'] !== false && <InsightsPanel />}
         <InsightsChart />
-        <AnalyticsPanel />
+        {prefs['analytics-agent'] !== false && <AnalyticsPanel />}
 
         <div className="bg-white/10 p-4 rounded shadow mb-4">
           <button
@@ -229,9 +254,9 @@ function App() {
           </button>
           {showGuidance && (
             <div className="mt-2 space-y-4">
-              <BoardPanel />
-              <MentorPanel />
-              <GuardianPanel />
+              {prefs['board-agent'] !== false && <BoardPanel />}
+              {prefs['mentor-agent'] !== false && <MentorPanel />}
+              {prefs['guardian-agent'] !== false && <GuardianPanel />}
             </div>
           )}
         </div>
