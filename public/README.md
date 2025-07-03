@@ -113,7 +113,7 @@ On CI, auth is handled via `FIREBASE_TOKEN`.
 ### CI Deploys
 
 1. Generate a token locally using `firebase login:ci`.
-2. Store it as `FIREBASE_TOKEN` in GitHub Actions secrets or as
+2. Store it as `FIREBASE_TOKEN` in your repository's GitHub Actions secrets (Settings > Secrets and variables > Actions). Alternatively, you can store it as
    `firebase-ci-token` in Cloud Build's Secret Manager.
 3. The CI workflow injects this token so `firebase deploy` runs without
    interactive login. If the token expires, re-run the command above.
