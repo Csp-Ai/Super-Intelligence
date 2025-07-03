@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { signInWithGoogle } from "./auth";
 import CanvasNetwork from "./components/CanvasNetwork";
+import OnboardingOverlay from "./components/OnboardingOverlay";
 
 const sections = {
   home: <p>Welcome to the demo app.</p>,
@@ -16,6 +17,7 @@ const sections = {
 function App() {
   const canvasRef = useRef(null);
   const [activeSection, setActiveSection] = useState("home");
+  const [showOverlay, setShowOverlay] = useState(false);
   const reduceMotion = useReducedMotion();
 
   const agents = [
@@ -23,6 +25,18 @@ function App() {
     { id: "mentor", x: 250, y: 60 },
     { id: "opportunity", x: 400, y: 200 }
   ];
+
+  useEffect(() => {
+    const completed = localStorage.getItem('demoOverlayComplete');
+    if (!completed) {
+      setShowOverlay(true);
+    }
+  }, []);
+
+  const handleOverlayDone = () => {
+    localStorage.setItem('demoOverlayComplete', '1');
+    setShowOverlay(false);
+  };
 
   const triggerPulse = id => {
     canvasRef.current?.updateActivity(id);
@@ -36,6 +50,7 @@ function App() {
 
   return (
     <div className="App">
+      {showOverlay && <OnboardingOverlay onComplete={handleOverlayDone} />}
       <h1>🚀 React Frontend Ready - No Binary Assets</h1>
 
       <nav className="space-x-2 mb-4">

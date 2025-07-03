@@ -38,3 +38,26 @@ p {
   margin-top: 1rem;
 }
 
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 50;
+}
+
+.overlay-panel {
+  background: #ffffff;
+  color: #000000;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 320px;
+  border-radius: 8px 8px 0 0;
+}
+
+.overlay-panel a {
+  color: #2563eb;
+}
+
