@@ -1,6 +1,8 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { app, auth } from '../firebase';
 
-const DashboardDataContext = createContext({ agentStyles: {}, metrics: [] });
+const DashboardDataContext = createContext({ agentStyles: {}, metrics: [], insights: {} });
 
 export const DashboardDataProvider = ({ children }) => {
   const agentStyles = {
@@ -15,8 +17,31 @@ export const DashboardDataProvider = ({ children }) => {
     { id: 'uptime', label: 'Uptime', value: '99%' }
   ];
 
+  const [insights, setInsights] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const db = getFirestore(app);
+        let col;
+        const uid = auth.currentUser?.uid;
+        if (uid) col = collection(db, 'users', uid, 'insights');
+        else col = collection(db, 'global', 'insights', 'agents');
+        const snap = await getDocs(col);
+        const obj = {};
+        snap.forEach(doc => {
+          obj[doc.id] = doc.data();
+        });
+        setInsights(obj);
+      } catch (err) {
+        console.error('Failed to fetch insights', err);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
-    <DashboardDataContext.Provider value={{ agentStyles, metrics }}>
+    <DashboardDataContext.Provider value={{ agentStyles, metrics, insights }}>
       {children}
     </DashboardDataContext.Provider>
   );
