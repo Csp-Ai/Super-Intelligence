@@ -19,6 +19,7 @@ async function loadData() {
 function renderSummary(agentDocs) {
   const summary = document.getElementById('summary');
   summary.className = 'mb-6 bg-white p-4 rounded shadow';
+  summary.setAttribute('data-tooltip', 'Overview of agent statuses');
   const total = agentDocs.length;
   const deprecated = agentDocs.filter(d => d.data().currentState === 'deprecated').length;
   const failing = agentDocs.filter(d => d.data().currentState === 'under-review' || d.data().currentState === 'offline').length;
@@ -28,6 +29,7 @@ function renderSummary(agentDocs) {
 function renderRecent(agentDocs) {
   const recent = document.getElementById('recent');
   recent.className = 'mb-6 bg-white p-4 rounded shadow';
+  recent.setAttribute('data-tooltip', 'Most recently updated agents');
   recent.innerHTML = '<h2 class="text-2xl font-semibold mb-2">Recently Modified</h2>';
   agentDocs
     .sort((a, b) => (b.data().updatedAt || '').localeCompare(a.data().updatedAt || ''))
@@ -42,6 +44,7 @@ function renderRecent(agentDocs) {
 function renderFailing(anomalyDocs) {
   const failing = document.getElementById('failing');
   failing.className = 'mb-6 bg-white p-4 rounded shadow';
+  failing.setAttribute('data-tooltip', 'Agents with frequent errors');
   failing.innerHTML = '<h2 class="text-2xl font-semibold mb-2">Top Failing Agents</h2>';
   anomalyDocs.forEach(doc => {
     const data = doc.data();
@@ -54,6 +57,7 @@ function renderFailing(anomalyDocs) {
 function renderCommits(commitDocs) {
   const commits = document.getElementById('commits');
   commits.className = 'mb-6 bg-white p-4 rounded shadow';
+  commits.setAttribute('data-tooltip', 'Recent commit history');
   commits.innerHTML = '<h2 class="text-2xl font-semibold mb-2">Recent Commits</h2>';
   commitDocs.forEach(doc => {
     const data = doc.data();
@@ -77,6 +81,7 @@ async function loadCoverage() {
 function renderCoverage(list) {
   const coverage = document.getElementById('coverage');
   coverage.className = 'mb-6 bg-white p-4 rounded shadow';
+  coverage.setAttribute('data-tooltip', 'CI test coverage report');
   coverage.innerHTML = '<h2 class="text-2xl font-semibold mb-2">CI Coverage</h2>';
   list.forEach(item => {
     const div = document.createElement('div');
@@ -88,6 +93,7 @@ function renderCoverage(list) {
 function renderActivity(anomalyDocs) {
   const activity = document.getElementById('activity');
   activity.className = 'mb-6 bg-white p-4 rounded shadow';
+  activity.setAttribute('data-tooltip', 'Latest anomaly messages');
   activity.innerHTML = '<h2 class="text-2xl font-semibold mb-2">Activity Feed</h2>';
   anomalyDocs.forEach(doc => {
     const data = doc.data();
