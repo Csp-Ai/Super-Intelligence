@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Debug Console</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="reduce-motion.css">
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
   <script src="firebase-config.js"></script>
@@ -46,5 +47,7 @@
     <div id="logsContainer"></div>
   </div>
   <script src="debug.js"></script>
+  <label class="fixed bottom-2 right-2 bg-gray-200 p-1 rounded text-xs"><input type="checkbox" id="reduceMotionToggle"> Reduce Motion</label>
+  <script src="reduce-motion.js"></script>
 </body>
 </html>
