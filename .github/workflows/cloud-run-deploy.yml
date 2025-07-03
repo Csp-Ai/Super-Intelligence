@@ -17,24 +17,31 @@ jobs:
       - name: Configure npm registry
         working-directory: functions
         run: echo "registry=https://registry.npmjs.org/" > .npmrc
-      - name: Remove deprecated npm proxy config
+      - name: Clear deprecated npm proxy config
+        working-directory: functions
         run: |
           npm config delete http-proxy || true
           npm config delete https-proxy || true
+          sed -i '/http-proxy/d;/https-proxy/d' .npmrc || true
       - name: Install dependencies
         working-directory: functions
-        run: npm ci --omit=dev
+        run: npm install
+      - name: Run tests
+        working-directory: functions
+        run: npm test
+      - name: Verify start script
+        working-directory: functions
+        run: timeout 5 npm start || true
       - uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ env.PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - name: Deploy to Cloud Run
         run: |
+          # Using --source with Buildpacks avoids Google_ENTRYPOINT issues
           gcloud run deploy node-backend \
             --source ./functions \
-            --path ./functions \
             --region us-central1 \
             --platform managed \
             --project $PROJECT_ID \
-            --allow-unauthenticated \
-            --use-docker
+            --allow-unauthenticated
