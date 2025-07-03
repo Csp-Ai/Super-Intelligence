@@ -10,6 +10,7 @@ import SectionNav from "./components/SectionNav";
 import AgentCard from "./components/AgentCard";
 import AnomalyPanel from "./components/AnomalyPanel";
 import TrendsPanel from "./components/TrendsPanel";
+import LifecycleTimeline from "./components/LifecycleTimeline";
 import { DashboardDataProvider } from "./context/DashboardDataContext";
 
 const sections = {
@@ -38,6 +39,7 @@ function App() {
   );
   const [registry, setRegistry] = useState([]);
   const [showAnomaliesFor, setShowAnomaliesFor] = useState(null);
+  const [showLifecycleFor, setShowLifecycleFor] = useState(null);
 
   useEffect(() => {
     fetch('/config/agents.json')
@@ -144,6 +146,7 @@ function App() {
                 anomalyScore={live.anomalyScore}
                 onTrain={() => trainAgent(reg.name)}
                 onViewAnomalies={() => setShowAnomaliesFor(reg.name)}
+                onStatusClick={() => setShowLifecycleFor(reg.name)}
               />
             );
           })}
@@ -158,6 +161,20 @@ function App() {
             >
               Close
             </button>
+          </div>
+        )}
+
+        {showLifecycleFor && (
+          <div className="overlay-backdrop">
+            <div className="overlay-panel">
+              <LifecycleTimeline agentId={showLifecycleFor} />
+              <button
+                onClick={() => setShowLifecycleFor(null)}
+                className="border px-2 py-1 rounded text-sm mt-2"
+              >
+                Close
+              </button>
+            </div>
           </div>
         )}
 
