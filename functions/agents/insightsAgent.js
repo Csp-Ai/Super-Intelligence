@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+const functions = require('firebase-functions/v1');
 const fs = require('fs');
 const path = require('path');
 
@@ -127,6 +127,10 @@ exports.runAllInsights = async () => {
 };
 
 exports.updateInsightsCron = functions.pubsub.schedule('every 24 hours').onRun(async () => {
+  if (!process.env.PUBSUB_EMULATOR_HOST) {
+    console.warn('PubSub emulator not detected. Skipping updateInsightsCron...');
+    return;
+  }
   await exports.runAllInsights();
 });
 

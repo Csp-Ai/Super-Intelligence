@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+const functions = require('firebase-functions/v1');
 const admin = require('firebase-admin');
 const { generateRoadmap } = require('../agents/roadmapAgent');
 const { generateResumeSummary } = require('../agents/resumeAgent');
@@ -11,6 +11,10 @@ const db = admin.firestore();
 exports.onCreateUser = functions.firestore
   .document('users/{uid}')
   .onCreate(async (snap, context) => {
+    if (!process.env.FIRESTORE_EMULATOR_HOST) {
+      console.warn('Firestore emulator not detected. Skipping onCreateUser...');
+      return;
+    }
     const uid = context.params.uid;
     const rawData = snap.data();
 

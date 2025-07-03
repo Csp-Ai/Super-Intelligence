@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+const functions = require('firebase-functions/v1');
 
 /**
  * Scheduled cleanup for replay logs.
@@ -9,6 +9,10 @@ const functions = require('firebase-functions');
 exports.cleanupOldReplays = functions.pubsub
   .schedule('every 24 hours')
   .onRun(async () => {
+    if (!process.env.PUBSUB_EMULATOR_HOST) {
+      console.warn('PubSub emulator not detected. Skipping cleanupOldReplays...');
+      return;
+    }
     const db = admin.firestore();
     const usersSnap = await db.collection('users').get();
     const now = Date.now();
