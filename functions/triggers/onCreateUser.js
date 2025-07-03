@@ -1,8 +1,7 @@
 const functions = require('firebase-functions/v1');
 const admin = require('firebase-admin');
-const { generateRoadmap } = require('../agents/roadmapAgent');
-const { generateResumeSummary } = require('../agents/resumeAgent');
-const { generateOpportunities } = require('../agents/opportunityAgent');
+const { runAgentFlow } = require('../../core/agentFlowEngine');
+const flows = require('../../flows');
 const { logAgentOutput } = require('../logger');
 const { formatAgentInput } = require('../onboardUser');
 
@@ -22,21 +21,19 @@ exports.onCreateUser = functions.firestore
     const input = formatAgentInput(rawData);
 
     try {
-      const roadmap = await generateRoadmap(input, uid);
+      const result = await runAgentFlow(flows.onboarding, { userId: uid, input });
+
       await logAgentOutput({
         agentName: 'roadmap-agent',
         agentVersion: 'v1.0.2',
         userId: uid,
         inputSummary: input,
-        outputSummary: roadmap
+        outputSummary: result.roadmap
       });
-      await snap.ref.collection('roadmap').add({ roadmap });
 
-      const resume = await generateResumeSummary(input, uid);
-      await snap.ref.collection('resume').add({ summary: resume });
-
-      const opportunities = await generateOpportunities(input, uid);
-      await snap.ref.collection('opportunities').add({ opportunities });
+      await snap.ref.collection('roadmap').add({ roadmap: result.roadmap });
+      await snap.ref.collection('resume').add({ summary: result.resume });
+      await snap.ref.collection('opportunities').add({ opportunities: result.opportunities });
 
       await snap.ref.update({ status: 'success' });
     } catch (err) {
