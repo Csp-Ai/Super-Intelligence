@@ -90,11 +90,18 @@ Inspired by principles from:
    ```bash
    npm install --prefix frontend
    ```
-4. Run tests from the repo root (requires functions dependencies):
+4. Create environment files in `frontend/`:
+   ```bash
+   cp frontend/.env frontend/.env.local
+   cp frontend/.env.production frontend/.env.production.local
+   ```
+   Edit these files to include your Firebase config such as
+   `VITE_FIREBASE_API_KEY`.
+5. Run tests from the repo root (requires functions dependencies):
    ```bash
    npm test --silent
    ```
-5. If the Firebase emulator reports authentication errors, re-authenticate using:
+6. If the Firebase emulator reports authentication errors, re-authenticate using:
    ```bash
    firebase login --reauth
    ```
