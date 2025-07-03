@@ -158,6 +158,20 @@ to their docs and actions to re-run them. The registry is stored in
 `config/agents.json` and mirrored under `public/config/agents.json` for
 hosting.
 
+### Website Analysis Flow
+
+A new `runWebsiteAnalysis` Cloud Function executes the website-analysis
+flow ported from the **ai-agent-systems** repository. Trigger it with a
+POST request containing the target URL:
+
+```bash
+curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/runWebsiteAnalysis \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com"}'
+```
+
+The response contains the captured flow state and outputs for each step.
+
 ## Firebase Project Info
 
 - **Project Name:** Super Intelligence  

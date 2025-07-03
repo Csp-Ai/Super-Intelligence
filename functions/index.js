@@ -80,3 +80,5 @@ exports.replayAgentRun = require('./replayAgentRun').replayAgentRun;
 exports.translateText = require('./utils/translate').translateText;
 exports.translateOutput = require('./utils/translate').translateOutput;
 
+exports.runWebsiteAnalysis = require('./runWebsiteAnalysis').runWebsiteAnalysis;
+
