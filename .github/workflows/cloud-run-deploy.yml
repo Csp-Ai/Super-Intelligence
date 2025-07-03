@@ -27,14 +27,14 @@ jobs:
           npm config delete https-proxy || true
           sed -i '/http-proxy/d;/https-proxy/d' .npmrc || true
       - name: Install dependencies
-        working-directory: functions
-        run: npm install
+        run: npm --prefix functions install
+      - name: Build functions
+        run: npm --prefix functions run build
       - name: Run tests
         working-directory: functions
         run: npm test
       - name: Verify start script
-        working-directory: functions
-        run: timeout 5 npm start || true
+        run: timeout 3 npm --prefix functions start || true
       - uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ env.PROJECT_ID }}

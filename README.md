@@ -206,8 +206,11 @@ Ensure `firebase-admin` appears in `functions/package.json` under
 
 ```bash
 npm --prefix functions run build
-timeout 3 npm --prefix functions start
+timeout 3 npm --prefix functions start || true
 ```
+
+If the start command complains about missing `firebase-admin`, run these
+commands again to ensure the dependency installed correctly.
 
 Both commands should exit without errors.
 
