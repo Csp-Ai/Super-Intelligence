@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+const functions = require('firebase-functions/v1');
 
 function aggregateUsage(runs = []) {
   const byAgent = {};
@@ -93,6 +93,10 @@ exports.runAllTrends = async () => {
 };
 
 exports.updateTrendsCron = functions.pubsub.schedule('every 24 hours').onRun(async () => {
+  if (!process.env.PUBSUB_EMULATOR_HOST) {
+    console.warn('PubSub emulator not detected. Skipping updateTrendsCron...');
+    return;
+  }
   await exports.runAllTrends();
 });
 

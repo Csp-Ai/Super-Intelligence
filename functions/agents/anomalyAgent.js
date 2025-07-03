@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+const functions = require('firebase-functions/v1');
 
 /**
  * Analyze recent agent runs and log anomalies to Firestore.
@@ -164,5 +164,9 @@ exports.runAnomalyDetection = detectAnomalies;
 exports.anomalyCron = functions.pubsub
   .schedule('every 24 hours')
   .onRun(async () => {
+    if (!process.env.PUBSUB_EMULATOR_HOST) {
+      console.warn('PubSub emulator not detected. Skipping anomalyCron...');
+      return;
+    }
     await detectAnomalies();
   });
