@@ -21,14 +21,15 @@ function renderTable(registry) {
   const tbody = document.createElement('tbody');
   Object.values(registry).forEach(agent => {
     const row = document.createElement('tr');
+    const desc = (agent.description || '').replace(/"/g, '&quot;');
     row.innerHTML = `
-      <td>${agent.name}</td>
-      <td>${agent.lastRunStatus}</td>
-      <td>${agent.version}</td>
-      <td>${agent.createdAt || ''}</td>
-      <td>${agent.updatedAt || ''}</td>
+      <td data-tooltip="Type: ${agent.agentType}. ${desc}">${agent.name}</td>
+      <td data-tooltip="Latest run status">${agent.lastRunStatus}</td>
+      <td data-tooltip="Semantic version">${agent.version}</td>
+      <td data-tooltip="Created at">${agent.createdAt || ''}</td>
+      <td data-tooltip="Last updated">${agent.updatedAt || ''}</td>
       <td><a class="text-blue-600 underline" href="${agent.docsUrl}" target="_blank">README</a></td>
-      <td><input type="checkbox" ${agent.enabled ? 'checked' : ''} disabled></td>
+      <td data-tooltip="Whether agent is enabled"><input type="checkbox" ${agent.enabled ? 'checked' : ''} disabled></td>
       <td>
         <button class="bg-gray-200 px-2 py-1 mr-1" onclick="testAgent('${agent.name}')">Test Agent</button>
         <button class="bg-gray-200 px-2 py-1" onclick="rerunAgent('${agent.name}')">Rerun</button>

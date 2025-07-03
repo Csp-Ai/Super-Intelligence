@@ -1,0 +1,13 @@
+.tooltip {
+  position: absolute;
+  background-color: rgba(55, 65, 81, 0.9);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  pointer-events: none;
+  z-index: 50;
+}
+.tooltip.hidden {
+  display: none;
+}
