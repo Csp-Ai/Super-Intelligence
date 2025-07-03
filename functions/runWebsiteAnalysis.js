@@ -1,5 +1,5 @@
 const functions = require('firebase-functions/v1');
-const { runAgentFlow } = require('./core/agentFlowEngine');
+const { runConfigFlow } = require('./core/agentFlowEngine');
 
 exports.runWebsiteAnalysis = functions.https.onRequest(async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
@@ -17,7 +17,7 @@ exports.runWebsiteAnalysis = functions.https.onRequest(async (req, res) => {
 
   try {
     const runId = Date.now().toString();
-    const result = await runAgentFlow(url, runId, { userId, configId: 'website-analysis' });
+    const result = await runConfigFlow(url, runId, { userId, configId: 'website-analysis' });
     res.json(result);
   } catch (err) {
     console.error('runWebsiteAnalysis error', err);
