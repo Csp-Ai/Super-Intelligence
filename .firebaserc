@@ -5,6 +5,14 @@
     "production": "super-intelligence-7b653",
     "hybrid": "super-intelligence-7b653"
   },
-  "targets": {},
+  "targets": {
+    "super-intelligence-7b653": {
+      "hosting": {
+        "staging": ["staging"],
+        "production": ["production"],
+        "hybrid": ["hybrid"]
+      }
+    }
+  },
   "etags": {}
 }
