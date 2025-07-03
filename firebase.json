@@ -3,6 +3,12 @@
   "functions": {
     "source": "functions"
   },
+  "apphosting": {
+    "build": {
+      "command": "npm run build --prefix frontend"
+    },
+    "source": "frontend/dist"
+  },
   "hosting": [
     {
       "target": "staging",
