@@ -2,8 +2,8 @@
   "projects": {
     "default": "super-intelligence-7b653",
     "staging": "super-intelligence-7b653",
-    "production": "super-intelligence-prod",
-    "hybriddancers": "hybriddancers"
+    "production": "super-intelligence-7b653",
+    "hybrid": "super-intelligence-7b653"
   },
   "targets": {},
   "etags": {}

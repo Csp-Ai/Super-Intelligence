@@ -51,7 +51,7 @@ And receive:
 
 - **Frontend**: HTML/CSS, custom neural UI, React (future)
 - **Backend**: Firebase (Firestore, Functions, Auth)
-- **AI**: OpenAI GPT, Claude, LangChain (planned)
+- **AI**: In-house models built on open-source frameworks (planned)
 - **Infra**: Node.js, GitHub Actions, Firebase Hosting
 
 ---

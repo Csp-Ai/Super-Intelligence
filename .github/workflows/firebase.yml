@@ -23,6 +23,9 @@ jobs:
           npm install
           npm --prefix functions install
 
+      - name: Validate agent metadata
+        run: node scripts/validateAgentMetadata.js
+
       - name: Lint and test
         run: |
           npm run lint --if-present
