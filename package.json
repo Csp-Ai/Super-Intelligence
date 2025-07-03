@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "firebase emulators:start",
-    "test": "npm --prefix functions test --silent",
+    "test": "node scripts/validateAgentMetadata.js && npm --prefix functions test --silent",
     "dev": "echo 'Dev server command missing. Please set it manually.'"
   },
   "engines": {
