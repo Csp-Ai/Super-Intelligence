@@ -14,6 +14,7 @@ import AnomalyPanel from "./components/AnomalyPanel";
 import TrendsPanel from "./components/TrendsPanel";
 import LifecycleTimeline from "./components/LifecycleTimeline";
 import InsightsChart from "./components/InsightsChart";
+import InsightsPanel from "./components/InsightsPanel";
 import BoardPanel from "./components/BoardPanel";
 import MentorPanel from "./components/MentorPanel";
 import GuardianPanel from "./components/GuardianPanel";
@@ -202,6 +203,7 @@ function App() {
         )}
 
         <TrendsPanel />
+        <InsightsPanel />
         <InsightsChart />
 
         <div className="bg-white/10 p-4 rounded shadow mb-4">
@@ -235,4 +237,5 @@ function App() {
 }
 
 export default App;
+
 
