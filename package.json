@@ -7,12 +7,13 @@
     "start": "firebase emulators:start",
     "sync-agents": "node scripts/syncAgentsConfig.js",
     "test": "npm run sync-agents && node scripts/validateAgentMetadata.js && npm --prefix functions test --silent",
-    "dev": "concurrently \"npm start --prefix frontend\" \"firebase emulators:start --only functions,firestore,hosting\"",
-    "build:frontend": "npm run build --prefix frontend",
-    "build:functions": "npm --prefix functions install",
-    "build": "npm run build:functions && npm run build:frontend",
-    "deploy": "npm run build && firebase deploy",
-    "preview": "npm run build && firebase hosting:channel:deploy preview"
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "preview": "npm --prefix frontend run preview",
+    "deploy": "firebase deploy --only hosting",
+    "deploy:preview": "firebase hosting:channel:deploy preview",
+    "deploy:all": "npm run build && firebase deploy",
+    "deploy:preview:all": "npm run build && firebase hosting:channel:deploy preview"
   },
   "engines": {
     "node": "18"
@@ -28,6 +29,7 @@
     "ws": "^8.13.0"
   },
   "devDependencies": {
-    "concurrently": "^9.2.0"
+    "concurrently": "^9.2.0",
+    "firebase-tools": "^13.0.0"
   }
 }
