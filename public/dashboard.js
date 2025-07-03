@@ -1,10 +1,3 @@
-// Firebase configuration placeholder - replace with your Firebase project values
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-};
-firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 const statusEl = document.getElementById('status');
