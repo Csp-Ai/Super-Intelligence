@@ -90,9 +90,10 @@ Inspired by principles from:
    ```bash
    npm install --prefix frontend
    ```
-4. Create environment files in `frontend/`:
+4. Create environment files in `frontend/` using the provided example:
    ```bash
-   cp frontend/.env frontend/.env.local
+   cp frontend/.env.example frontend/.env
+   cp frontend/.env.example frontend/.env.local
    cp frontend/.env.production frontend/.env.production.local
    ```
    Edit these files to include your Firebase config such as
