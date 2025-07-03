@@ -90,3 +90,10 @@
 - 📅 Last updated: 2025-07-02
 - 🔗 [View source](https://github.com/Csp-Ai/Super-Intelligence/blob/main/functions/agents/trendsAgent.js)
 - 🧠 Description: Computes usage trends across all agents
+
+### flow-career
+- 📁 Path: `functions/flows/flow-career.js`
+- 🏷️ Tags: flow
+- 📅 Last updated: 2025-07-02
+- 🔗 [View source](https://github.com/Csp-Ai/Super-Intelligence/blob/main/functions/flows/flow-career.js)
+- 🧠 Description: Chains roadmap, resume, and opportunity agents using in-memory storage
