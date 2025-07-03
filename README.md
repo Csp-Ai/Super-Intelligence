@@ -78,12 +78,23 @@ Inspired by principles from:
 
 ### Local Development
 
-1. Install dependencies in the `functions` directory: `npm install`
-2. Run tests from the repo root:
+1. Install root dependencies:
+   ```bash
+   npm install
+   ```
+2. Install Cloud Functions dependencies:
+   ```bash
+   npm install --prefix functions
+   ```
+3. Install frontend dependencies:
+   ```bash
+   npm install --prefix frontend
+   ```
+4. Run tests from the repo root (requires functions dependencies):
    ```bash
    npm test --silent
    ```
-3. If the Firebase emulator reports authentication errors, re-authenticate using:
+5. If the Firebase emulator reports authentication errors, re-authenticate using:
    ```bash
    firebase login --reauth
    ```
