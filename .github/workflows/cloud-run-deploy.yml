@@ -51,5 +51,6 @@ jobs:
             --source . \
             --region us-central1 \
             --project $PROJECT_ID \
+            --timeout=300s \
             --allow-unauthenticated \
             --build-env-vars "GOOGLE_ENTRYPOINT=${{ env.GOOGLE_ENTRYPOINT }}"
