@@ -4,7 +4,8 @@ const path = require('path');
 function generateMarkdown() {
   const configPath = path.join(__dirname, '..', 'config', 'agents.json');
   const outPath = path.join(__dirname, '..', 'AGENTS.md');
-  const repoUrl = 'https://github.com/YOUR_REPO/';
+  // Base URL for linking to agent source files in the repository
+  const repoUrl = 'https://github.com/Csp-Ai/Super-Intelligence/blob/main/';
   const raw = fs.readFileSync(configPath, 'utf8');
   const agents = JSON.parse(raw);
 
