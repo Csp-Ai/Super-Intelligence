@@ -8,14 +8,22 @@ const stateColors = {
   deprecated: 'bg-gray-500'
 };
 
-const AgentCard = ({ agentName, metrics = {}, status, state, anomalyScore, onTrain, onViewAnomalies }) => {
+const AgentCard = ({ agentName, metrics = {}, status, state, anomalyScore, onTrain, onViewAnomalies, onStatusClick }) => {
   return (
     <motion.div
       whileHover={{ scale: 1.05 }}
       className="p-4 rounded shadow-md bg-white/10 backdrop-blur hover:shadow-lg transition-shadow"
     >
       <h3 className="font-semibold text-lg mb-2">{agentName}</h3>
-      <p className="text-sm mb-1">Status: {status}</p>
+      <p className="text-sm mb-1">
+        Status:
+        <span
+          onClick={onStatusClick}
+          className="ml-1 underline cursor-pointer"
+        >
+          {status}
+        </span>
+      </p>
       {state && (
         <p className="text-sm mb-1 flex items-center">
           State:
