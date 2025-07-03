@@ -5,7 +5,17 @@ on:
     branches: [main]
 
 jobs:
+  binary-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Detect binary files
+        run: |
+          git diff --cached --name-only | xargs file | grep -v 'text' && exit 1 || echo "No binaries"
+
   deploy:
+    needs: binary-check
     runs-on: ubuntu-latest
     env:
       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
