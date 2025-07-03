@@ -6,8 +6,8 @@
   "scripts": {
     "start": "firebase emulators:start",
     "sync-agents": "node scripts/syncAgentsConfig.js",
-    "test": "npm run sync-agents && npm --prefix functions test --silent",
-    "dev": "echo 'Dev server command missing. Please set it manually.'"
+    "test": "npm run sync-agents && node scripts/validateAgentMetadata.js && npm --prefix functions test --silent",
+    "dev": "concurrently \"npm start --prefix frontend\" \"firebase emulators:start\""
   },
   "engines": {
     "node": "18"
@@ -21,5 +21,8 @@
     "firebase-functions": "^3.24.1",
     "jsdom": "^26.1.0",
     "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
   }
 }
