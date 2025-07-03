@@ -1,1 +1,1 @@
-web: npm --prefix frontend run preview
+web: node scripts/startPreview.js
