@@ -16,6 +16,8 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm install
+      - name: Install frontend dependencies
+        run: npm install --prefix frontend
       - name: Install Ajv
         run: npm install ajv --save-dev
       - name: Install Firebase CLI
