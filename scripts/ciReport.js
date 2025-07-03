@@ -9,6 +9,8 @@ function toPascal(str){
 }
 
 const stepsPath = path.join(__dirname,'..','functions','steps.json');
+// optional additional tests not driven directly by agents.json
+const extraTests = [{ id: 'alignment-core', file: 'testAlignmentCore.js' }];
 
 const results = [];
 for(const id of Object.keys(agents)){
@@ -30,6 +32,14 @@ for(const id of Object.keys(agents)){
   const newSteps = after.slice(before.length).filter(s=>s.agent===id);
   const hasSteps = newSteps.length > 0;
   results.push({agent:id,status:run.status===0?'tested':'failing',steps:hasSteps});
+}
+
+for(const {id, file} of extraTests){
+  if(results.some(r => r.agent === id)) continue;
+  const testPath = path.join(__dirname,'..','functions',file);
+  if(!fs.existsSync(testPath)) continue;
+  const run = spawnSync('node',[testPath],{stdio:'inherit'});
+  results.push({agent:id,status:run.status===0?'tested':'failing',steps:false});
 }
 
 let md = '# Agent Test Coverage\n\n';
