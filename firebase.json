@@ -3,14 +3,10 @@
     "source": "functions"
   },
   "apphosting": {
-    "build": {
-      "command": "npm run build --prefix frontend"
-    },
     "source": "frontend/dist"
   },
   "hosting": {
-    "source": "frontend",
-    "public": "dist",
+    "public": "frontend/dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [{ "source": "**", "destination": "/index.html" }]
   },
