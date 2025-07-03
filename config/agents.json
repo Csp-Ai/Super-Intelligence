@@ -194,5 +194,17 @@
     "sourcePath": "functions/agents/board-agent-hybrid.js",
     "tags": ["analytics"],
     "lifecycle": "stable"
+  },
+  "analytics-agent": {
+    "name": "analytics-agent",
+    "description": "Logs frontend interaction metrics",
+    "version": "v1.0.0",
+    "lastRunStatus": "unknown",
+    "agentType": "analytics",
+    "enabled": true,
+    "docsUrl": "../functions/agents/analytics-agent.js",
+    "sourcePath": "functions/agents/analytics-agent.js",
+    "tags": ["analytics"],
+    "lifecycle": "beta"
   }
 }

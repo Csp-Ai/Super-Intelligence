@@ -81,6 +81,7 @@ exports.translateText = require('./utils/translate').translateText;
 exports.translateOutput = require('./utils/translate').translateOutput;
 
 exports.trainAgent = require('./trainAgent').trainAgent;
+exports.analyticsAgent = require('./agents/analytics-agent').analyticsAgent;
 
 exports.runWebsiteAnalysis = require('./runWebsiteAnalysis').runWebsiteAnalysis;
 
