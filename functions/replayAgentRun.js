@@ -57,7 +57,7 @@ function runLoop(runId) {
   setTimeout(() => runLoop(runId), 500);
 }
 
-async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = false, persist = false, message }) {
+async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = false, persist = false, message, rating, comment, submittedAt }) {
   if (process.env.LOCAL_AGENT_RUN) persist = true;
   let result;
   let error;
@@ -93,6 +93,31 @@ async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = 
     } else if (action === 'error') {
       await logReplayEvent({ userId, runId, action: 'client-error', params: { message }, state: {}, error: message, persist });
       result = { status: 'logged' };
+    } else if (action === 'feedback') {
+      const ratingNum = Number(rating);
+      if (rating != null && (isNaN(ratingNum) || ratingNum < 1 || ratingNum > 5)) {
+        throw new Error('Invalid rating');
+      }
+      const fb = {
+        rating: ratingNum,
+        comment: comment || '',
+        submittedAt: submittedAt || new Date().toISOString()
+      };
+      if (!process.env.LOCAL_AGENT_RUN) {
+        const db = admin.firestore();
+        await db.collection('users').doc(userId).collection('agentRuns').doc(runId).set({ feedback: fb }, { merge: true });
+      } else {
+        const logPath = path.join(__dirname, 'replayLogs.json');
+        let store = {};
+        if (fs.existsSync(logPath)) {
+          try { store = JSON.parse(fs.readFileSync(logPath, 'utf8')); } catch (_) {}
+        }
+        if (!store[runId]) store[runId] = [];
+        store[runId].push({ action: 'feedback', timestamp: fb.submittedAt, params: fb });
+        fs.writeFileSync(logPath, JSON.stringify(store, null, 2));
+      }
+      await logReplayEvent({ userId, runId, action: 'feedback', params: fb, state: {}, persist });
+      result = { status: 'recorded' };
     } else {
       throw new Error('Invalid action');
     }
@@ -110,7 +135,10 @@ async function handleReplayAction({ userId, runId, action, speed = 1, isAdmin = 
         }
       : {};
     try {
-      await logReplayEvent({ userId, runId, action, params: { speed }, state, error, persist });
+      const params = action === 'feedback'
+        ? { rating: rating ? Number(rating) : undefined, comment, submittedAt }
+        : { speed };
+      await logReplayEvent({ userId, runId, action, params, state, error, persist });
     } catch (e) {
       console.error('replay log failed', e.message);
     }
@@ -144,7 +172,7 @@ exports.replayAgentRun = functions.https.onRequest(async (req, res) => {
       ? functions.config().debug.allowlist.split(',')
       : ['admin@example.com'];
 
-    const { runId, action = 'start', speed = 1, persist = false, message } = req.body || {};
+    const { runId, action = 'start', speed = 1, persist = false, message, rating, comment, submittedAt } = req.body || {};
     if (!runId) {
       res.status(400).json({ error: 'Missing runId' });
       return;
@@ -158,7 +186,10 @@ exports.replayAgentRun = functions.https.onRequest(async (req, res) => {
       speed,
       isAdmin: allowed.includes(decoded.email),
       persist,
-      message
+      message,
+      rating,
+      comment,
+      submittedAt
     });
     res.json(result);
   } catch (err) {

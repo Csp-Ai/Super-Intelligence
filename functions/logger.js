@@ -18,7 +18,8 @@ async function logAgentOutput({
   agentVersion,
   userId,
   inputSummary,
-  outputSummary
+  outputSummary,
+  feedback
 }) {
   const logEntry = {
     timestamp: new Date().toISOString(),
@@ -28,6 +29,18 @@ async function logAgentOutput({
     inputSummary,
     outputSummary
   };
+
+  if (feedback) {
+    const ratingNum = Number(feedback.rating);
+    if (feedback.rating != null && (isNaN(ratingNum) || ratingNum < 1 || ratingNum > 5)) {
+      throw new Error('Invalid rating');
+    }
+    logEntry.feedback = {
+      rating: ratingNum,
+      comment: feedback.comment || '',
+      submittedAt: feedback.submittedAt || new Date().toISOString()
+    };
+  }
 
   // Write to Firestore collection 'logs'
   if (!process.env.LOCAL_AGENT_RUN) {
