@@ -1,6 +1,6 @@
 const functions = require('firebase-functions/v1');
 const admin = require('firebase-admin');
-const { runAgentFlow } = require('../../core/agentFlowEngine');
+const { runAgentFlow } = require('../core/agentFlowEngine');
 const flows = require('../../flows');
 const { logAgentOutput } = require('../logger');
 const { formatAgentInput } = require('../onboardUser');
