@@ -9,12 +9,29 @@
     },
     "source": "frontend/dist"
   },
-  "hosting": {
-    "source": "frontend/dist",
-    "rewrites": [
-      { "source": "**", "destination": "/index.html" }
-    ]
-  },
+  "hosting": [
+    {
+      "target": "staging",
+      "source": "frontend/dist",
+      "rewrites": [
+        { "source": "**", "destination": "/index.html" }
+      ]
+    },
+    {
+      "target": "production",
+      "source": "frontend/dist",
+      "rewrites": [
+        { "source": "**", "destination": "/index.html" }
+      ]
+    },
+    {
+      "target": "hybrid",
+      "source": "frontend/dist",
+      "rewrites": [
+        { "source": "**", "destination": "/index.html" }
+      ]
+    }
+  ],
   "emulators": {
     "auth": {
       "port": 9099
