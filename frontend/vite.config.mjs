@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     },
     esbuild: {
       loader: 'jsx',
-      include: /src\/.*\.js$/
+      include: /src\/.*\.[jt]sx?$/
     }
   }
 })

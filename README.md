@@ -90,9 +90,10 @@ Inspired by principles from:
    ```bash
    npm install --prefix frontend
    ```
-4. Create environment files in `frontend/`:
+4. Create environment files in `frontend/` using the provided example:
    ```bash
-   cp frontend/.env frontend/.env.local
+   cp frontend/.env.example frontend/.env
+   cp frontend/.env.example frontend/.env.local
    cp frontend/.env.production frontend/.env.production.local
    ```
    Edit these files to include your Firebase config such as
@@ -148,6 +149,8 @@ To push the frontend and Cloud Functions together:
 npm run build --prefix frontend && firebase deploy
 ```
 
+⚠️ Known issue: Transitive vulnerability in protobufjs via google-gax. Not exploitable in current setup. Awaiting upstream patch from firebase-admin maintainers.
+
 ### Running `index.js` in Production
 
 When deploying the Node server (for example via App Engine) you must provide
@@ -155,6 +158,8 @@ Firebase credentials for `firebase-admin`. Place a `serviceAccount.json` file in
 the repository root or set the `GOOGLE_APPLICATION_CREDENTIALS` environment
 variable to point at your service account file. The file name is already listed
 in `.gitignore` so your credentials won't be committed.
+
+⚠️ Audit: firebase-admin → google-gax → protobufjs includes a known CVE. Not exploitable in current deployment context. Monitor firebase-admin releases.
 
 ### Debug Console
 
