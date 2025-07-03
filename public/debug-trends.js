@@ -10,15 +10,18 @@ async function fetchTrends() {
 
 function renderTrends(data) {
   const container = document.getElementById('trendsContainer');
+  container.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4';
   container.innerHTML = '';
   if (!data.metrics) {
     container.textContent = 'No trend data available';
     return;
   }
+
   Object.keys(data.metrics).forEach(agent => {
     const section = document.createElement('div');
-    section.className = 'mb-6';
+    section.className = 'mb-6 bg-white p-4 rounded shadow';
     section.innerHTML = `<h2 class="text-2xl font-semibold mb-2">${agent}</h2>`;
+
     const pre = document.createElement('pre');
     pre.textContent = JSON.stringify(data.metrics[agent], null, 2);
     section.appendChild(pre);
@@ -62,4 +65,5 @@ auth.onAuthStateChanged(user => {
     fetchTrends();
   }
 });
+
 

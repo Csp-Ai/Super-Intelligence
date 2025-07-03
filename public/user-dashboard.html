@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Run History</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="reduce-motion.css">
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
@@ -13,7 +14,7 @@
 </head>
 <body class="bg-gray-100">
   <div class="container mx-auto p-4">
-  <h1 class="text-3xl font-extrabold mb-4">Agent Run History</h1>
+    <h1 class="text-3xl font-extrabold mb-4">Agent Run History</h1>
 
     <div id="loginSection" class="mb-4">
       <input id="email" class="border p-2 mr-2" placeholder="Email">
@@ -68,8 +69,9 @@
 
   <div id="logModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
     <div class="bg-white p-4 rounded w-11/12 md:w-2/3 lg:w-1/2 max-h-screen overflow-y-auto">
-      <button id="closeModal" class="float-right text-red-600">X</button>
+      <button id="closeModal" aria-label="Close" class="float-right text-red-600">X</button>
       <h2 class="text-2xl font-semibold mb-2">Run Details</h2>
+
       <div id="modalContent" class="text-sm whitespace-pre-wrap mb-4"></div>
 
       <div id="feedbackSection" class="hidden mb-4">
@@ -84,5 +86,9 @@
   </div>
 
   <script src="user-dashboard.js"></script>
+  <label class="fixed bottom-2 right-2 bg-gray-200 p-1 rounded text-xs">
+    <input type="checkbox" id="reduceMotionToggle"> Reduce Motion
+  </label>
+  <script src="reduce-motion.js"></script>
 </body>
 </html>
