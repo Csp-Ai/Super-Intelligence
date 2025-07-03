@@ -1,12 +1,14 @@
 const { spawn } = require('child_process');
+const path = require('path');
 
 console.log('[startup] Launching Vite preview...');
 console.log(`[startup] process.env.PORT = ${process.env.PORT}`);
 
 const port = process.env.PORT || 8080;
-console.log(`[startup] Executing: npm --prefix frontend exec vite preview --host 0.0.0.0 --port ${port}`);
+console.log(`[startup] Executing: vite preview --host 0.0.0.0 --port ${port}`);
 
-const child = spawn('npm', ['--prefix', 'frontend', 'exec', 'vite', 'preview', '--', '--host', '0.0.0.0', '--port', port], {
+const child = spawn('npx', ['vite', 'preview', '--host', '0.0.0.0', '--port', port], {
+  cwd: path.join(__dirname, '..', 'frontend'),
   stdio: 'inherit',
   env: process.env,
 });
