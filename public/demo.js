@@ -10,12 +10,18 @@ async function loadDemoData() {
   }
 }
 
-function runTrainingSimulation() {
+async function runTrainingSimulation() {
   const statusEl = document.getElementById('status');
-  statusEl.textContent = 'Running simulation...';
-  setTimeout(() => {
-    statusEl.textContent = 'Simulation complete.';
-  }, 1000);
+  statusEl.textContent = 'Training...';
+  try {
+    const functions = firebase.app().functions();
+    const train = functions.httpsCallable('trainAgent');
+    await train({ agentId: 'core' });
+    statusEl.textContent = 'Training complete.';
+  } catch (err) {
+    console.error('train failed', err);
+    statusEl.textContent = 'Training failed.';
+  }
 }
 
 document.getElementById('demoBtn').addEventListener('click', loadDemoData);
