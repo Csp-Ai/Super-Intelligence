@@ -9,6 +9,7 @@ import OnboardingOverlay from "./components/OnboardingOverlay";
 import SectionNav from "./components/SectionNav";
 import AgentCard from "./components/AgentCard";
 import AnomalyPanel from "./components/AnomalyPanel";
+import TrendsPanel from "./components/TrendsPanel";
 import { DashboardDataProvider } from "./context/DashboardDataContext";
 
 const sections = {
@@ -61,24 +62,24 @@ function App() {
     let unsub;
     const db = getFirestore(app);
     unsub = onSnapshot(collection(db, 'agents'), snap => {
-        const updates = {};
-        snap.forEach(doc => {
-          updates[doc.id] = doc.data();
-        });
-        setAgents(prev =>
-          prev.map(a => {
-            const data = updates[a.id];
-            if (!data) return a;
-            if (
-              data.activity !== a.activity ||
-              data.connections !== a.connections
-            ) {
-              triggerPulse(a.id);
-            }
-            return { ...a, ...data };
-          })
-        );
+      const updates = {};
+      snap.forEach(doc => {
+        updates[doc.id] = doc.data();
       });
+      setAgents(prev =>
+        prev.map(a => {
+          const data = updates[a.id];
+          if (!data) return a;
+          if (
+            data.activity !== a.activity ||
+            data.connections !== a.connections
+          ) {
+            triggerPulse(a.id);
+          }
+          return { ...a, ...data };
+        })
+      );
+    });
     return () => unsub && unsub();
   }, []);
 
@@ -103,68 +104,71 @@ function App() {
 
   return (
     <DashboardDataProvider>
-    <div className="App">
-      {showOverlay && <OnboardingOverlay onComplete={handleOverlayDone} />}
-      <h1>🚀 React Frontend Ready - No Binary Assets</h1>
+      <div className="App">
+        {showOverlay && <OnboardingOverlay onComplete={handleOverlayDone} />}
+        <h1>🚀 React Frontend Ready - No Binary Assets</h1>
 
-      <SectionNav
-        sections={sections}
-        active={activeSection}
-        onChange={setActiveSection}
-      />
+        <SectionNav
+          sections={sections}
+          active={activeSection}
+          onChange={setActiveSection}
+        />
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeSection}
-          variants={variants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="section-container"
-        >
-          {sections[activeSection]}
-        </motion.div>
-      </AnimatePresence>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-        {registry.map(reg => {
-          const live = agents.find(a => a.id === reg.name) || {};
-          const metrics = {
-            activity: live.activity || 0,
-            connections: live.connections || 0,
-          };
-          return (
-            <AgentCard
-              key={reg.name}
-              agentName={reg.name}
-              metrics={metrics}
-              status={reg.lastRunStatus}
-              state={live.currentState}
-              anomalyScore={live.anomalyScore}
-              onTrain={() => trainAgent(reg.name)}
-              onViewAnomalies={() => setShowAnomaliesFor(reg.name)}
-            />
-          );
-        })}
-      </div>
-
-      {showAnomaliesFor && (
-        <div>
-          <AnomalyPanel agentId={showAnomaliesFor} />
-          <button
-            onClick={() => setShowAnomaliesFor(null)}
-            className="border px-2 py-1 rounded text-sm"
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSection}
+            variants={variants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="section-container"
           >
-            Close
-          </button>
-        </div>
-      )}
+            {sections[activeSection]}
+          </motion.div>
+        </AnimatePresence>
 
-      <button onClick={() => triggerPulse("core")}>Trigger Core Pulse</button>
-      <CanvasNetwork ref={canvasRef} agents={agents} width={500} height={300} />
-    </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+          {registry.map(reg => {
+            const live = agents.find(a => a.id === reg.name) || {};
+            const metrics = {
+              activity: live.activity || 0,
+              connections: live.connections || 0,
+            };
+            return (
+              <AgentCard
+                key={reg.name}
+                agentName={reg.name}
+                metrics={metrics}
+                status={reg.lastRunStatus}
+                state={live.currentState}
+                anomalyScore={live.anomalyScore}
+                onTrain={() => trainAgent(reg.name)}
+                onViewAnomalies={() => setShowAnomaliesFor(reg.name)}
+              />
+            );
+          })}
+        </div>
+
+        {showAnomaliesFor && (
+          <div>
+            <AnomalyPanel agentId={showAnomaliesFor} />
+            <button
+              onClick={() => setShowAnomaliesFor(null)}
+              className="border px-2 py-1 rounded text-sm"
+            >
+              Close
+            </button>
+          </div>
+        )}
+
+        <TrendsPanel />
+
+        <button onClick={() => triggerPulse("core")}>Trigger Core Pulse</button>
+        <CanvasNetwork ref={canvasRef} agents={agents} width={500} height={300} />
+      </div>
     </DashboardDataProvider>
   );
 }
 
 export default App;
+
