@@ -67,3 +67,7 @@ exports.cleanupOldReplays = require('./ops/cleanupOldReplays').cleanupOldReplays
 
 exports.replayAgentRun = require('./replayAgentRun').replayAgentRun;
 
+// Translation utilities for localizing agent outputs
+exports.translateText = require('./utils/translate').translateText;
+exports.translateOutput = require('./utils/translate').translateOutput;
+
