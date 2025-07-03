@@ -159,6 +159,8 @@ the repository root or set the `GOOGLE_APPLICATION_CREDENTIALS` environment
 variable to point at your service account file. The file name is already listed
 in `.gitignore` so your credentials won't be committed.
 
+⚠️ Audit: firebase-admin → google-gax → protobufjs includes a known CVE. Not exploitable in current deployment context. Monitor firebase-admin releases.
+
 ### Debug Console
 
 Developers can review recent agent activity through `/debug.html` once
