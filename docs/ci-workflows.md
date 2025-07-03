@@ -15,7 +15,7 @@ Each workflow automates part of the deploy or validation process.
 5. Deploy to a preview Hosting channel with `firebase hosting:channel:deploy preview`.
 
 **Environment Variables**
-- `FIREBASE_TOKEN` &mdash; Firebase deploy token from secrets. Add this secret under **Settings > Secrets and variables > Actions** in your GitHub repository.
+- `FIREBASE_TOKEN` &mdash; Firebase deploy token from secrets. Generate it with `firebase login:ci` and store the value under **Settings > Secrets and variables > Actions** in your GitHub repository.
 - `NODE_VERSION` &mdash; set to `18.x`.
 
 ## Firebase CI/CD (`firebase.yml`)
