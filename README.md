@@ -149,6 +149,8 @@ To push the frontend and Cloud Functions together:
 npm run build --prefix frontend && firebase deploy
 ```
 
+⚠️ Known issue: Transitive vulnerability in protobufjs via google-gax. Not exploitable in current setup. Awaiting upstream patch from firebase-admin maintainers.
+
 ### Running `index.js` in Production
 
 When deploying the Node server (for example via App Engine) you must provide
