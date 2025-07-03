@@ -7,6 +7,14 @@
 - 🔗 [View source](https://github.com/Csp-Ai/Super-Intelligence/blob/main/functions/agents/alignment-core.js)
 - 🧠 Description: TBD
 
+### analytics-agent
+- 📁 Path: `functions/agents/analytics-agent.js`
+- 🏷️ Tags: analytics
+- 📅 Last updated: unknown
+- 🔗 [View source](https://github.com/Csp-Ai/Super-Intelligence/blob/main/functions/agents/analytics-agent.js)
+- 🧠 Description: Logs frontend interaction metrics
+- ▶️ Command: `firebase functions:call analyticsAgent --data '{"eventName":"test","userId":"123"}'`
+
 ### anomaly-agent
 - 📁 Path: `functions/agents/anomalyAgent.js`
 - 🏷️ Tags: monitor
