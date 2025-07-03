@@ -13,10 +13,19 @@ if ! java -version >/dev/null 2>&1; then
   exit 0
 fi
 
-# Start only the hosting emulator
-firebase emulators:start --only hosting &
+# Start Firebase emulators for functions, Firestore, and Hosting
+firebase emulators:start --only functions,firestore,hosting &
 
 # Launch frontend dev server
+if [ ! -d functions/node_modules ]; then
+  npm ci --prefix functions >/dev/null 2>&1
+else
+  echo "Functions packages already installed"
+fi
 cd frontend
-npm install
+if [ ! -d node_modules ]; then
+  npm ci
+else
+  echo "Frontend packages already installed"
+fi
 npm run dev
