@@ -11,7 +11,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyALV8mGdTdENmOCjgiPCODLVs6DUtD5H0U",
   authDomain: "super-intelligence-7b653.firebaseapp.com",
   projectId: "super-intelligence-7b653",
-  storageBucket: "super-intelligence-7b653.firebasestorage.app",
+  storageBucket: "super-intelligence-7b653.appspot.com",
   messagingSenderId: "170923536461",
   appId: "1:170923536461:web:f055faae06eb4552e8ac04",
   measurementId: "G-BNQTJQ902V"
