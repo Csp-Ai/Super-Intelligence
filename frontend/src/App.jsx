@@ -29,6 +29,7 @@ import OpportunityCard from "./components/OpportunityCard";
 import BoardPanel from "./components/BoardPanel";
 import MentorPanel from "./components/MentorPanel";
 import GuardianPanel from "./components/GuardianPanel";
+import AgentTimelinePanel from "./components/AgentTimelinePanel";
 
 import useAgentPreferences from "./hooks/useAgentPreferences";
 
@@ -274,6 +275,7 @@ function App() {
           <AgentSyncPanel events={syncEvents} />
           <AgentLearningPanel />
         </div>
+        <AgentTimelinePanel onSelectAgent={triggerPulse} />
       </div>
     </DashboardDataProvider>
   );
