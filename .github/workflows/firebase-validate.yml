@@ -1,0 +1,30 @@
+name: Firebase Config Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Grant execute permission for setup script
+        run: chmod +x setup.sh
+      - name: Run setup script
+        run: ./setup.sh
+      - name: Run npm tests
+        run: npm test --silent
+
+  firebase-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Validate Firebase configuration
+        run: node scripts/checkFirebaseTargets.js

@@ -7,31 +7,48 @@ function checkTargets() {
   const rc = JSON.parse(fs.readFileSync(rcPath, 'utf8'));
   const config = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 
-  const required = new Set();
+  const configTargets = new Set();
   const hostingConfig = config.hosting || [];
   if (Array.isArray(hostingConfig)) {
     for (const h of hostingConfig) {
-      if (h && h.target) required.add(h.target);
+      if (h && h.target) {
+        configTargets.add(h.target);
+        if (!h.rewrites && !h.redirects) {
+          console.warn(`Warning: hosting target '${h.target}' has no rewrites or redirects defined`);
+        }
+      }
     }
   } else if (hostingConfig && hostingConfig.target) {
-    required.add(hostingConfig.target);
+    configTargets.add(hostingConfig.target);
+    if (!hostingConfig.rewrites && !hostingConfig.redirects) {
+      console.warn(`Warning: hosting target '${hostingConfig.target}' has no rewrites or redirects defined`);
+    }
   }
 
-  const defined = new Set();
+  const rcTargets = new Set();
   if (rc.targets && typeof rc.targets === 'object') {
     for (const project of Object.values(rc.targets)) {
       if (project.hosting && typeof project.hosting === 'object') {
         for (const t of Object.keys(project.hosting)) {
-          defined.add(t);
+          rcTargets.add(t);
         }
       }
     }
   }
 
-  const missing = Array.from(required).filter(t => !defined.has(t));
-  if (missing.length > 0) {
-    console.error(`Missing Firebase hosting targets in .firebaserc: ${missing.join(', ')}`);
+  const missingInRc = Array.from(configTargets).filter(t => !rcTargets.has(t));
+  const missingInConfig = Array.from(rcTargets).filter(t => !configTargets.has(t));
+
+  if (missingInRc.length || missingInConfig.length) {
+    if (missingInRc.length) {
+      console.error(`Missing Firebase hosting targets in .firebaserc: ${missingInRc.join(', ')}`);
+    }
+    if (missingInConfig.length) {
+      console.error(`Targets defined in .firebaserc but not in firebase.json: ${missingInConfig.join(', ')}`);
+    }
     process.exit(1);
+  } else {
+    console.log('Firebase hosting targets validated successfully.');
   }
 }
 
