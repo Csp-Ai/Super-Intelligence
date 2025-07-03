@@ -12,6 +12,9 @@ import AnomalyPanel from "./components/AnomalyPanel";
 import TrendsPanel from "./components/TrendsPanel";
 import LifecycleTimeline from "./components/LifecycleTimeline";
 import InsightsChart from "./components/InsightsChart";
+import ResumeCard from "./components/ResumeCard";
+import RoadmapCard from "./components/RoadmapCard";
+import OpportunityCard from "./components/OpportunityCard";
 import { DashboardDataProvider } from "./context/DashboardDataContext";
 
 const sections = {
@@ -166,6 +169,13 @@ function App() {
               />
             );
           })}
+        </div>
+
+        <div className="mb-4">
+          <h2 className="font-semibold mb-2">Agent Outputs</h2>
+          <ResumeCard />
+          <RoadmapCard />
+          <OpportunityCard />
         </div>
 
         {showAnomaliesFor && (
