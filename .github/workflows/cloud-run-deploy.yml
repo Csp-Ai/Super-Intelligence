@@ -17,6 +17,10 @@ jobs:
       - name: Configure npm registry
         working-directory: functions
         run: echo "registry=https://registry.npmjs.org/" > .npmrc
+      - name: Clean up obsolete npm proxy config
+        run: |
+          npm config delete http-proxy
+          npm config delete https-proxy
       - name: Install dependencies
         working-directory: functions
         run: npm ci --omit=dev
