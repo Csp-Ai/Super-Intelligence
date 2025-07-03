@@ -1,1 +1,1 @@
-web: npm --prefix functions start
+web: npm start
