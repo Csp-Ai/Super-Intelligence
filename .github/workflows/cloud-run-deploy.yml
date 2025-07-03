@@ -31,4 +31,5 @@ jobs:
             --region us-central1 \
             --platform managed \
             --project $PROJECT_ID \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --use-docker
