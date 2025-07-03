@@ -1,6 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { getFirestore, collection, onSnapshot } from "firebase/firestore";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { signInWithGoogle } from "./auth";
+import { getFirebase } from "./firebase";
 import CanvasNetwork from "./components/CanvasNetwork";
 import OnboardingOverlay from "./components/OnboardingOverlay";
 
@@ -20,11 +23,14 @@ function App() {
   const [showOverlay, setShowOverlay] = useState(false);
   const reduceMotion = useReducedMotion();
 
-  const agents = [
+  const defaultAgents = [
     { id: "core", x: 100, y: 120 },
     { id: "mentor", x: 250, y: 60 },
     { id: "opportunity", x: 400, y: 200 }
   ];
+  const [agents, setAgents] = useState(
+    defaultAgents.map(a => ({ ...a, activity: 0, connections: 0 }))
+  );
 
   useEffect(() => {
     const completed = localStorage.getItem('demoOverlayComplete');
@@ -38,8 +44,45 @@ function App() {
     setShowOverlay(false);
   };
 
+  useEffect(() => {
+    let unsub;
+    getFirebase().then(({ app }) => {
+      const db = getFirestore(app);
+      unsub = onSnapshot(collection(db, 'agents'), snap => {
+        const updates = {};
+        snap.forEach(doc => {
+          updates[doc.id] = doc.data();
+        });
+        setAgents(prev =>
+          prev.map(a => {
+            const data = updates[a.id];
+            if (!data) return a;
+            if (
+              data.activity !== a.activity ||
+              data.connections !== a.connections
+            ) {
+              triggerPulse(a.id);
+            }
+            return { ...a, ...data };
+          })
+        );
+      });
+    });
+    return () => unsub && unsub();
+  }, []);
+
   const triggerPulse = id => {
     canvasRef.current?.updateActivity(id);
+  };
+
+  const trainAgent = async id => {
+    try {
+      const { app } = await getFirebase();
+      const fn = httpsCallable(getFunctions(app), 'trainAgent');
+      await fn({ agentId: id });
+    } catch (err) {
+      console.error('train failed', err);
+    }
   };
 
   const variants = {
@@ -77,6 +120,22 @@ function App() {
           {sections[activeSection]}
         </motion.div>
       </AnimatePresence>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+        {agents.map(agent => (
+          <div key={agent.id} className="border p-2 rounded">
+            <h3 className="font-semibold mb-1">{agent.id}</h3>
+            <div className="text-sm">Activity: {agent.activity || 0}</div>
+            <div className="text-sm mb-2">Connections: {agent.connections || 0}</div>
+            <button
+              onClick={() => trainAgent(agent.id)}
+              className="border px-2 py-1 rounded"
+            >
+              Train
+            </button>
+          </div>
+        ))}
+      </div>
 
       <button onClick={() => triggerPulse("core")}>Trigger Core Pulse</button>
       <CanvasNetwork ref={canvasRef} agents={agents} width={500} height={300} />
