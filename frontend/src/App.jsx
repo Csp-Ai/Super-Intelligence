@@ -4,7 +4,10 @@ import { getFirestore, collection, onSnapshot } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { signInWithGoogle } from "./auth";
 import { app } from "./firebase";
+
 import CanvasNetwork from "./components/CanvasNetwork";
+import AgentSyncPanel from "./components/AgentSyncPanel";
+import useAgentSync from "./hooks/useAgentSync";
 import OnboardingOverlay from "./components/OnboardingOverlay";
 import SectionNav from "./components/SectionNav";
 import AgentCard from "./components/AgentCard";
@@ -12,9 +15,15 @@ import AnomalyPanel from "./components/AnomalyPanel";
 import TrendsPanel from "./components/TrendsPanel";
 import LifecycleTimeline from "./components/LifecycleTimeline";
 import InsightsChart from "./components/InsightsChart";
+import InsightsPanel from "./components/InsightsPanel";
+import AnalyticsPanel from "./components/AnalyticsPanel";
 import ResumeCard from "./components/ResumeCard";
 import RoadmapCard from "./components/RoadmapCard";
 import OpportunityCard from "./components/OpportunityCard";
+import BoardPanel from "./components/BoardPanel";
+import MentorPanel from "./components/MentorPanel";
+import GuardianPanel from "./components/GuardianPanel";
+
 import { DashboardDataProvider } from "./context/DashboardDataContext";
 
 const sections = {
@@ -31,6 +40,7 @@ function App() {
   const canvasRef = useRef(null);
   const [activeSection, setActiveSection] = useState("home");
   const [showOverlay, setShowOverlay] = useState(false);
+  const [showGuidance, setShowGuidance] = useState(false);
   const reduceMotion = useReducedMotion();
 
   const layoutAgents = ids => {
@@ -53,6 +63,7 @@ function App() {
   const [registry, setRegistry] = useState([]);
   const [showAnomaliesFor, setShowAnomaliesFor] = useState(null);
   const [showLifecycleFor, setShowLifecycleFor] = useState(null);
+  const syncEvents = useAgentSync('demo-run');
 
   useEffect(() => {
     fetch('/config/agents.json')
@@ -205,14 +216,40 @@ function App() {
         )}
 
         <TrendsPanel />
+        <InsightsPanel />
         <InsightsChart />
+        <AnalyticsPanel />
+
+        <div className="bg-white/10 p-4 rounded shadow mb-4">
+          <button
+            onClick={() => setShowGuidance(!showGuidance)}
+            className="font-semibold mb-2"
+          >
+            Agent Guidance {showGuidance ? '▲' : '▼'}
+          </button>
+          {showGuidance && (
+            <div className="mt-2 space-y-4">
+              <BoardPanel />
+              <MentorPanel />
+              <GuardianPanel />
+            </div>
+          )}
+        </div>
 
         <button onClick={() => triggerPulse("core")}>Trigger Core Pulse</button>
-        <CanvasNetwork ref={canvasRef} agents={agents} width={500} height={300} />
+        <CanvasNetwork
+          ref={canvasRef}
+          agents={agents}
+          width={500}
+          height={300}
+          events={syncEvents}
+        />
+        <AgentSyncPanel events={syncEvents} />
       </div>
     </DashboardDataProvider>
   );
 }
 
-export default App;
+export default App
+
 
