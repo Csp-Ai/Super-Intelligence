@@ -1,21 +1,23 @@
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getAnalytics } from 'firebase/analytics';
 
-let app;
-let analytics;
-let auth;
+const firebaseConfig = {
+  apiKey: "AIzaSyALV8mGdTdENmOCjgiPCODLVs6DUtD5H0U",
+  authDomain: "super-intelligence-7b653.firebaseapp.com",
+  projectId: "super-intelligence-7b653",
+  storageBucket: "super-intelligence-7b653.firebasestorage.app",
+  messagingSenderId: "170923536461",
+  appId: "1:170923536461:web:f055faae06eb4552e8ac04",
+  measurementId: "G-BNQTJQ902V"
+};
 
-export async function getFirebase() {
-  if (!app) {
-    const resp = await fetch('/__/firebase/init.json');
-    const config = await resp.json();
-    app = initializeApp(config);
-    analytics = getAnalytics(app);
-    auth = getAuth(app);
-    if (window.location.hostname === 'localhost') {
-      connectAuthEmulator(auth, 'http://localhost:9099');
-    }
-  }
-  return { app, analytics, auth };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const analytics = getAnalytics(app);
+
+if (window.location.hostname === 'localhost') {
+  connectAuthEmulator(auth, 'http://localhost:9099');
 }
+
+export { app, auth, analytics };
