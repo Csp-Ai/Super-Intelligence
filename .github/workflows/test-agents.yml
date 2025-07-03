@@ -1,0 +1,55 @@
+name: Test Agents
+
+on:
+  push:
+    paths:
+      - 'functions/agents/**'
+      - '.github/workflows/test-agents.yml'
+  pull_request:
+
+jobs:
+  run-agent-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - agent: alignment-core
+            test: functions/testAlignmentCore.js
+          - agent: analytics-agent
+            test: functions/testAnalyticsAgent.js
+          - agent: anomaly-agent
+            test: functions/testAnomalyAgent.js
+          - agent: board-agent
+            test: functions/testBoardAgent.js
+          - agent: board-agent-hybrid
+            test: functions/testBoardAgentHybrid.js
+          - agent: guardian-agent
+            test: functions/testGuardianAgent.js
+          - agent: insights-agent
+            test: functions/testInsightsAgent.js
+          - agent: mentor-agent
+            test: functions/testMentorAgent.js
+          - agent: mentor-agent-academic
+            test: functions/testMentorAgentAcademic.js
+          - agent: mentor-agent-dance
+            test: functions/testMentorAgentDance.js
+          - agent: opportunity-agent
+            test: functions/testOpportunityAgent.js
+          - agent: resume-agent
+            test: functions/testResumeAgent.js
+          - agent: roadmap-agent
+            test: functions/testRoadmapAgent.js
+          - agent: trends-agent
+            test: functions/testTrendsAgent.js
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install
+      - name: Install function dependencies
+        run: npm --prefix functions install
+      - name: Run agent test
+        run: node ${{ matrix.test }}
