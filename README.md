@@ -118,6 +118,23 @@ On CI, auth is handled via `FIREBASE_TOKEN`.
 3. The CI workflow injects this token so `firebase deploy` runs without
    interactive login. If the token expires, re-run the command above.
 
+### Build Frontend for Hosting
+
+Before deploying, create a production build of the React app:
+
+```bash
+npm run build --prefix frontend
+```
+
+The command outputs static files in `frontend/build/`. Copy them to the repository's
+`public/` directory or set `hosting.public` in `firebase.json` to `frontend/build` so
+Firebase Hosting serves the build directory. Ensure these files are available before
+running:
+
+```bash
+firebase deploy
+```
+
 ### Debug Console
 
 Developers can review recent agent activity through `/debug.html` once
