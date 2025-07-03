@@ -12,6 +12,7 @@ import { app } from "./firebase";
 
 import CanvasNetwork from "./components/CanvasNetwork";
 import AgentSyncPanel from "./components/AgentSyncPanel";
+import AgentLearningPanel from "./components/AgentLearningPanel";
 import useAgentSync from "./hooks/useAgentSync";
 import OnboardingOverlay from "./components/OnboardingOverlay";
 import SectionNav from "./components/SectionNav";
@@ -269,7 +270,10 @@ function App() {
           height={300}
           events={syncEvents}
         />
-        <AgentSyncPanel events={syncEvents} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-4">
+          <AgentSyncPanel events={syncEvents} />
+          <AgentLearningPanel />
+        </div>
       </div>
     </DashboardDataProvider>
   );
