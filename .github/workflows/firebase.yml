@@ -43,6 +43,9 @@ jobs:
           npm run lint --if-present
           npm --prefix functions test --silent
 
+      - name: Verify Firebase hosting targets
+        run: node scripts/checkFirebaseTargets.js
+
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
