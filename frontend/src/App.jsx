@@ -4,22 +4,7 @@ import { getFirestore, collection, onSnapshot } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { signInWithGoogle } from "./auth";
 import { app } from "./firebase";
-import CanvasNetwork from "./components/CanvasNetwork";
-import AgentSyncPanel from "./components/AgentSyncPanel";
-import useAgentSync from "./hooks/useAgentSync";
-import OnboardingOverlay from "./components/OnboardingOverlay";
-import SectionNav from "./components/SectionNav";
-import AgentCard from "./components/AgentCard";
-import AnomalyPanel from "./components/AnomalyPanel";
-import TrendsPanel from "./components/TrendsPanel";
-import LifecycleTimeline from "./components/LifecycleTimeline";
-import InsightsChart from "./components/InsightsChart";
-import { useRef, useState, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { getFirestore, collection, onSnapshot } from "firebase/firestore";
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { signInWithGoogle } from "./auth";
-import { app } from "./firebase";
+
 import CanvasNetwork from "./components/CanvasNetwork";
 import AgentSyncPanel from "./components/AgentSyncPanel";
 import useAgentSync from "./hooks/useAgentSync";
@@ -32,10 +17,12 @@ import LifecycleTimeline from "./components/LifecycleTimeline";
 import InsightsChart from "./components/InsightsChart";
 import InsightsPanel from "./components/InsightsPanel";
 import AnalyticsPanel from "./components/AnalyticsPanel";
+import ResumeCard from "./components/ResumeCard";
+import RoadmapCard from "./components/RoadmapCard";
+import OpportunityCard from "./components/OpportunityCard";
 import BoardPanel from "./components/BoardPanel";
 import MentorPanel from "./components/MentorPanel";
 import GuardianPanel from "./components/GuardianPanel";
-import { DashboardDataProvider } from "./context/DashboardDataContext";
 
 import { DashboardDataProvider } from "./context/DashboardDataContext";
 
@@ -195,6 +182,13 @@ function App() {
           })}
         </div>
 
+        <div className="mb-4">
+          <h2 className="font-semibold mb-2">Agent Outputs</h2>
+          <ResumeCard />
+          <RoadmapCard />
+          <OpportunityCard />
+        </div>
+
         {showAnomaliesFor && (
           <div>
             <AnomalyPanel agentId={showAnomaliesFor} />
@@ -256,6 +250,6 @@ function App() {
   );
 }
 
-export default App;
+export default App
 
 
