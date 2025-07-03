@@ -13,6 +13,7 @@
   },
   "scripts": {
     "start": "node index.js",
+    "build": "echo 'no build step'",
     "test": "node testRoadmapAgent.js && node testResumeAgent.js && node testOpportunityAgent.js && node testOnboardingFlow.js && node testInsightsAgent.js && node testAnomalyAgent.js && node testTrendsAgent.js && node testSummarizeReplayLogs.js && node testLifecycleFlow.js && node testFeedbackAction.js"
   }
 }
