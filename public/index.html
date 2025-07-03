@@ -23,7 +23,7 @@
   <script src="firebase-config.js"></script>
 </head>
 <body class="bg-gray-100 p-6">
-  <div class="max-w-md mx-auto bg-white p-4 shadow">
+  <div class="max-w-md mx-auto bg-white p-4 shadow mb-8">
     <h1 class="text-3xl font-extrabold mb-4">Get Started</h1>
     <input id="name" class="border p-2 w-full mb-2" placeholder="Full name" />
     <input id="email" class="border p-2 w-full mb-2" placeholder="Email" />
@@ -36,6 +36,21 @@
     <button id="trainBtn" class="bg-gray-200 px-4 py-2 rounded w-full">Run Training Simulation</button>
     <p id="status" class="text-sm mt-2"></p>
   </div>
+
+  <div class="max-w-xl mx-auto my-6">
+    <iframe id="demoVideo" class="w-full rounded shadow" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Demo Video" allowfullscreen></iframe>
+  </div>
+
+  <div class="max-w-xl mx-auto my-8" id="testimonials">
+    <h2 class="text-xl font-bold text-center mb-4">Trusted by innovators</h2>
+    <blockquote class="italic text-center mb-2">"This platform accelerated our social impact." – Jane D.</blockquote>
+    <blockquote class="italic text-center">"A responsible approach to AI." – TechForGood</blockquote>
+  </div>
+
+  <div class="flex justify-center space-x-4 mt-4 mb-24" id="githubActivity">
+    <span id="githubStars" class="text-sm"></span>
+    <span id="githubCommit" class="text-sm"></span>
+  </div>
   <footer class="text-center mt-6 text-sm" id="starFooter">
     <a href="https://github.com/Csp-Ai/Super-Intelligence" target="_blank" id="githubStar" class="underline">Star us on GitHub</a>
   </footer>
@@ -44,5 +59,10 @@
   <script src="github-stats.js"></script>
   <label class="fixed bottom-2 right-2 bg-gray-200 p-1 rounded text-xs"><input type="checkbox" id="reduceMotionToggle"> Reduce Motion</label>
   <script src="reduce-motion.js"></script>
+
+  <div id="ctaBar" class="fixed bottom-0 left-0 right-0 bg-purple-700 text-white py-3 flex justify-center items-center space-x-4">
+    <span class="font-semibold">Deploy Your Own Ethical AI</span>
+    <a href="https://github.com/Csp-Ai/Super-Intelligence" class="bg-white text-purple-700 font-semibold px-4 py-2 rounded">Get Started</a>
+  </div>
 </body>
 </html>
