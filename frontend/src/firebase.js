@@ -3,7 +3,7 @@ import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyALV8mGdTdENmOCjgiPCODLVs6DUtD5H0U",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "super-intelligence-7b653.firebaseapp.com",
   projectId: "super-intelligence-7b653",
   storageBucket: "super-intelligence-7b653.firebasestorage.app",
