@@ -48,3 +48,24 @@
 - 📅 Last updated: 2025-07-02
 - 🔗 [View source](https://github.com/YOUR_REPO/functions/agents/trendsAgent.js)
 - 🧠 Description: Computes usage trends across all agents
+
+### mentor-agent
+- 📁 Path: `functions/agents/mentor-agent.js`
+- 🏷️ Tags: utility
+- 📅 Last updated: 2025-07-02
+- 🔗 [View source](https://github.com/YOUR_REPO/functions/agents/mentor-agent.js)
+- 🧠 Description: Provides weekly mentoring tips
+
+### board-agent
+- 📁 Path: `functions/agents/board-agent.js`
+- 🏷️ Tags: analytics
+- 📅 Last updated: 2025-07-02
+- 🔗 [View source](https://github.com/YOUR_REPO/functions/agents/board-agent.js)
+- 🧠 Description: Generates weekly board summaries
+
+### guardian-agent
+- 📁 Path: `functions/agents/guardian-agent.js`
+- 🏷️ Tags: monitor
+- 📅 Last updated: 2025-07-02
+- 🔗 [View source](https://github.com/YOUR_REPO/functions/agents/guardian-agent.js)
+- 🧠 Description: Runs compliance and safety checks

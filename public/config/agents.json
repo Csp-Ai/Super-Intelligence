@@ -110,5 +110,53 @@
       "utility"
     ],
     "lifecycle": "stable"
+  },
+  "mentor-agent": {
+    "name": "mentor-agent",
+    "description": "Provides weekly mentoring tips",
+    "version": "v1.0.0",
+    "lastRunStatus": "unknown",
+    "agentType": "utility",
+    "enabled": true,
+    "docsUrl": "../functions/agents/mentor-agent.js",
+    "sourcePath": "functions/agents/mentor-agent.js",
+    "updatedAt": "2025-07-02T02:27:43.913Z",
+    "createdAt": "2025-07-02T02:27:43.913Z",
+    "tags": [
+      "utility"
+    ],
+    "lifecycle": "stable"
+  },
+  "board-agent": {
+    "name": "board-agent",
+    "description": "Generates weekly board summaries",
+    "version": "v1.0.0",
+    "lastRunStatus": "unknown",
+    "agentType": "analytics",
+    "enabled": true,
+    "docsUrl": "../functions/agents/board-agent.js",
+    "sourcePath": "functions/agents/board-agent.js",
+    "updatedAt": "2025-07-02T02:27:43.913Z",
+    "createdAt": "2025-07-02T02:27:43.913Z",
+    "tags": [
+      "analytics"
+    ],
+    "lifecycle": "stable"
+  },
+  "guardian-agent": {
+    "name": "guardian-agent",
+    "description": "Runs compliance and safety checks",
+    "version": "v1.0.0",
+    "lastRunStatus": "unknown",
+    "agentType": "monitor",
+    "enabled": true,
+    "docsUrl": "../functions/agents/guardian-agent.js",
+    "sourcePath": "functions/agents/guardian-agent.js",
+    "updatedAt": "2025-07-02T02:27:43.913Z",
+    "createdAt": "2025-07-02T02:27:43.913Z",
+    "tags": [
+      "monitor"
+    ],
+    "lifecycle": "stable"
   }
 }
