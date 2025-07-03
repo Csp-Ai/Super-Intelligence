@@ -39,7 +39,7 @@ async function generateOpportunities(userData = {}, userId = 'unknown', metadata
     agentName: 'opportunity-agent',
     agentVersion,
     userId,
-    inputSummary: metadata,
+    inputSummary: userData,
     outputSummary: Array.isArray(finalOutput) ? finalOutput.map(o => o.title) : finalOutput
   });
 
