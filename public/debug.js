@@ -46,6 +46,7 @@ async function fetchLogs() {
 function renderLogs(logs) {
   const filter = document.getElementById('statusFilter').value;
   const container = document.getElementById('logsContainer');
+  container.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4';
   container.innerHTML = '';
   const grouped = {};
   logs.forEach(l => {
@@ -55,7 +56,7 @@ function renderLogs(logs) {
   });
   Object.keys(grouped).forEach(agent => {
     const section = document.createElement('div');
-    section.className = 'mb-6';
+    section.className = 'mb-4 bg-white p-4 rounded shadow';
     section.innerHTML = `<h2 class="text-xl font-semibold mb-2">${agent}</h2>`;
     const table = document.createElement('table');
     table.className = 'min-w-full bg-white text-sm';
