@@ -12,6 +12,7 @@ import AnomalyPanel from "./components/AnomalyPanel";
 import TrendsPanel from "./components/TrendsPanel";
 import LifecycleTimeline from "./components/LifecycleTimeline";
 import InsightsChart from "./components/InsightsChart";
+import AnalyticsPanel from "./components/AnalyticsPanel";
 import { DashboardDataProvider } from "./context/DashboardDataContext";
 
 const sections = {
@@ -196,6 +197,7 @@ function App() {
 
         <TrendsPanel />
         <InsightsChart />
+        <AnalyticsPanel />
 
         <button onClick={() => triggerPulse("core")}>Trigger Core Pulse</button>
         <CanvasNetwork ref={canvasRef} agents={agents} width={500} height={300} />
