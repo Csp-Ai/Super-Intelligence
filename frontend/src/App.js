@@ -3,6 +3,8 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { signInWithGoogle } from "./auth";
 import CanvasNetwork from "./components/CanvasNetwork";
 import OnboardingOverlay from "./components/OnboardingOverlay";
+import SectionNav from "./components/SectionNav";
+import { DashboardDataProvider } from "./context/DashboardDataContext";
 
 const sections = {
   home: <p>Welcome to the demo app.</p>,
@@ -49,21 +51,16 @@ function App() {
   };
 
   return (
+    <DashboardDataProvider>
     <div className="App">
       {showOverlay && <OnboardingOverlay onComplete={handleOverlayDone} />}
       <h1>🚀 React Frontend Ready - No Binary Assets</h1>
 
-      <nav className="space-x-2 mb-4">
-        {Object.keys(sections).map(key => (
-          <button
-            key={key}
-            onClick={() => setActiveSection(key)}
-            className="border px-2 py-1 rounded"
-          >
-            {key}
-          </button>
-        ))}
-      </nav>
+      <SectionNav
+        sections={sections}
+        active={activeSection}
+        onChange={setActiveSection}
+      />
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -81,6 +78,7 @@ function App() {
       <button onClick={() => triggerPulse("core")}>Trigger Core Pulse</button>
       <CanvasNetwork ref={canvasRef} agents={agents} width={500} height={300} />
     </div>
+    </DashboardDataProvider>
   );
 }
 
