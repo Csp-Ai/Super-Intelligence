@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { getFirestore, collection, onSnapshot } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { signInWithGoogle } from "./auth";
-import { getFirebase } from "./firebase";
+import { app } from "./firebase";
 import CanvasNetwork from "./components/CanvasNetwork";
 import OnboardingOverlay from "./components/OnboardingOverlay";
 import SectionNav from "./components/SectionNav";
@@ -57,9 +57,8 @@ function App() {
 
   useEffect(() => {
     let unsub;
-    getFirebase().then(({ app }) => {
-      const db = getFirestore(app);
-      unsub = onSnapshot(collection(db, 'agents'), snap => {
+    const db = getFirestore(app);
+    unsub = onSnapshot(collection(db, 'agents'), snap => {
         const updates = {};
         snap.forEach(doc => {
           updates[doc.id] = doc.data();
@@ -78,7 +77,6 @@ function App() {
           })
         );
       });
-    });
     return () => unsub && unsub();
   }, []);
 
@@ -88,7 +86,6 @@ function App() {
 
   const trainAgent = async id => {
     try {
-      const { app } = await getFirebase();
       const fn = httpsCallable(getFunctions(app), 'trainAgent');
       await fn({ agentId: id });
     } catch (err) {
