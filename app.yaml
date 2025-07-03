@@ -1,2 +1,4 @@
-runtime: nodejs18
-entrypoint: npm run build && npm run preview
+runtime: nodejs20
+entrypoint: npm --prefix functions start
+env_variables:
+  FIREBASE_CONFIG: '{"projectId":"super-intelligence-7b653"}'

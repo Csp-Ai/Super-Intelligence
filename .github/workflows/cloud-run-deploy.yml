@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      SERVICE_NAME: node-backend
     steps:
       - uses: actions/checkout@v3
       - name: Verify functions package.json
@@ -39,12 +40,12 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - name: Build container image
+        run: gcloud builds submit functions --tag gcr.io/$PROJECT_ID/$SERVICE_NAME --project $PROJECT_ID
       - name: Deploy to Cloud Run
-        working-directory: functions
         run: |
-          # Using --source with Buildpacks avoids Google_ENTRYPOINT issues
-          gcloud run deploy node-backend \
-            --source . \
+          gcloud run deploy $SERVICE_NAME \
+            --image gcr.io/$PROJECT_ID/$SERVICE_NAME \
             --region us-central1 \
             --platform managed \
             --project $PROJECT_ID \
