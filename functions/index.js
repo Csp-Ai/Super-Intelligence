@@ -85,3 +85,5 @@ exports.analyticsAgent = require('./agents/analytics-agent').analyticsAgent;
 
 exports.runWebsiteAnalysis = require('./runWebsiteAnalysis').runWebsiteAnalysis;
 
+exports.agentEndpoint = require('./agentEndpoint').agentEndpoint;
+
