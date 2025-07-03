@@ -8,6 +8,7 @@ import CanvasNetwork from "./components/CanvasNetwork";
 import OnboardingOverlay from "./components/OnboardingOverlay";
 import SectionNav from "./components/SectionNav";
 import AgentCard from "./components/AgentCard";
+import AnomalyPanel from "./components/AnomalyPanel";
 import { DashboardDataProvider } from "./context/DashboardDataContext";
 
 const sections = {
@@ -35,6 +36,7 @@ function App() {
     defaultAgents.map(a => ({ ...a, activity: 0, connections: 0 }))
   );
   const [registry, setRegistry] = useState([]);
+  const [showAnomaliesFor, setShowAnomaliesFor] = useState(null);
 
   useEffect(() => {
     fetch('/config/agents.json')
@@ -137,12 +139,26 @@ function App() {
               agentName={reg.name}
               metrics={metrics}
               status={reg.lastRunStatus}
+              state={live.currentState}
               anomalyScore={live.anomalyScore}
               onTrain={() => trainAgent(reg.name)}
+              onViewAnomalies={() => setShowAnomaliesFor(reg.name)}
             />
           );
         })}
       </div>
+
+      {showAnomaliesFor && (
+        <div>
+          <AnomalyPanel agentId={showAnomaliesFor} />
+          <button
+            onClick={() => setShowAnomaliesFor(null)}
+            className="border px-2 py-1 rounded text-sm"
+          >
+            Close
+          </button>
+        </div>
+      )}
 
       <button onClick={() => triggerPulse("core")}>Trigger Core Pulse</button>
       <CanvasNetwork ref={canvasRef} agents={agents} width={500} height={300} />
