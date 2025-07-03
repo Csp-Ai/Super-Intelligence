@@ -1,2 +1,2 @@
 runtime: nodejs18
-entrypoint: node index.js
+entrypoint: npm run build && npm run preview
