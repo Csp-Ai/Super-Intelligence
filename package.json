@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "firebase emulators:start",
-    "test": "npm --prefix functions test --silent",
+    "test": "node scripts/validateAgentMetadata.js && npm --prefix functions test --silent",
     "dev": "concurrently \"npm start --prefix frontend\" \"firebase emulators:start\""
   },
   "engines": {
