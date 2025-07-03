@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const express = require('express');
 const http = require('http');
+const path = require('path');
 const { initAgentSyncWs } = require('./functions/utils/agent-sync-ws');
 
 if (!process.env.GOOGLE_CLOUD_PROJECT && !process.env.FIREBASE_PROJECT_ID) {
@@ -30,6 +31,11 @@ console.log(`Firebase initialized for project ${projectId}`);
 const app = express();
 const server = http.createServer(app);
 initAgentSyncWs(server);
+
+app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+});
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {

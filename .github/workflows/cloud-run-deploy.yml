@@ -11,42 +11,29 @@ jobs:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
       SERVICE_NAME: node-backend
       GOOGLE_REGION: us-central1
-      GOOGLE_ENTRYPOINT: "npm --prefix functions start"
+      GOOGLE_ENTRYPOINT: "node index.js"
     steps:
       - uses: actions/checkout@v3
-      - name: Verify functions package.json
-        run: |
-          test -f functions/package.json || { echo "\u274c Missing package.json"; exit 1; }
       - uses: actions/setup-node@v3
         with:
           node-version: 20
       - name: Configure npm registry
-        working-directory: functions
         run: echo "registry=https://registry.npmjs.org/" > .npmrc
-      - name: Clear deprecated npm proxy config
-        working-directory: functions
-        run: |
-          npm config delete http-proxy || true
-          npm config delete https-proxy || true
-          sed -i '/http-proxy/d;/https-proxy/d' .npmrc || true
       - name: Install dependencies
-        working-directory: functions
-        run: npm install
-      - name: Build functions
-        working-directory: functions
+        run: |
+          npm install
+          npm install --prefix frontend
+      - name: Build frontend
         run: npm run build
       - name: Run tests
-        working-directory: functions
         run: npm test
       - name: Verify start script
-        working-directory: functions
-        run: timeout 3 npm start || true
+        run: timeout 3 node index.js || true
       - uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ env.PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - name: Deploy to Cloud Run
-        working-directory: functions
         run: |
           gcloud run deploy $SERVICE_NAME \
             --source . \
