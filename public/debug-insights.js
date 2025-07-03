@@ -22,7 +22,7 @@ function renderInsights(data) {
   Object.keys(data).forEach(agent => {
     const section = document.createElement('div');
     section.className = 'mb-6';
-    section.innerHTML = `<h2 class="text-xl font-semibold mb-2">${agent}</h2>`;
+    section.innerHTML = `<h2 class="text-2xl font-semibold mb-2">${agent}</h2>`;
     const pre = document.createElement('pre');
     pre.textContent = JSON.stringify(data[agent], null, 2);
     section.appendChild(pre);

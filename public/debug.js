@@ -56,7 +56,7 @@ function renderLogs(logs) {
   Object.keys(grouped).forEach(agent => {
     const section = document.createElement('div');
     section.className = 'mb-6';
-    section.innerHTML = `<h2 class="text-xl font-semibold mb-2">${agent}</h2>`;
+    section.innerHTML = `<h2 class="text-2xl font-semibold mb-2">${agent}</h2>`;
     const table = document.createElement('table');
     table.className = 'min-w-full bg-white text-sm';
     table.innerHTML = `<thead><tr>

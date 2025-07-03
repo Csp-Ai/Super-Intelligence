@@ -25,7 +25,7 @@ function renderSummary(agentDocs) {
 
 function renderRecent(agentDocs) {
   const recent = document.getElementById('recent');
-  recent.innerHTML = '<h2 class="text-xl font-semibold mb-2">Recently Modified</h2>';
+  recent.innerHTML = '<h2 class="text-2xl font-semibold mb-2">Recently Modified</h2>';
   agentDocs
     .sort((a, b) => (b.data().updatedAt || '').localeCompare(a.data().updatedAt || ''))
     .slice(0, 5)
@@ -38,7 +38,7 @@ function renderRecent(agentDocs) {
 
 function renderFailing(anomalyDocs) {
   const failing = document.getElementById('failing');
-  failing.innerHTML = '<h2 class="text-xl font-semibold mb-2">Top Failing Agents</h2>';
+  failing.innerHTML = '<h2 class="text-2xl font-semibold mb-2">Top Failing Agents</h2>';
   anomalyDocs.forEach(doc => {
     const data = doc.data();
     const div = document.createElement('div');
@@ -49,7 +49,7 @@ function renderFailing(anomalyDocs) {
 
 function renderCommits(commitDocs) {
   const commits = document.getElementById('commits');
-  commits.innerHTML = '<h2 class="text-xl font-semibold mb-2">Recent Commits</h2>';
+  commits.innerHTML = '<h2 class="text-2xl font-semibold mb-2">Recent Commits</h2>';
   commitDocs.forEach(doc => {
     const data = doc.data();
     const div = document.createElement('div');
@@ -71,7 +71,7 @@ async function loadCoverage() {
 
 function renderCoverage(list) {
   const coverage = document.getElementById('coverage');
-  coverage.innerHTML = '<h2 class="text-xl font-semibold mb-2">CI Coverage</h2>';
+  coverage.innerHTML = '<h2 class="text-2xl font-semibold mb-2">CI Coverage</h2>';
   list.forEach(item => {
     const div = document.createElement('div');
     div.textContent = `${item.agent} - ${item.status}`;
@@ -81,7 +81,7 @@ function renderCoverage(list) {
 
 function renderActivity(anomalyDocs) {
   const activity = document.getElementById('activity');
-  activity.innerHTML = '<h2 class="text-xl font-semibold mb-2">Activity Feed</h2>';
+  activity.innerHTML = '<h2 class="text-2xl font-semibold mb-2">Activity Feed</h2>';
   anomalyDocs.forEach(doc => {
     const data = doc.data();
     const div = document.createElement('div');
