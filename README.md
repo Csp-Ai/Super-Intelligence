@@ -135,6 +135,12 @@ running:
 firebase deploy
 ```
 
+To push the frontend and Cloud Functions together:
+
+```bash
+npm run build --prefix frontend && firebase deploy
+```
+
 ### Running `index.js` in Production
 
 When deploying the Node server (for example via App Engine) you must provide
