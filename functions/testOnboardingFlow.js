@@ -1,6 +1,6 @@
 process.env.LOCAL_AGENT_RUN = '1';
 const { formatAgentInput } = require('./onboardUser');
-const { runAgentFlow } = require('../core/agentFlowEngine');
+const { runAgentFlow } = require('./core/agentFlowEngine');
 const flows = require('../flows');
 
 (async () => {
