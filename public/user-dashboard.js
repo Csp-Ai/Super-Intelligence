@@ -25,7 +25,7 @@ function renderRuns(runs) {
   }
   runs.forEach(run => {
     const div = document.createElement('div');
-    div.className = 'mb-2 p-2 border bg-white rounded cursor-pointer';
+    div.className = 'mb-4 p-4 bg-gray-50 border border-gray-200 rounded shadow cursor-pointer';
     div.innerHTML = `<div class="flex justify-between"><span>${run.agentName}</span><span>${new Date(run.timestamp).toLocaleString()}</span></div>`;
     div.addEventListener('click', () => openModal(run.id));
     container.appendChild(div);

@@ -54,10 +54,12 @@ function renderLogs(logs) {
     if (!grouped[agent]) grouped[agent] = [];
     if (!filter || l.status === filter) grouped[agent].push(l);
   });
+
   Object.keys(grouped).forEach(agent => {
     const section = document.createElement('div');
-    section.className = 'mb-4 bg-white p-4 rounded shadow';
-    section.innerHTML = `<h2 class="text-xl font-semibold mb-2">${agent}</h2>`;
+    section.className = 'mb-6 bg-white p-4 rounded shadow';
+    section.innerHTML = `<h2 class="text-2xl font-semibold mb-2">${agent}</h2>`;
+
     const table = document.createElement('table');
     table.className = 'min-w-full bg-white text-sm';
     table.innerHTML = `<thead><tr>
@@ -67,6 +69,7 @@ function renderLogs(logs) {
         <th class="border px-2 py-1">Output</th>
         <th class="border px-2 py-1">Status</th>
       </tr></thead>`;
+
     const tbody = document.createElement('tbody');
     grouped[agent].forEach(e => {
       const row = document.createElement('tr');
@@ -132,3 +135,4 @@ auth.onAuthStateChanged(user => {
     fetchLogs();
   }
 });
+

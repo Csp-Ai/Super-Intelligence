@@ -20,10 +20,12 @@ function renderInsights(data) {
   const container = document.getElementById('insightsContainer');
   container.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4';
   container.innerHTML = '';
+
   Object.keys(data).forEach(agent => {
     const section = document.createElement('div');
-    section.className = 'mb-4 bg-white p-4 rounded shadow';
-    section.innerHTML = `<h2 class="text-xl font-semibold mb-2">${agent}</h2>`;
+    section.className = 'mb-6 bg-white p-4 rounded shadow';
+    section.innerHTML = `<h2 class="text-2xl font-semibold mb-2">${agent}</h2>`;
+
     const pre = document.createElement('pre');
     pre.textContent = JSON.stringify(data[agent], null, 2);
     section.appendChild(pre);

@@ -16,10 +16,12 @@ function renderTrends(data) {
     container.textContent = 'No trend data available';
     return;
   }
+
   Object.keys(data.metrics).forEach(agent => {
     const section = document.createElement('div');
-    section.className = 'mb-4 bg-white p-4 rounded shadow';
-    section.innerHTML = `<h2 class="text-xl font-semibold mb-2">${agent}</h2>`;
+    section.className = 'mb-6 bg-white p-4 rounded shadow';
+    section.innerHTML = `<h2 class="text-2xl font-semibold mb-2">${agent}</h2>`;
+
     const pre = document.createElement('pre');
     pre.textContent = JSON.stringify(data.metrics[agent], null, 2);
     section.appendChild(pre);
@@ -63,4 +65,5 @@ auth.onAuthStateChanged(user => {
     fetchTrends();
   }
 });
+
 

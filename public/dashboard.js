@@ -68,7 +68,7 @@ document.getElementById('fetchBtn').addEventListener('click', async () => {
 
 function renderRoadmap(steps) {
   const container = document.getElementById('roadmap');
-  container.innerHTML = '<h2 class="text-xl font-semibold mb-2">\uD83D\uDCCD Roadmap</h2>';
+  container.innerHTML = '<h2 class="text-2xl font-semibold mb-2">\uD83D\uDCCD Roadmap</h2>';
   if (!steps.length) {
     container.innerHTML += '<p>No roadmap found.</p>';
     return;
@@ -85,13 +85,13 @@ function renderRoadmap(steps) {
 
 function renderResume(summary) {
   const container = document.getElementById('resume');
-  container.innerHTML = '<h2 class="text-xl font-semibold mb-2">\uD83D\uDCC4 Resume</h2>';
+  container.innerHTML = '<h2 class="text-2xl font-semibold mb-2">\uD83D\uDCC4 Resume</h2>';
   container.innerHTML += summary ? `<p>${summary}</p>` : '<p>No resume summary found.</p>';
 }
 
 function renderOpportunities(list) {
   const container = document.getElementById('opportunities');
-  container.innerHTML = '<h2 class="text-xl font-semibold mb-2">\uD83D\uDD0D Opportunities</h2>';
+  container.innerHTML = '<h2 class="text-2xl font-semibold mb-2">\uD83D\uDD0D Opportunities</h2>';
   if (!list.length) {
     container.innerHTML += '<p>No opportunities found.</p>';
     return;
