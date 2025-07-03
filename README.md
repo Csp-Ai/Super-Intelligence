@@ -190,6 +190,27 @@ curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/runWebsiteAnalysis \
 
 The response contains the captured flow state and outputs for each step.
 
+### Troubleshooting
+
+If Cloud Functions report `Error: Cannot find module 'firebase-admin'`, install
+dependencies explicitly:
+
+```bash
+cd functions
+npm install firebase-admin
+npm --prefix functions install
+```
+
+Ensure `firebase-admin` appears in `functions/package.json` under
+`dependencies`. Validate the installation with:
+
+```bash
+npm --prefix functions run build
+timeout 3 npm --prefix functions start
+```
+
+Both commands should exit without errors.
+
 ## Firebase Project Info
 
 - **Project Name:** Super Intelligence  
