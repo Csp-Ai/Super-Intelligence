@@ -1,15 +1,8 @@
-// Firebase config placeholder
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID"
-};
 
 let auth, db;
 let firebaseReady = true;
 
 try {
-  firebase.initializeApp(firebaseConfig);
   auth = firebase.auth();
   db = firebase.firestore();
 } catch (err) {
