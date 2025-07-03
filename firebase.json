@@ -9,29 +9,12 @@
     },
     "source": "frontend/dist"
   },
-  "hosting": [
-    {
-      "target": "staging",
-      "source": "frontend/dist",
-      "rewrites": [
-        { "source": "**", "destination": "/index.html" }
-      ]
-    },
-    {
-      "target": "production",
-      "source": "frontend/dist",
-      "rewrites": [
-        { "source": "**", "destination": "/index.html" }
-      ]
-    },
-    {
-      "target": "hybrid",
-      "source": "frontend/dist",
-      "rewrites": [
-        { "source": "**", "destination": "/index.html" }
-      ]
-    }
-  ],
+  "hosting": {
+    "source": "frontend",
+    "public": "dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+  },
   "emulators": {
     "auth": {
       "port": 9099
