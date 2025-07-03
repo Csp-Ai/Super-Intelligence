@@ -28,14 +28,23 @@ function App() {
   const [showOverlay, setShowOverlay] = useState(false);
   const reduceMotion = useReducedMotion();
 
-  const defaultAgents = [
-    { id: "core", x: 100, y: 120 },
-    { id: "mentor", x: 250, y: 60 },
-    { id: "opportunity", x: 400, y: 200 }
-  ];
-  const [agents, setAgents] = useState(
-    defaultAgents.map(a => ({ ...a, activity: 0, connections: 0 }))
-  );
+  const layoutAgents = ids => {
+    const centerX = 250;
+    const centerY = 150;
+    const radius = Math.min(centerX, centerY) - 30;
+    return ids.map((id, idx) => {
+      const angle = (2 * Math.PI * idx) / ids.length;
+      return {
+        id,
+        x: centerX + radius * Math.cos(angle),
+        y: centerY + radius * Math.sin(angle),
+        activity: 0,
+        connections: 0,
+      };
+    });
+  };
+
+  const [agents, setAgents] = useState([]);
   const [registry, setRegistry] = useState([]);
   const [showAnomaliesFor, setShowAnomaliesFor] = useState(null);
 
@@ -45,6 +54,12 @@ function App() {
       .then(data => setRegistry(Object.values(data)))
       .catch(err => console.error('failed to load agents', err));
   }, []);
+
+  useEffect(() => {
+    if (registry.length) {
+      setAgents(layoutAgents(registry.map(r => r.name)));
+    }
+  }, [registry]);
 
   useEffect(() => {
     const completed = localStorage.getItem('demoOverlayComplete');
