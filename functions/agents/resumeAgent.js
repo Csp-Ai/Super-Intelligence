@@ -1,5 +1,6 @@
 const { executeAgent } = require('../utils/agent-wrapper');
 const { logAgentOutput } = require('../logger');
+const { translateOutput } = require('../utils/aas-translate');
 
 /**
  * Core resume summary generation logic.
@@ -35,6 +36,15 @@ async function generateResumeSummary(userData = {}, userId = 'unknown', metadata
     ? await executeAgent({ agentName, version: agentVersion, userId, input: userData, agentFunction: agentFn })
     : await agentFn(userData);
 
+  let finalOutput = summary;
+  if (metadata.locale && metadata.locale !== 'en') {
+    try {
+      finalOutput = await translateOutput(summary, metadata.locale);
+    } catch (err) {
+      console.error('resume-agent translation failed', err);
+    }
+  }
+
   // Log input and output using modular logger
   try {
     await logAgentOutput({
@@ -42,13 +52,13 @@ async function generateResumeSummary(userData = {}, userId = 'unknown', metadata
       agentVersion,
       userId,
       inputSummary: userData,
-      outputSummary: summary
+      outputSummary: finalOutput
     });
   } catch (err) {
     console.error('resume-agent logging failed', err);
   }
 
-  return summary;
+  return finalOutput;
 }
 
 module.exports = { generateResumeSummary, resumeSummaryCore };

@@ -3,26 +3,68 @@
   "functions": {
     "source": "functions"
   },
-  "hosting": {
-    "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  },
+  "hosting": [
+    {
+      "target": "staging",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        { "source": "/app/**", "destination": "/index.html" },
+        { "source": "/dashboard/**", "destination": "/index.html" },
+        { "source": "**", "destination": "/index.html" }
+      ]
+    },
+    {
+      "target": "production",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        { "source": "/app/**", "destination": "/index.html" },
+        { "source": "/dashboard/**", "destination": "/index.html" },
+        { "source": "**", "destination": "/index.html" }
+      ]
+    },
+    {
+      "target": "hybrid",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        { "source": "/app/**", "destination": "/index.html" },
+        { "source": "/dashboard/**", "destination": "/index.html" },
+        { "source": "**", "destination": "/index.html" }
+      ]
+    }
+  ],
   "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "functions": {
+      "port": 5001
+    },
     "firestore": {
       "port": 8080
     },
     "pubsub": {
       "port": 8085
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "extensions": {
+      "port": 5001
     }
   }
 }

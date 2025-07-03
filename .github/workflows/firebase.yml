@@ -5,7 +5,17 @@ on:
     branches: [main]
 
 jobs:
+  binary-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Detect binary files
+        run: |
+          git diff --cached --name-only | xargs file | grep -v 'text' && exit 1 || echo "No binaries"
+
   deploy:
+    needs: binary-check
     runs-on: ubuntu-latest
     env:
       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
@@ -22,12 +32,22 @@ jobs:
         run: |
           npm install
           npm --prefix functions install
+          npm run sync-agents
+          npm run validate-metadata
 
-      - name: Run agent tests
-        run: npm test --silent
+      - name: Validate agent metadata
+        run: node scripts/validateAgentMetadata.js
+
+      - name: Lint and test
+        run: |
+          npm run lint --if-present
+          npm --prefix functions test --silent
+
+      - name: Verify Firebase hosting targets
+        run: node scripts/checkFirebaseTargets.js
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
       - name: Deploy to Firebase
-        run: firebase deploy --only functions,firestore,hosting --project ${{ secrets.FIREBASE_PROJECT_ID }}
+        run: firebase deploy --only functions,hosting,firestore --project ${{ secrets.FIREBASE_PROJECT_ID }}

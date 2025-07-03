@@ -1,8 +1,18 @@
 {
   "projects": {
-    "default": "super-intelligence-dev",
-    "staging": "super-intelligence-7b653"
+    "default": "super-intelligence-7b653",
+    "staging": "super-intelligence-7b653",
+    "production": "super-intelligence-7b653",
+    "hybrid": "super-intelligence-7b653"
   },
-  "targets": {},
+  "targets": {
+    "super-intelligence-7b653": {
+      "hosting": {
+        "staging": ["staging"],
+        "production": ["production"],
+        "hybrid": ["hybrid"]
+      }
+    }
+  },
   "etags": {}
 }

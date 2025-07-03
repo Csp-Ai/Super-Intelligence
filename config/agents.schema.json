@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "patternProperties": {
+    "^[a-z0-9-]+$": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "version",
+        "agentType",
+        "enabled",
+        "sourcePath",
+        "lifecycle"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "version": { "type": "string" },
+        "lastRunStatus": { "type": "string" },
+        "agentType": { "type": "string" },
+        "enabled": { "type": "boolean" },
+        "docsUrl": { "type": "string" },
+        "sourcePath": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "lifecycle": { "type": "string" }
+      }
+    }
+  }
+}

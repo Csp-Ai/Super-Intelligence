@@ -60,10 +60,25 @@ const trends = require('./agents/trendsAgent');
 exports.updateTrendsCron = trends.updateTrendsCron;
 exports.getTrends = trends.getTrends;
 
+const mentor = require('./agents/mentor-agent');
+exports.mentorCron = mentor.mentorCron;
+
+const board = require('./agents/board-agent');
+exports.boardCron = board.boardCron;
+
+const guardian = require('./agents/guardian-agent');
+exports.guardianCron = guardian.guardianCron;
+
 exports.updateAgentState = require('./ops/updateAgentState').updateAgentState;
 exports.logCommit = require('./ops/logCommit').logCommit;
 exports.agentSyncSubscribe = require('./ops/agentSyncSubscribe').agentSyncSubscribe;
 exports.cleanupOldReplays = require('./ops/cleanupOldReplays').cleanupOldReplays;
 
 exports.replayAgentRun = require('./replayAgentRun').replayAgentRun;
+
+// Translation utilities for localizing agent outputs
+exports.translateText = require('./utils/translate').translateText;
+exports.translateOutput = require('./utils/translate').translateOutput;
+
+exports.runWebsiteAnalysis = require('./runWebsiteAnalysis').runWebsiteAnalysis;
 

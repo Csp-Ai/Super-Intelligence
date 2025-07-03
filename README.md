@@ -51,7 +51,7 @@ And receive:
 
 - **Frontend**: HTML/CSS, custom neural UI, React (future)
 - **Backend**: Firebase (Firestore, Functions, Auth)
-- **AI**: OpenAI GPT, Claude, LangChain (planned)
+- **AI**: In-house models built on open-source frameworks (planned)
 - **Infra**: Node.js, GitHub Actions, Firebase Hosting
 
 ---
@@ -118,6 +118,37 @@ On CI, auth is handled via `FIREBASE_TOKEN`.
 3. The CI workflow injects this token so `firebase deploy` runs without
    interactive login. If the token expires, re-run the command above.
 
+### Build Frontend for Hosting
+
+Before deploying, create a production build of the React app:
+
+```bash
+npm run build --prefix frontend
+```
+
+The command outputs static files in `frontend/build/`. Copy them to the repository's
+`public/` directory or set `hosting.public` in `firebase.json` to `frontend/build` so
+Firebase Hosting serves the build directory. Ensure these files are available before
+running:
+
+```bash
+firebase deploy
+```
+
+To push the frontend and Cloud Functions together:
+
+```bash
+npm run build --prefix frontend && firebase deploy
+```
+
+### Running `index.js` in Production
+
+When deploying the Node server (for example via App Engine) you must provide
+Firebase credentials for `firebase-admin`. Place a `serviceAccount.json` file in
+the repository root or set the `GOOGLE_APPLICATION_CREDENTIALS` environment
+variable to point at your service account file. The file name is already listed
+in `.gitignore` so your credentials won't be committed.
+
 ### Debug Console
 
 Developers can review recent agent activity through `/debug.html` once
@@ -132,6 +163,20 @@ filterable, auto-refreshing table grouped by agent.
 to their docs and actions to re-run them. The registry is stored in
 `config/agents.json` and mirrored under `public/config/agents.json` for
 hosting.
+
+### Website Analysis Flow
+
+A new `runWebsiteAnalysis` Cloud Function executes the website-analysis
+flow ported from the **ai-agent-systems** repository. Trigger it with a
+POST request containing the target URL:
+
+```bash
+curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/runWebsiteAnalysis \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com"}'
+```
+
+The response contains the captured flow state and outputs for each step.
 
 ## Firebase Project Info
 

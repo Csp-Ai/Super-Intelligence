@@ -1,5 +1,6 @@
 const { executeAgent } = require('../utils/agent-wrapper');
 const { logAgentOutput } = require('../logger');
+const { translateOutput } = require('../utils/aas-translate');
 
 /**
  * Generate a list of opportunities for the user.
@@ -25,15 +26,24 @@ async function generateOpportunities(userData = {}, userId = 'unknown', metadata
     }
   });
 
+  let finalOutput = result;
+  if (metadata.locale && metadata.locale !== 'en') {
+    try {
+      finalOutput = await translateOutput(result, metadata.locale);
+    } catch (err) {
+      console.error('opportunity-agent translation failed', err);
+    }
+  }
+
   await logAgentOutput({
     agentName: 'opportunity-agent',
     agentVersion,
     userId,
-    inputSummary: metadata,
-    outputSummary: Array.isArray(result) ? result.map(o => o.title) : result
+    inputSummary: userData,
+    outputSummary: Array.isArray(finalOutput) ? finalOutput.map(o => o.title) : finalOutput
   });
 
-  return result;
+  return finalOutput;
 }
 
 module.exports = { generateOpportunities };
