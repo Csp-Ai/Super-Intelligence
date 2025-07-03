@@ -7,6 +7,7 @@ import { getFirebase } from "./firebase";
 import CanvasNetwork from "./components/CanvasNetwork";
 import OnboardingOverlay from "./components/OnboardingOverlay";
 import SectionNav from "./components/SectionNav";
+import AgentCard from "./components/AgentCard";
 import { DashboardDataProvider } from "./context/DashboardDataContext";
 
 const sections = {
@@ -33,6 +34,14 @@ function App() {
   const [agents, setAgents] = useState(
     defaultAgents.map(a => ({ ...a, activity: 0, connections: 0 }))
   );
+  const [registry, setRegistry] = useState([]);
+
+  useEffect(() => {
+    fetch('/config/agents.json')
+      .then(res => res.json())
+      .then(data => setRegistry(Object.values(data)))
+      .catch(err => console.error('failed to load agents', err));
+  }, []);
 
   useEffect(() => {
     const completed = localStorage.getItem('demoOverlayComplete');
@@ -119,19 +128,23 @@ function App() {
       </AnimatePresence>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-        {agents.map(agent => (
-          <div key={agent.id} className="border p-2 rounded">
-            <h3 className="font-semibold mb-1">{agent.id}</h3>
-            <div className="text-sm">Activity: {agent.activity || 0}</div>
-            <div className="text-sm mb-2">Connections: {agent.connections || 0}</div>
-            <button
-              onClick={() => trainAgent(agent.id)}
-              className="border px-2 py-1 rounded"
-            >
-              Train
-            </button>
-          </div>
-        ))}
+        {registry.map(reg => {
+          const live = agents.find(a => a.id === reg.name) || {};
+          const metrics = {
+            activity: live.activity || 0,
+            connections: live.connections || 0,
+          };
+          return (
+            <AgentCard
+              key={reg.name}
+              agentName={reg.name}
+              metrics={metrics}
+              status={reg.lastRunStatus}
+              anomalyScore={live.anomalyScore}
+              onTrain={() => trainAgent(reg.name)}
+            />
+          );
+        })}
       </div>
 
       <button onClick={() => triggerPulse("core")}>Trigger Core Pulse</button>
