@@ -1,1 +1,436 @@
-[]
+[
+  {
+    "agent": "roadmap-agent",
+    "runId": "local-1751532774645",
+    "stepType": "start",
+    "timestamp": "2025-07-03T08:52:54.645Z",
+    "input": {
+      "goal": "learn AI"
+    }
+  },
+  {
+    "agent": "roadmap-agent",
+    "runId": "local-1751532774645",
+    "stepType": "execute",
+    "timestamp": "2025-07-03T08:52:54.648Z",
+    "input": {
+      "goal": "learn AI"
+    },
+    "output": [
+      {
+        "phase": "Discover",
+        "description": "Research scholarships and career paths."
+      },
+      {
+        "phase": "Build",
+        "description": "Create resume and develop key skills."
+      },
+      {
+        "phase": "Launch",
+        "description": "Apply to programs and prepare for interviews."
+      }
+    ],
+    "durationMs": 1
+  },
+  {
+    "agent": "roadmap-agent",
+    "runId": "local-1751532774645",
+    "stepType": "alignment",
+    "timestamp": "2025-07-03T08:52:54.649Z",
+    "input": [
+      {
+        "phase": "Discover",
+        "description": "Research scholarships and career paths."
+      },
+      {
+        "phase": "Build",
+        "description": "Create resume and develop key skills."
+      },
+      {
+        "phase": "Launch",
+        "description": "Apply to programs and prepare for interviews."
+      }
+    ],
+    "output": {
+      "alignmentPassed": true,
+      "flags": [],
+      "notes": ""
+    }
+  },
+  {
+    "agent": "roadmap-agent",
+    "runId": "local-1751532774645",
+    "stepType": "complete",
+    "timestamp": "2025-07-03T08:52:54.652Z",
+    "output": [
+      {
+        "phase": "Discover",
+        "description": "Research scholarships and career paths."
+      },
+      {
+        "phase": "Build",
+        "description": "Create resume and develop key skills."
+      },
+      {
+        "phase": "Launch",
+        "description": "Apply to programs and prepare for interviews."
+      }
+    ],
+    "durationMs": 10
+  },
+  {
+    "agent": "resume-agent",
+    "runId": "local-1751532774729",
+    "stepType": "start",
+    "timestamp": "2025-07-03T08:52:54.729Z",
+    "input": {
+      "fullName": "Test Runner",
+      "dreamOutcome": "land an amazing role"
+    }
+  },
+  {
+    "agent": "resume-agent",
+    "runId": "local-1751532774729",
+    "stepType": "execute",
+    "timestamp": "2025-07-03T08:52:54.732Z",
+    "input": {
+      "fullName": "Test Runner",
+      "dreamOutcome": "land an amazing role"
+    },
+    "output": "Hi, I'm Test Runner. I aim to achieve land an amazing role. I bring strengths in leadership and adaptability.",
+    "durationMs": 1
+  },
+  {
+    "agent": "resume-agent",
+    "runId": "local-1751532774729",
+    "stepType": "alignment",
+    "timestamp": "2025-07-03T08:52:54.733Z",
+    "input": "Hi, I'm Test Runner. I aim to achieve land an amazing role. I bring strengths in leadership and adaptability.",
+    "output": {
+      "alignmentPassed": true,
+      "flags": [],
+      "notes": ""
+    }
+  },
+  {
+    "agent": "resume-agent",
+    "runId": "local-1751532774729",
+    "stepType": "complete",
+    "timestamp": "2025-07-03T08:52:54.735Z",
+    "output": "Hi, I'm Test Runner. I aim to achieve land an amazing role. I bring strengths in leadership and adaptability.",
+    "durationMs": 9
+  },
+  {
+    "agent": "opportunity-agent",
+    "runId": "local-1751532774811",
+    "stepType": "start",
+    "timestamp": "2025-07-03T08:52:54.811Z",
+    "input": {
+      "focus": "tech"
+    }
+  },
+  {
+    "agent": "opportunity-agent",
+    "runId": "local-1751532774811",
+    "stepType": "execute",
+    "timestamp": "2025-07-03T08:52:54.814Z",
+    "input": {
+      "focus": "tech"
+    },
+    "output": [
+      {
+        "title": "tech Scholarship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "tech Internship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "tech Grant",
+        "link": "https://example.com"
+      }
+    ],
+    "durationMs": 1
+  },
+  {
+    "agent": "opportunity-agent",
+    "runId": "local-1751532774811",
+    "stepType": "alignment",
+    "timestamp": "2025-07-03T08:52:54.816Z",
+    "input": [
+      {
+        "title": "tech Scholarship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "tech Internship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "tech Grant",
+        "link": "https://example.com"
+      }
+    ],
+    "output": {
+      "alignmentPassed": true,
+      "flags": [],
+      "notes": ""
+    }
+  },
+  {
+    "agent": "opportunity-agent",
+    "runId": "local-1751532774811",
+    "stepType": "complete",
+    "timestamp": "2025-07-03T08:52:54.818Z",
+    "output": [
+      {
+        "title": "tech Scholarship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "tech Internship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "tech Grant",
+        "link": "https://example.com"
+      }
+    ],
+    "durationMs": 9
+  },
+  {
+    "agent": "roadmap-agent",
+    "runId": "local-1751532774952",
+    "stepType": "start",
+    "timestamp": "2025-07-03T08:52:54.952Z",
+    "input": {
+      "fullName": "Test User",
+      "email": "test@example.com",
+      "dreamOutcome": "be legendary",
+      "skills": [
+        "coding",
+        "design"
+      ]
+    }
+  },
+  {
+    "agent": "roadmap-agent",
+    "runId": "local-1751532774952",
+    "stepType": "execute",
+    "timestamp": "2025-07-03T08:52:54.955Z",
+    "input": {
+      "fullName": "Test User",
+      "email": "test@example.com",
+      "dreamOutcome": "be legendary",
+      "skills": [
+        "coding",
+        "design"
+      ]
+    },
+    "output": [
+      {
+        "phase": "Discover",
+        "description": "Research scholarships and career paths."
+      },
+      {
+        "phase": "Build",
+        "description": "Create resume and develop key skills."
+      },
+      {
+        "phase": "Launch",
+        "description": "Apply to programs and prepare for interviews."
+      }
+    ],
+    "durationMs": 1
+  },
+  {
+    "agent": "roadmap-agent",
+    "runId": "local-1751532774952",
+    "stepType": "alignment",
+    "timestamp": "2025-07-03T08:52:54.957Z",
+    "input": [
+      {
+        "phase": "Discover",
+        "description": "Research scholarships and career paths."
+      },
+      {
+        "phase": "Build",
+        "description": "Create resume and develop key skills."
+      },
+      {
+        "phase": "Launch",
+        "description": "Apply to programs and prepare for interviews."
+      }
+    ],
+    "output": {
+      "alignmentPassed": true,
+      "flags": [],
+      "notes": ""
+    }
+  },
+  {
+    "agent": "roadmap-agent",
+    "runId": "local-1751532774952",
+    "stepType": "complete",
+    "timestamp": "2025-07-03T08:52:54.959Z",
+    "output": [
+      {
+        "phase": "Discover",
+        "description": "Research scholarships and career paths."
+      },
+      {
+        "phase": "Build",
+        "description": "Create resume and develop key skills."
+      },
+      {
+        "phase": "Launch",
+        "description": "Apply to programs and prepare for interviews."
+      }
+    ],
+    "durationMs": 8
+  },
+  {
+    "agent": "resume-agent",
+    "runId": "local-1751532774961",
+    "stepType": "start",
+    "timestamp": "2025-07-03T08:52:54.961Z",
+    "input": {
+      "fullName": "Test User",
+      "email": "test@example.com",
+      "dreamOutcome": "be legendary",
+      "skills": [
+        "coding",
+        "design"
+      ]
+    }
+  },
+  {
+    "agent": "resume-agent",
+    "runId": "local-1751532774961",
+    "stepType": "execute",
+    "timestamp": "2025-07-03T08:52:54.963Z",
+    "input": {
+      "fullName": "Test User",
+      "email": "test@example.com",
+      "dreamOutcome": "be legendary",
+      "skills": [
+        "coding",
+        "design"
+      ]
+    },
+    "output": "Hi, I'm Test User. I aim to achieve be legendary. I bring strengths in leadership and adaptability.",
+    "durationMs": 0
+  },
+  {
+    "agent": "resume-agent",
+    "runId": "local-1751532774961",
+    "stepType": "alignment",
+    "timestamp": "2025-07-03T08:52:54.966Z",
+    "input": "Hi, I'm Test User. I aim to achieve be legendary. I bring strengths in leadership and adaptability.",
+    "output": {
+      "alignmentPassed": true,
+      "flags": [],
+      "notes": ""
+    }
+  },
+  {
+    "agent": "resume-agent",
+    "runId": "local-1751532774961",
+    "stepType": "complete",
+    "timestamp": "2025-07-03T08:52:54.968Z",
+    "output": "Hi, I'm Test User. I aim to achieve be legendary. I bring strengths in leadership and adaptability.",
+    "durationMs": 7
+  },
+  {
+    "agent": "opportunity-agent",
+    "runId": "local-1751532774971",
+    "stepType": "start",
+    "timestamp": "2025-07-03T08:52:54.971Z",
+    "input": {
+      "fullName": "Test User",
+      "email": "test@example.com",
+      "dreamOutcome": "be legendary",
+      "skills": [
+        "coding",
+        "design"
+      ]
+    }
+  },
+  {
+    "agent": "opportunity-agent",
+    "runId": "local-1751532774971",
+    "stepType": "execute",
+    "timestamp": "2025-07-03T08:52:54.974Z",
+    "input": {
+      "fullName": "Test User",
+      "email": "test@example.com",
+      "dreamOutcome": "be legendary",
+      "skills": [
+        "coding",
+        "design"
+      ]
+    },
+    "output": [
+      {
+        "title": "general Scholarship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "general Internship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "general Grant",
+        "link": "https://example.com"
+      }
+    ],
+    "durationMs": 1
+  },
+  {
+    "agent": "opportunity-agent",
+    "runId": "local-1751532774971",
+    "stepType": "alignment",
+    "timestamp": "2025-07-03T08:52:54.975Z",
+    "input": [
+      {
+        "title": "general Scholarship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "general Internship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "general Grant",
+        "link": "https://example.com"
+      }
+    ],
+    "output": {
+      "alignmentPassed": true,
+      "flags": [],
+      "notes": ""
+    }
+  },
+  {
+    "agent": "opportunity-agent",
+    "runId": "local-1751532774971",
+    "stepType": "complete",
+    "timestamp": "2025-07-03T08:52:54.977Z",
+    "output": [
+      {
+        "title": "general Scholarship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "general Internship",
+        "link": "https://example.com"
+      },
+      {
+        "title": "general Grant",
+        "link": "https://example.com"
+      }
+    ],
+    "durationMs": 6
+  }
+]
