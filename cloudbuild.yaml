@@ -27,6 +27,11 @@ steps:
     timeout: 600s
 
   - name: 'gcr.io/cloud-builders/npm'
+    args: ['install', '--prefix', 'frontend']
+    id: Install frontend build deps
+    timeout: 600s
+
+  - name: 'gcr.io/cloud-builders/npm'
     args: ['--prefix', 'frontend', 'run', 'build']
     id: Build frontend
     timeout: 600s
