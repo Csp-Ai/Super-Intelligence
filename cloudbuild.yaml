@@ -9,3 +9,14 @@ steps:
     id: Install frontend
     timeout: 600s
     env: ['NODE_ENV=production']
+
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+    id: Install test deps
+    dir: '.'
+    timeout: 300s
+
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['test', '--silent']
+    id: Run tests
+    timeout: 600s
