@@ -132,5 +132,4 @@ options:
 substitutions:
   _SERVICE_NAME: ""
   _REGION: ""
-  _FIREBASE_TOKEN: ""
 
