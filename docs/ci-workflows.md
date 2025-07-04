@@ -65,5 +65,17 @@ The repository does not currently include separate `deploy-prod.yml` or `test-ag
 
 ## Cloud Build (`cloudbuild.yaml`)
 
-Google Cloud Build triggers on pushes to `main` and orchestrates the entire deployment. It installs all backend, functions and frontend dependencies with `npm install`, then runs tests. The React app is compiled using `npm --prefix frontend run build` so the Vite build succeeds. After building, Cloud Build deploys Firebase functions using the optional `firebase-ci-token` secret and finally updates the Cloud Run service via `gcloud run deploy`.
+Google Cloud Build triggers on pushes to `main` and orchestrates the entire deployment. It installs all backend, functions and frontend dependencies with `npm install`, then runs tests. The React app is compiled using `npm --prefix frontend run build` so the Vite build succeeds. After building, Cloud Build deploys Firebase functions using the optional `firebase-ci-token` secret exposed as `_FIREBASE_TOKEN` and finally updates the Cloud Run service via `gcloud run deploy`.
 If the token isn't configured, the functions deploy step is skipped.
+
+To create the secret, run:
+
+```bash
+firebase login:ci
+gcloud secrets create firebase-ci-token --replication-policy=automatic
+printf '%s' "$FIREBASE_TOKEN" | \
+  gcloud secrets versions add firebase-ci-token --data-file=-
+gcloud secrets add-iam-policy-binding firebase-ci-token \
+  --member="serviceAccount:$PROJECT_ID@cloudbuild.gserviceaccount.com" \
+  --role="roles/secretmanager.secretAccessor"
+```
