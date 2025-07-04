@@ -245,6 +245,21 @@ commands again to ensure the dependency installed correctly.
 
 Both commands should exit without errors.
 
+## \U0001F527 Deployment Troubleshooting
+
+When deployments fail, first confirm `FIREBASE_TOKEN` and `PROJECT_ID` are
+defined in your Cloud Build trigger or GitHub workflow. Verify the service
+account used has permission to deploy Firebase functions and Cloud Run.
+
+Run a local test build with:
+
+```bash
+gcloud builds submit --config cloudbuild.yaml
+```
+
+Logs stream to **Cloud Logging** by default. If a `logsBucket` is configured,
+logs will also appear in that Cloud Storage bucket.
+
 ## Firebase Project Info
 
 - **Project Name:** Super Intelligence  
