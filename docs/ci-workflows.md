@@ -63,4 +63,4 @@ The repository does not currently include separate `deploy-prod.yml` or `test-ag
 
 ## Cloud Build (`cloudbuild.yaml`)
 
-Google Cloud Build uses the `cloudbuild.yaml` file located at the repo root to deploy the application. The pipeline installs only production dependencies at first with `npm install --omit=dev` to reduce memory usage, then runs a full `npm install` before executing `vite build`. Because `vite` and `@vitejs/plugin-react` are regular dependencies in `frontend/package.json`, Cloud Build always has the packages needed to compile the React app.
+Google Cloud Build triggers on pushes to `main` and orchestrates the entire deployment. It installs all backend, functions and frontend dependencies with `npm install`, then runs tests. The React app is compiled using `npm --prefix frontend run build` so the Vite build succeeds. After building, Cloud Build deploys Firebase functions with `firebase deploy --only functions` using the `firebase-ci-token` secret and finally updates the Cloud Run service via `gcloud run deploy`.
