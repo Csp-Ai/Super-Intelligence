@@ -32,9 +32,11 @@ const app = express();
 const server = http.createServer(app);
 initAgentSyncWs(server);
 
-app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
+const distPath = path.join(__dirname, 'frontend', 'dist');
+app.use(express.static(distPath));
+// Fallback to index.html so client-side routing works
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
 const port = process.env.PORT || 3000;
