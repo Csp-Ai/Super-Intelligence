@@ -15,8 +15,7 @@ Each workflow automates part of the deploy or validation process.
 5. Deploy to a preview Hosting channel with `firebase hosting:channel:deploy preview`.
 
 -**Environment Variables**
-- `_FIREBASE_TOKEN` &mdash; Firebase deploy token from secrets passed as a custom substitution. Generate it with `firebase login:ci` and store the value under **Settings > Secrets and variables > Actions** in your GitHub repository. If omitted, functions deploy is skipped.
-- If the secret isn't defined, workflows read `FIREBASE_TOKEN` from a local `.env` file when present and warn otherwise.
+- `FIREBASE_TOKEN` &mdash; Firebase deploy token retrieved from repository secrets. Generate it with `firebase login:ci` and store the value under **Settings > Secrets and variables > Actions**. If the secret isn't defined, workflows read `FIREBASE_TOKEN` from a local `.env` file and warn if absent. Functions deploy is skipped when the token is missing.
 
 - `NODE_VERSION` &mdash; set to `18.x`.
 
@@ -29,8 +28,7 @@ Each workflow automates part of the deploy or validation process.
 - `deploy` installs dependencies, validates agent metadata, runs lint and tests, verifies Hosting targets, installs the Firebase CLI, and deploys functions, hosting and Firestore.
 
 **Environment Variables**
-- `_FIREBASE_TOKEN` &mdash; deploy token from secrets. Optional; skip functions deploy if not provided.
-- If unset, the CI job looks for `FIREBASE_TOKEN` in `.env`.
+- `FIREBASE_TOKEN` &mdash; deploy token from repository secrets. Optional; functions deploy is skipped if the token is not provided. If unset, the CI job looks for `FIREBASE_TOKEN` in `.env`.
 
 - `FIREBASE_PROJECT_ID` &mdash; Firebase project ID secret used during deploy.
 
