@@ -100,7 +100,7 @@ Inspired by principles from:
    ```
    Edit these files to include your Firebase config such as
    `VITE_FIREBASE_API_KEY`.
-5. Run tests from the repo root (requires functions dependencies):
+5. Run tests from the repo root (requires functions dependencies). The `ajv` package is a mandatory dev dependency and must be installed before running tests:
    ```bash
    npm test --silent
    ```
