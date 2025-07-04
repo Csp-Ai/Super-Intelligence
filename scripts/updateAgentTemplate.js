@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
 const cfgPath = path.join(__dirname,'..','config','agents.json');

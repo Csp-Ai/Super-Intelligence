@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # release-mvp.sh - Commit changes, tag, push, and create GitHub release for Super-Intelligence MVP
 set -e
 

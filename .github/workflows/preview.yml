@@ -5,6 +5,7 @@ on:
 
 jobs:
   deploy-preview:
+    if: ${{ secrets.FIREBASE_TOKEN != '' }}
     runs-on: ubuntu-latest
     env:
       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

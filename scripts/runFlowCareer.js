@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { runFlowCareer } = require('../functions/flows/flow-career');
 process.env.LOCAL_AGENT_RUN = '1';
 
