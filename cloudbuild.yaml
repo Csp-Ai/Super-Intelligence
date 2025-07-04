@@ -48,6 +48,9 @@ steps:
               echo "✅ $var resolved"
             fi
           done
+          if [ -n "${_FIREBASE_TOKEN:-}" ]; then
+            FIREBASE_TOKEN="${_FIREBASE_TOKEN}"
+          fi
           if [ -z "$FIREBASE_TOKEN" ]; then
             echo "⚠️ FIREBASE_TOKEN not provided; functions deploy will be skipped"
           else
@@ -69,6 +72,9 @@ steps:
     args:
       - -c
       - |
+          if [ -n "${_FIREBASE_TOKEN:-}" ]; then
+            FIREBASE_TOKEN="${_FIREBASE_TOKEN}"
+          fi
           if [ -z "$FIREBASE_TOKEN" ]; then
             echo "⚠️ FIREBASE_TOKEN missing - skipping functions deploy"
           else
@@ -119,7 +125,7 @@ steps:
 availableSecrets:
   secretManager:
     - versionName: projects/$PROJECT_ID/secrets/firebase-ci-token/versions/latest
-      env: FIREBASE_TOKEN
+      env: _FIREBASE_TOKEN
 
 options:
   logging: CLOUD_LOGGING_ONLY

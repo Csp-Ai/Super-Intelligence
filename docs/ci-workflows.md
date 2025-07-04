@@ -15,7 +15,7 @@ Each workflow automates part of the deploy or validation process.
 5. Deploy to a preview Hosting channel with `firebase hosting:channel:deploy preview`.
 
 -**Environment Variables**
-- `FIREBASE_TOKEN` &mdash; Firebase deploy token from secrets. Generate it with `firebase login:ci` and store the value under **Settings > Secrets and variables > Actions** in your GitHub repository. If omitted, functions deploy is skipped.
+- `_FIREBASE_TOKEN` &mdash; Firebase deploy token from secrets. Generate it with `firebase login:ci` and store the value under **Settings > Secrets and variables > Actions** in your GitHub repository. If omitted, functions deploy is skipped.
 - `NODE_VERSION` &mdash; set to `18.x`.
 
 ## Firebase CI/CD (`firebase.yml`)
@@ -27,7 +27,7 @@ Each workflow automates part of the deploy or validation process.
 - `deploy` installs dependencies, validates agent metadata, runs lint and tests, verifies Hosting targets, installs the Firebase CLI, and deploys functions, hosting and Firestore.
 
 **Environment Variables**
-- `FIREBASE_TOKEN` &mdash; deploy token from secrets. Optional; skip functions deploy if not provided.
+- `_FIREBASE_TOKEN` &mdash; deploy token from secrets. Optional; skip functions deploy if not provided.
 - `FIREBASE_PROJECT_ID` &mdash; Firebase project ID secret used during deploy.
 
 ## Firebase Config Validation (`firebase-validate.yml`)
