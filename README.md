@@ -91,6 +91,8 @@ Inspired by principles from:
    ```bash
    npm install --prefix frontend
    ```
+   This runs automatically after the root `npm install` via the
+   `postinstall` script in `package.json`.
 4. Create environment files in `frontend/` using the provided example:
    ```bash
    cp frontend/.env.example frontend/.env
