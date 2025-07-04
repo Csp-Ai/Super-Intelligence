@@ -13,6 +13,22 @@ steps:
     id: Install frontend packages
     timeout: 600s
 
+  # Validate required tooling
+  - name: node:20
+    entrypoint: bash
+    args:
+      - -c
+      - |
+          if ! command -v vite >/dev/null 2>&1; then
+            echo "\u274c vite is not installed. Add it to your devDependencies or install globally."
+            exit 1
+          fi
+          if ! command -v firebase >/dev/null 2>&1; then
+            echo "\u274c firebase-tools is not installed. Add it to your devDependencies or install globally."
+            exit 1
+          fi
+    id: Validate tooling
+
   # Build the frontend with Vite via root script
   - name: 'node:20'
     entrypoint: npm

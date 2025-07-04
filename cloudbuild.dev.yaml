@@ -1,0 +1,8 @@
+# Dev trigger for local debugging
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+      - -c
+      - |
+          echo "\u2705 Cloud Build dev trigger executed"
