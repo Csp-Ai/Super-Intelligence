@@ -15,7 +15,6 @@ jobs:
           git diff --cached --name-only | xargs file | grep -v 'text' && exit 1 || echo "No binaries"
 
   deploy:
-    if: ${{ secrets.FIREBASE_TOKEN != '' }}
     needs: binary-check
     runs-on: ubuntu-latest
     env:
@@ -23,6 +22,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Load FIREBASE_TOKEN
+        run: |
+          if [ -z "$FIREBASE_TOKEN" ] && [ -f .env ]; then
+            token=$(grep -E '^FIREBASE_TOKEN=' .env | cut -d '=' -f2- | tr -d '"')
+            if [ -n "$token" ]; then
+              echo "FIREBASE_TOKEN=$token" >> "$GITHUB_ENV"
+              echo "Loaded FIREBASE_TOKEN from .env"
+            else
+              echo "::warning::FIREBASE_TOKEN not found in .env"
+            fi
+          elif [ -z "$FIREBASE_TOKEN" ]; then
+            echo "::warning::FIREBASE_TOKEN not set"
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -50,4 +62,9 @@ jobs:
         run: npm install -g firebase-tools
 
       - name: Deploy to Firebase
-        run: firebase deploy --only functions,hosting,firestore --project ${{ secrets.FIREBASE_PROJECT_ID }}
+        run: |
+          if [ -z "$FIREBASE_TOKEN" ]; then
+            echo "::warning::FIREBASE_TOKEN not set - skipping deploy"
+            exit 0
+          fi
+          firebase deploy --only functions,hosting,firestore --project ${{ secrets.FIREBASE_PROJECT_ID }} --token "$FIREBASE_TOKEN"

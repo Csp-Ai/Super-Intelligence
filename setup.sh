@@ -1,6 +1,19 @@
 #!/bin/bash
 set -e
 
+# Load FIREBASE_TOKEN from .env when not already defined
+if [ -z "$FIREBASE_TOKEN" ] && [ -f .env ]; then
+  token=$(grep -E '^FIREBASE_TOKEN=' .env | cut -d '=' -f2- | tr -d '"')
+  if [ -n "$token" ]; then
+    export FIREBASE_TOKEN="$token"
+    echo "[setup] Loaded FIREBASE_TOKEN from .env"
+  else
+    echo "[setup] WARNING: FIREBASE_TOKEN not found in .env" >&2
+  fi
+elif [ -z "$FIREBASE_TOKEN" ]; then
+  echo "[setup] WARNING: FIREBASE_TOKEN not set" >&2
+fi
+
 # Try npm ci and fallback to legacy peer deps when not running in CI
 safe_npm_ci() {
   local prefix_arg=""
