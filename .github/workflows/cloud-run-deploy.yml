@@ -3,6 +3,7 @@ name: Cloud Run Deploy
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -42,7 +43,7 @@ jobs:
             --substitutions=_SERVICE_NAME=$SERVICE_NAME,_REGION=$GOOGLE_REGION
       - name: Verify Cloud Run healthcheck
         run: |
-          status=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.SERVICE_NAME }}-${{ env.GOOGLE_REGION }}.a.run.app/healthcheck.html)
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.SERVICE_NAME }}-${{ env.GOOGLE_REGION }}.a.run.app/healthz)
           if [ "$status" != "200" ]; then
             echo "Healthcheck failed with status $status"
             exit 1

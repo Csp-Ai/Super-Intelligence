@@ -32,6 +32,11 @@ const app = express();
 const server = http.createServer(app);
 initAgentSyncWs(server);
 
+// healthcheck for Cloud Run
+app.get('/healthz', (req, res) => {
+  res.status(200).send('ok');
+});
+
 const distPath = path.join(__dirname, 'frontend', 'dist');
 app.use(express.static(distPath));
 // Fallback to index.html so client-side routing works

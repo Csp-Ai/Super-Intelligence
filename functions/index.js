@@ -4,6 +4,11 @@ const fs = require('fs/promises');
 const path = require('path');
 admin.initializeApp();
 
+// Simple healthcheck endpoint for uptime monitors
+exports.healthz = functions.https.onRequest((req, res) => {
+  res.status(200).send('ok');
+});
+
 exports.onCreateUser = require('./triggers/onCreateUser').onCreateUser;
 
 const ALLOWLIST = (functions.config().debug && functions.config().debug.allowlist)
