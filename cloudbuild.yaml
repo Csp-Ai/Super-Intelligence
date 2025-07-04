@@ -1,0 +1,11 @@
+steps:
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['ci']
+    id: Install backend
+    timeout: 600s
+
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['--prefix', 'frontend', 'install', '--omit=dev']
+    id: Install frontend
+    timeout: 600s
+    env: ['NODE_ENV=production']
