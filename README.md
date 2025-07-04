@@ -129,6 +129,33 @@ On CI, auth is handled via `FIREBASE_TOKEN`.
    the secret token and finally updates the Cloud Run service with
    `gcloud run deploy`.
 
+## 🔧 Cloud Build Setup
+
+This project uses a custom `cloudbuild.yaml` to deploy both Firebase Functions
+and Cloud Run services.
+
+### Prerequisites
+
+- Add the following secret to Secret Manager:
+  Name: firebase-ci-token
+  Value: [your Firebase CI token]
+- Grant access to the Cloud Build service account.
+- Link your GitHub repo to Google Cloud Build.
+
+### Trigger Configuration
+
+1. Go to **Cloud Build → Triggers**.
+2. Click **Create Trigger**.
+3. Choose:
+   - **Event:** Push to a branch
+   - **Branch:** `main`
+   - **Configuration:** Cloud Build configuration file
+   - **File location:** `/cloudbuild.yaml`
+   - **Service Account:** Use custom role with only required permissions
+4. Save the trigger.
+
+✅ Your deployments will now be fully managed through this YAML file.
+
 ### Build Frontend for Hosting
 
 Before deploying, create a production build of the React app. From the
