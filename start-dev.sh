@@ -1,6 +1,24 @@
 #!/bin/bash
 set -e
 
+# Try npm ci and fallback to legacy peer deps when not running in CI
+safe_npm_ci() {
+  local prefix_arg=""
+  if [ -n "$1" ]; then
+    prefix_arg="--prefix $1"
+  fi
+  npm ci $prefix_arg >/dev/null 2>&1
+  local status=$?
+  if [ $status -ne 0 ]; then
+    if [ -z "$CI" ] || [ -n "$DEV_NPM_LEGACY" ]; then
+      echo "npm ci failed, retrying with --legacy-peer-deps"
+      npm ci $prefix_arg --legacy-peer-deps >/dev/null 2>&1
+    else
+      return $status
+    fi
+  fi
+}
+
 trap "echo '\nShutting down services...'" INT TERM
 
 echo "Checking Firebase authentication..."
@@ -29,14 +47,14 @@ echo "Launching development environment..."
 
 if [ ! -d node_modules ]; then
   echo "Installing root npm packages..."
-  npm ci >/dev/null 2>&1
+  safe_npm_ci
 else
   echo "Root packages already installed"
 fi
 
 if [ ! -d functions/node_modules ]; then
   echo "Installing functions npm packages..."
-  npm ci --prefix functions >/dev/null 2>&1
+  safe_npm_ci functions
 else
   echo "Functions packages already installed"
 fi
