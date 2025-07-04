@@ -6,6 +6,7 @@
   "scripts": {
     "start": "firebase emulators:start",
     "sync-agents": "node scripts/syncAgentsConfig.js",
+    "validate-metadata": "node scripts/validateAgentMetadata.js",
     "test": "if [ \"$TEST\" = \"false\" ]; then echo 'Skipping tests'; else node scripts/checkDevDeps.js && npm run sync-agents && node scripts/validateAgentMetadata.js && npm --prefix functions test --silent; fi",
     "dev": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build",
