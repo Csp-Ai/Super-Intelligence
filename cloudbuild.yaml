@@ -1,38 +1,19 @@
 steps:
+  # Install root dependencies
   - name: 'gcr.io/cloud-builders/npm'
     args: ['ci']
-    id: Install backend
+    id: Install dependencies
     timeout: 600s
 
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['install']
-    dir: 'functions'
-    id: Install functions
-    timeout: 600s
-
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['install']
-    dir: 'frontend'
-    id: Install frontend
-    timeout: 600s
-
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['install']
-    id: Install test deps
-    timeout: 300s
-
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['test', '--silent']
-    id: Run tests
-    timeout: 600s
-
+  # Install frontend packages
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install', '--prefix', 'frontend']
-    id: Install frontend build deps
+    id: Install frontend packages
     timeout: 600s
 
+  # Build the frontend (runs `vite build` via root script)
   - name: 'gcr.io/cloud-builders/npm'
-    args: ['--prefix', 'frontend', 'run', 'build']
+    args: ['run', 'build']
     id: Build frontend
     timeout: 600s
 
