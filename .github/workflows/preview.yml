@@ -5,13 +5,25 @@ on:
 
 jobs:
   deploy-preview:
-    if: ${{ secrets.FIREBASE_TOKEN != '' }}
     runs-on: ubuntu-latest
     env:
       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       NODE_VERSION: 18.x
     steps:
       - uses: actions/checkout@v3
+      - name: Load FIREBASE_TOKEN
+        run: |
+          if [ -z "$FIREBASE_TOKEN" ] && [ -f .env ]; then
+            token=$(grep -E '^FIREBASE_TOKEN=' .env | cut -d '=' -f2- | tr -d '"')
+            if [ -n "$token" ]; then
+              echo "FIREBASE_TOKEN=$token" >> "$GITHUB_ENV"
+              echo "Loaded FIREBASE_TOKEN from .env"
+            else
+              echo "::warning::FIREBASE_TOKEN not found in .env"
+            fi
+          elif [ -z "$FIREBASE_TOKEN" ]; then
+            echo "::warning::FIREBASE_TOKEN not set"
+          fi
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -26,5 +38,10 @@ jobs:
       - name: Build
         run: npm run build
       - name: Deploy to preview channel
-        run: firebase hosting:channel:deploy preview
+        run: |
+          if [ -z "$FIREBASE_TOKEN" ]; then
+            echo "::warning::FIREBASE_TOKEN not set - skipping deploy"
+            exit 0
+          fi
+          firebase hosting:channel:deploy preview --token "$FIREBASE_TOKEN"
 
