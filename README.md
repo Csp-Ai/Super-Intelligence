@@ -86,7 +86,8 @@ Inspired by principles from:
    ```bash
    npm install --prefix functions
    ```
-3. Install frontend dependencies:
+3. Install frontend dependencies (this also runs automatically after the root
+   install):
    ```bash
    npm install --prefix frontend
    ```
@@ -128,10 +129,11 @@ On CI, auth is handled via `FIREBASE_TOKEN`.
 
 ### Build Frontend for Hosting
 
-Before deploying, create a production build of the React app:
+Before deploying, create a production build of the React app. From the
+repository root run:
 
 ```bash
-npm run build --prefix frontend
+npm run build
 ```
 
 The command outputs static files in `frontend/build/`. Copy them to the repository's
@@ -146,7 +148,7 @@ firebase deploy
 To push the frontend and Cloud Functions together:
 
 ```bash
-npm run build --prefix frontend && firebase deploy
+npm run build && firebase deploy
 ```
 
 ⚠️ Known issue: Transitive vulnerability in protobufjs via google-gax. Not exploitable in current setup. Awaiting upstream patch from firebase-admin maintainers.
