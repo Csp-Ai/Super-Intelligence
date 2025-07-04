@@ -1,6 +1,7 @@
 # 🧠 Super-Intelligence
 
 [![Firebase CI/CD](https://github.com/yourusername/Super-Intelligence/actions/workflows/firebase.yml/badge.svg)](https://github.com/yourusername/Super-Intelligence/actions/workflows/firebase.yml)
+[![AJV Locked](https://github.com/yourusername/Super-Intelligence/actions/workflows/main.yml/badge.svg)](https://github.com/yourusername/Super-Intelligence/actions/workflows/main.yml)
 
 **Building ethical, human-centered superintelligence to empower individuals and transform global systems.**
 
@@ -245,6 +246,8 @@ commands again to ensure the dependency installed correctly.
 
 Both commands should exit without errors.
 
+- If `ajv` is not found during tests, re-run `npm ci` or `npm install` from the repository root to reinstall dev dependencies.
+
 ## \U0001F527 Deployment Troubleshooting
 
 When deployments fail, first confirm `FIREBASE_TOKEN` and `PROJECT_ID` are
@@ -259,6 +262,12 @@ gcloud builds submit --config cloudbuild.yaml
 
 Logs stream to **Cloud Logging** by default. If a `logsBucket` is configured,
 logs will also appear in that Cloud Storage bucket.
+
+### FAQ
+
+**Why do we use `ajv`?** It validates agent metadata against JSON schemas so tests can enforce correct structure.
+
+**Why is `ajv` mandatory?** Metadata validation and unit tests depend on it. Missing `ajv` will cause CI and local tests to fail.
 
 ## Firebase Project Info
 
