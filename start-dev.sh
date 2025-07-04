@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
 # Try npm ci and fallback to legacy peer deps when not running in CI

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Installs npm dependencies with engine fallback and cleans proxy config
 set -e
 

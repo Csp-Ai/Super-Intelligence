@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Try npm ci and fallback to legacy peer deps when not running in CI
 safe_npm_ci() {

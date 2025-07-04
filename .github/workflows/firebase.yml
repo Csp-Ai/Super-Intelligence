@@ -15,6 +15,7 @@ jobs:
           git diff --cached --name-only | xargs file | grep -v 'text' && exit 1 || echo "No binaries"
 
   deploy:
+    if: ${{ secrets.FIREBASE_TOKEN != '' }}
     needs: binary-check
     runs-on: ubuntu-latest
     env:

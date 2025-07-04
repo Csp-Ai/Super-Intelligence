@@ -10,7 +10,7 @@ Each workflow automates part of the deploy or validation process.
 **Steps**
 1. Checkout the repository and set up Node `18`.
 2. Install root and frontend dependencies.
-3. Install the Firebase CLI. The `ajv` package is now a regular dependency so it's installed during `npm install`.
+3. Install the Firebase CLI with `npm install -g firebase-tools`.
 4. Run tests and build the project.
 5. Deploy to a preview Hosting channel with `firebase hosting:channel:deploy preview`.
 

@@ -1,7 +1,7 @@
 # 🧠 Super-Intelligence
 
 [![Firebase CI/CD](https://github.com/yourusername/Super-Intelligence/actions/workflows/firebase.yml/badge.svg)](https://github.com/yourusername/Super-Intelligence/actions/workflows/firebase.yml)
-[![AJV Locked](https://github.com/yourusername/Super-Intelligence/actions/workflows/main.yml/badge.svg)](https://github.com/yourusername/Super-Intelligence/actions/workflows/main.yml)
+[![Ship Mode](https://img.shields.io/badge/Ship%20Mode-%E2%9C%85%20Ready%20to%20deploy%20anywhere-brightgreen)](https://github.com/yourusername/Super-Intelligence)
 
 **Building ethical, human-centered superintelligence to empower individuals and transform global systems.**
 
@@ -79,21 +79,25 @@ Inspired by principles from:
 
 ### Local Development
 
-1. Install root dependencies:
+1. Run the environment setup script:
+   ```bash
+   ./scripts/setupEnv.sh
+   ```
+2. Install root dependencies:
    ```bash
    npm install
    ```
-2. Install Cloud Functions dependencies:
+3. Install Cloud Functions dependencies:
    ```bash
    npm install --prefix functions
    ```
-3. Install frontend dependencies:
+4. Install frontend dependencies:
    ```bash
    npm install --prefix frontend
    ```
    Run this separately after the root install. The Cloud Build pipeline
    also performs `npm install` so the Vite production build works.
-4. Create environment files in `frontend/` using the provided example:
+5. Create environment files in `frontend/` using the provided example:
    ```bash
    cp frontend/.env.example frontend/.env
    cp frontend/.env.example frontend/.env.local
@@ -101,11 +105,11 @@ Inspired by principles from:
    ```
    Edit these files to include your Firebase config such as
    `VITE_FIREBASE_API_KEY`.
-5. Run tests from the repo root (requires functions dependencies). The `ajv` package is a mandatory dev dependency and must be installed before running tests:
+6. Run tests from the repo root (requires functions dependencies):
    ```bash
    npm test --silent
    ```
-6. If the Firebase emulator reports authentication errors, re-authenticate using:
+7. If the Firebase emulator reports authentication errors, re-authenticate using:
    ```bash
    firebase login --reauth
    ```
@@ -246,8 +250,6 @@ commands again to ensure the dependency installed correctly.
 
 Both commands should exit without errors.
 
-- If `ajv` is not found during tests, re-run `npm ci` or `npm install` from the repository root to reinstall dev dependencies.
-
 ## \U0001F527 Deployment Troubleshooting
 
 When deployments fail, first confirm `FIREBASE_TOKEN` and `PROJECT_ID` are
@@ -263,11 +265,6 @@ gcloud builds submit --config cloudbuild.yaml
 Logs stream to **Cloud Logging** by default. If a `logsBucket` is configured,
 logs will also appear in that Cloud Storage bucket.
 
-### FAQ
-
-**Why do we use `ajv`?** It validates agent metadata against JSON schemas so tests can enforce correct structure.
-
-**Why is `ajv` mandatory?** Metadata validation and unit tests depend on it. Missing `ajv` will cause CI and local tests to fail.
 
 ## Firebase Project Info
 
