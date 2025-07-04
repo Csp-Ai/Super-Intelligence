@@ -1,23 +1,27 @@
 steps:
-  # Install root dependencies
-  - name: 'gcr.io/cloud-builders/npm'
+  # Install root dependencies using Node 20
+  - name: 'node:20'
+    entrypoint: npm
     args: ['ci']
     id: Install dependencies
     timeout: 600s
 
-  # Install frontend packages
-  - name: 'gcr.io/cloud-builders/npm'
+  # Install frontend packages and Vite
+  - name: 'node:20'
+    entrypoint: npm
     args: ['install', '--prefix', 'frontend']
     id: Install frontend packages
     timeout: 600s
 
-  # Build the frontend (runs `vite build` via root script)
-  - name: 'gcr.io/cloud-builders/npm'
+  # Build the frontend with Vite via root script
+  - name: 'node:20'
+    entrypoint: npm
     args: ['run', 'build']
     id: Build frontend
     timeout: 600s
 
-  - name: 'gcr.io/cloud-builders/npm'
+  # Deploy Firebase functions
+  - name: 'node:20'
     entrypoint: bash
     args:
       - -c
@@ -27,8 +31,14 @@ steps:
     id: Deploy functions
     timeout: 1200s
 
+  # Deploy Cloud Run service from container image (no Buildpacks)
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'super-intelligence', '--source=.', '--region=europe-west1']
+    args:
+      - run
+      - deploy
+      - "$SERVICE_NAME"
+      - --image=gcr.io/$PROJECT_ID/$SERVICE_NAME
+      - --region=$REGION
     id: Deploy service
 
 availableSecrets:
