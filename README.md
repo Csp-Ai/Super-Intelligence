@@ -86,13 +86,12 @@ Inspired by principles from:
    ```bash
    npm install --prefix functions
    ```
-3. Install frontend dependencies (this also runs automatically after the root
-   install):
+3. Install frontend dependencies:
    ```bash
    npm install --prefix frontend
    ```
-   This runs automatically after the root `npm install` via the
-   `postinstall` script in `package.json`.
+   Run this separately after the root install, since the `postinstall`
+   hook no longer installs the frontend for Cloud Build memory savings.
 4. Create environment files in `frontend/` using the provided example:
    ```bash
    cp frontend/.env.example frontend/.env
