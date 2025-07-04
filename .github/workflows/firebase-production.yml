@@ -3,6 +3,7 @@ name: Firebase Hosting Production
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy-production:

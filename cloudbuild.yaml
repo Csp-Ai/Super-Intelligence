@@ -1,4 +1,5 @@
 steps:
+  # Cloud Build logs stdout/stderr from each step by default
   # Install root dependencies using Node 20
   - name: 'node:20'
     entrypoint: npm
@@ -57,7 +58,27 @@ steps:
       - --region=$REGION
     id: Deploy service
 
-availableSecrets:
-  secretManager:
-    - versionName: projects/$PROJECT_ID/secrets/firebase-ci-token/versions/latest
-      env: FIREBASE_TOKEN
+  # Verify health endpoint after deploy and create uptime checks
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+      - -c
+      - |
+          curl -f https://$SERVICE_NAME-$REGION.a.run.app/healthz
+          gcloud monitoring uptime-checks create http cloud-run-health \
+            --http-path=/healthz \
+            --display-name="cloud-run-health" \
+            --project=$PROJECT_ID \
+            --hostname="$SERVICE_NAME-$REGION.a.run.app" || true
+          gcloud monitoring uptime-checks create http functions-health \
+            --http-path=/healthz \
+            --display-name="functions-health" \
+            --project=$PROJECT_ID \
+            --hostname="$REGION-$PROJECT_ID.cloudfunctions.net" || true
+    id: Setup uptime checks
+
+  availableSecrets:
+    secretManager:
+      - versionName: projects/$PROJECT_ID/secrets/firebase-ci-token/versions/latest
+        env: FIREBASE_TOKEN
+  # FIREBASE_TOKEN must exist in Secret Manager for functions deploys
