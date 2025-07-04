@@ -60,3 +60,7 @@ Each workflow automates part of the deploy or validation process.
 - None
 
 The repository does not currently include separate `deploy-prod.yml` or `test-agents.yml` workflows; production deployment and agent tests are handled within the existing workflows above.
+
+## Cloud Build (`cloudbuild.yaml`)
+
+Google Cloud Build uses the `cloudbuild.yaml` file located at the repo root to deploy the application. The pipeline installs only production dependencies at first with `npm install --omit=dev` to reduce memory usage, then runs a full `npm install` before executing `vite build`. Because `vite` and `@vitejs/plugin-react` are regular dependencies in `frontend/package.json`, Cloud Build always has the packages needed to compile the React app.
