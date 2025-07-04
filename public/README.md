@@ -113,10 +113,11 @@ On CI, auth is handled via `FIREBASE_TOKEN`.
 ### CI Deploys
 
 1. Generate a token locally using `firebase login:ci`.
-2. Store it as `FIREBASE_TOKEN` in your repository's GitHub Actions secrets (Settings > Secrets and variables > Actions). Alternatively, you can store it as
-   `firebase-ci-token` in Cloud Build's Secret Manager.
-3. The CI workflow injects this token so `firebase deploy` runs without
-   interactive login. If the token expires, re-run the command above.
+2. Store it as `firebase-ci-token` in Cloud Build's Secret Manager.
+3. Pushes to `main` trigger Cloud Build, which installs all dependencies,
+   runs tests, builds the frontend with Vite, deploys Firebase functions using
+   the token and then updates the Cloud Run service with
+   `gcloud run deploy`.
 
 ### Build Frontend for Hosting
 
@@ -128,8 +129,8 @@ npm run build --prefix frontend
 
 The command outputs static files in `frontend/build/`. Copy them to the repository's
 `public/` directory or set `hosting.public` in `firebase.json` to `frontend/build` so
-Firebase Hosting serves the build directory. Ensure these files are available before
-running:
+Firebase Hosting serves the build directory. Cloud Build executes this command
+automatically during CI, but you can run it manually before:
 
 ```bash
 firebase deploy
