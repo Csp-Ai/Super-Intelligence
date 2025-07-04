@@ -108,13 +108,21 @@ To run Firebase Hosting locally and start the frontend app:
 ```
 If you're not logged into Firebase, it will prompt you.
 
-On CI, Cloud Build reads `FIREBASE_TOKEN` from Secret Manager.
+On CI, Cloud Build reads `_FIREBASE_TOKEN` from Secret Manager.
 If the token is missing, Cloud Build warns and skips deploying Firebase functions.
 
 ### CI Deploys
 
 1. Generate a token locally using `firebase login:ci`.
-2. Store it as `firebase-ci-token` in Cloud Build's Secret Manager.
+2. Store it as `firebase-ci-token` in Secret Manager and grant Cloud Build access:
+   ```bash
+   gcloud secrets create firebase-ci-token --replication-policy=automatic
+   printf '%s' "$FIREBASE_TOKEN" | \
+     gcloud secrets versions add firebase-ci-token --data-file=-
+   gcloud secrets add-iam-policy-binding firebase-ci-token \
+     --member="serviceAccount:$PROJECT_ID@cloudbuild.gserviceaccount.com" \
+     --role="roles/secretmanager.secretAccessor"
+   ```
 3. Pushes to `main` trigger Cloud Build, which installs all dependencies,
    runs tests, builds the frontend with Vite, and deploys Firebase functions
    when the token is available before updating the Cloud Run service with

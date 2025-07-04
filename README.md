@@ -123,7 +123,7 @@ To run Firebase Hosting locally and start the frontend app:
 ```
 If you're not logged into Firebase, it will prompt you.
 
-On CI, Cloud Build loads `FIREBASE_TOKEN` from Secret Manager.
+On CI, Cloud Build loads `_FIREBASE_TOKEN` from Secret Manager.
 If the secret is not configured, Cloud Build skips deploying Firebase functions
 and continues with the Cloud Run deploy.
 GitHub Actions uses the same secret, or reads `FIREBASE_TOKEN` from a local
@@ -133,7 +133,15 @@ GitHub Actions uses the same secret, or reads `FIREBASE_TOKEN` from a local
 ### CI Deploys
 
 1. Generate a token locally using `firebase login:ci`.
-2. Store it as `firebase-ci-token` in Cloud Build's Secret Manager.
+2. Store it as `firebase-ci-token` in Secret Manager and grant Cloud Build access:
+   ```bash
+   gcloud secrets create firebase-ci-token --replication-policy=automatic
+   printf '%s' "$FIREBASE_TOKEN" | \
+     gcloud secrets versions add firebase-ci-token --data-file=-
+   gcloud secrets add-iam-policy-binding firebase-ci-token \
+     --member="serviceAccount:$PROJECT_ID@cloudbuild.gserviceaccount.com" \
+     --role="roles/secretmanager.secretAccessor"
+   ```
 3. Pushes to `main` trigger Cloud Build, which installs all dependencies,
    runs tests, builds the frontend with Vite, and deploys Firebase functions
    when the secret token is present before updating the Cloud Run service with
@@ -259,7 +267,7 @@ Both commands should exit without errors.
 
 When deployments fail, first confirm `PROJECT_ID` and other required
 variables are defined in your Cloud Build trigger or GitHub workflow.
-`FIREBASE_TOKEN` is optional — if it's missing, the build skips the functions deploy step. Ensure the service account used has permission to deploy Firebase functions and Cloud Run.
+`_FIREBASE_TOKEN` is optional — if it's missing, the build skips the functions deploy step. Ensure the service account used has permission to deploy Firebase functions and Cloud Run.
 
 Firebase functions and Cloud Run.
 
