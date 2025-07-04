@@ -108,9 +108,9 @@ To run Firebase Hosting locally and start the frontend app:
 ```
 If you're not logged into Firebase, it will prompt you.
 
-On CI, auth is handled via `FIREBASE_TOKEN`.
-If the variable is unset, Cloud Build warns and skips deploying Firebase
-functions.
+On CI, auth is handled via the `_FIREBASE_TOKEN` secret.
+If neither `_FIREBASE_TOKEN` nor `FIREBASE_TOKEN` are set, Cloud Build warns and
+skips deploying Firebase functions.
 
 ### CI Deploys
 
