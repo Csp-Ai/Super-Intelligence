@@ -123,11 +123,11 @@ To run Firebase Hosting locally and start the frontend app:
 ```
 If you're not logged into Firebase, it will prompt you.
 
-On CI, auth is handled via the `_FIREBASE_TOKEN` substitution.
-If neither `_FIREBASE_TOKEN` nor `FIREBASE_TOKEN` are provided, Cloud Build
-skips deploying Firebase functions and continues with the Cloud Run deploy.
-GitHub Actions will also look for `FIREBASE_TOKEN` in a local `.env` file when
-the secret isn't configured and will print a warning if it remains unset.
+On CI, Cloud Build loads `FIREBASE_TOKEN` from Secret Manager.
+If the secret is not configured, Cloud Build skips deploying Firebase functions
+and continues with the Cloud Run deploy.
+GitHub Actions uses the same secret, or reads `FIREBASE_TOKEN` from a local
+`.env` file when the secret isn't set and prints a warning otherwise.
 
 
 ### CI Deploys
@@ -259,7 +259,7 @@ Both commands should exit without errors.
 
 When deployments fail, first confirm `PROJECT_ID` and other required
 variables are defined in your Cloud Build trigger or GitHub workflow.
-`_FIREBASE_TOKEN` (or `FIREBASE_TOKEN`) is optional — if it's missing, the build skips the functions deploy step. Ensure the service account used has permission to deploy Firebase functions and Cloud Run.
+`FIREBASE_TOKEN` is optional — if it's missing, the build skips the functions deploy step. Ensure the service account used has permission to deploy Firebase functions and Cloud Run.
 
 Firebase functions and Cloud Run.
 

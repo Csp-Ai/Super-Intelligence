@@ -26,6 +26,7 @@ steps:
     args:
       - -c
       - |
+          set -euo pipefail
           npx --yes vite --version >/dev/null 2>&1 || { echo "❌ vite not found"; exit 1; }
           npx --yes firebase --version >/dev/null 2>&1 || { echo "❌ firebase-tools not found"; exit 1; }
     id: Validate tooling
@@ -36,6 +37,7 @@ steps:
     args:
       - -c
       - |
+          set -euo pipefail
           missing=0
           for var in PROJECT_ID _SERVICE_NAME _REGION; do
             if [ -z "${!var}" ]; then
@@ -45,15 +47,12 @@ steps:
               echo "✅ $var resolved"
             fi
           done
-          if [ -n "${_FIREBASE_TOKEN:-}" ]; then
-            export FIREBASE_TOKEN="${_FIREBASE_TOKEN}"
-          fi
-          if [ -z "$FIREBASE_TOKEN" ]; then
-            echo "⚠️ _FIREBASE_TOKEN not provided; functions deploy will be skipped"
+          if [ -z "${FIREBASE_TOKEN:-}" ]; then
+            echo "⚠️ FIREBASE_TOKEN not provided; functions deploy will be skipped"
           else
-            echo "✅ _FIREBASE_TOKEN resolved"
+            echo "✅ FIREBASE_TOKEN resolved"
           fi
-          if [ "${SKIP_DEPLOY}" = "true" ]; then
+          if [ "${SKIP_DEPLOY:-}" = "true" ]; then
             echo "⚠️ SKIP_DEPLOY enabled - deploy steps will be skipped"
           fi
           [ $missing -eq 0 ] || exit 1
@@ -72,14 +71,12 @@ steps:
     args:
       - -c
       - |
-          if [ "${SKIP_DEPLOY}" = "true" ]; then
+          set -euo pipefail
+          if [ "${SKIP_DEPLOY:-}" = "true" ]; then
             echo "⚠️ SKIP_DEPLOY=true - skipping functions deploy"
             exit 0
           fi
-          if [ -n "${_FIREBASE_TOKEN:-}" ]; then
-            export FIREBASE_TOKEN="${_FIREBASE_TOKEN}"
-          fi
-          if [ -z "$FIREBASE_TOKEN" ]; then
+          if [ -z "${FIREBASE_TOKEN:-}" ]; then
             echo "⚠️ No firebase token - skipping functions deploy"
           else
             npm install -g firebase-tools
@@ -99,7 +96,8 @@ steps:
     args:
       - -c
       - |
-          if [ "${SKIP_DEPLOY}" = "true" ]; then
+          set -euo pipefail
+          if [ "${SKIP_DEPLOY:-}" = "true" ]; then
             echo "⚠️ SKIP_DEPLOY=true - skipping Cloud Run deploy"
             exit 0
           fi
@@ -117,7 +115,8 @@ steps:
     args:
       - -c
       - |
-          if [ "${SKIP_DEPLOY}" = "true" ]; then
+          set -euo pipefail
+          if [ "${SKIP_DEPLOY:-}" = "true" ]; then
             echo "⚠️ SKIP_DEPLOY=true - skipping uptime checks"
             exit 0
           fi
@@ -137,7 +136,7 @@ steps:
 availableSecrets:
   secretManager:
     - versionName: projects/$PROJECT_ID/secrets/firebase-ci-token/versions/latest
-      env: _FIREBASE_TOKEN
+      env: FIREBASE_TOKEN
 options:
   logging: CLOUD_LOGGING_ONLY
 
