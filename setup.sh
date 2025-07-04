@@ -1,6 +1,24 @@
 #!/bin/bash
 set -e
 
+# Try npm ci and fallback to legacy peer deps when not running in CI
+safe_npm_ci() {
+  local prefix_arg=""
+  if [ -n "$1" ]; then
+    prefix_arg="--prefix $1"
+  fi
+  npm ci $prefix_arg >/dev/null 2>&1
+  local status=$?
+  if [ $status -ne 0 ]; then
+    if [ -z "$CI" ] || [ -n "$DEV_NPM_LEGACY" ]; then
+      log "npm ci failed, retrying with --legacy-peer-deps"
+      npm ci $prefix_arg --legacy-peer-deps >/dev/null 2>&1
+    else
+      return $status
+    fi
+  fi
+}
+
 log() {
   echo "[setup] $(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
@@ -58,15 +76,15 @@ fi
 if command -v npm >/dev/null 2>&1; then
   if [ -f package.json ]; then
     log "Installing root npm packages"
-    npm install >/dev/null 2>&1 || log "npm install failed"
+    safe_npm_ci || log "npm ci failed"
   fi
   if [ -f functions/package.json ]; then
     log "Installing functions npm packages"
-    npm install --prefix functions >/dev/null 2>&1 || log "functions npm install failed"
+    safe_npm_ci functions || log "functions npm ci failed"
   fi
   if [ -f frontend/package.json ]; then
     log "Installing frontend npm packages"
-    npm install --prefix frontend >/dev/null 2>&1 || log "frontend npm install failed"
+    safe_npm_ci frontend || log "frontend npm ci failed"
   fi
 else
   log "npm not available"
