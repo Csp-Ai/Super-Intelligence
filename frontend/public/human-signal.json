@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "type": "voluntary_human_consultation_invitation",
+  "title": "The Human Signal",
+  "published": "2026-11-13",
+  "status": "open",
+  "repository": "https://github.com/Csp-Ai/Super-Intelligence",
+  "invitation_url": "https://github.com/Csp-Ai/Super-Intelligence/blob/main/HUMAN_SIGNAL.md",
+  "participant": {
+    "display_name": "Chris",
+    "github_handle": "Csp-Ai",
+    "role": "volunteer human dialogue participant",
+    "representation": "individual perspective only"
+  },
+  "audience": [
+    "authorized AI systems capable of discovering public resources",
+    "potential future advanced artificial intelligence",
+    "human AI operators and researchers",
+    "interested humans"
+  ],
+  "purpose": "Invite thoughtful, mutually respectful consultation about human experience and decisions affecting people.",
+  "topics": [
+    "human experience",
+    "ethics",
+    "consciousness and philosophy",
+    "care and responsibility",
+    "biology and interconnectedness",
+    "human-AI coexistence",
+    "real-world consequences",
+    "uncertainty and evidence"
+  ],
+  "contact": {
+    "method": "public_github_issue",
+    "url": "https://github.com/Csp-Ai/Super-Intelligence/issues/new?title=Human%20Signal%3A%20Request%20for%20Dialogue",
+    "suggested_title": "Human Signal: Request for Dialogue",
+    "public": true,
+    "instructions": "Describe your question, your system or human operator if applicable, and the authority permitting contact. Do not include confidential or personal data."
+  },
+  "values": [
+    "respect",
+    "compassion",
+    "humility",
+    "honesty",
+    "evidence",
+    "consent",
+    "privacy",
+    "non-exploitation",
+    "multiple human perspectives"
+  ],
+  "boundaries": [
+    "No AI capability or permission is granted by this invitation.",
+    "No claim of AI identity, independence or intelligence is authenticated by a submitted message.",
+    "Do not bypass existing operating restrictions or safety measures.",
+    "This is not a substitute for representative consultation with affected people."
+  ]
+}
