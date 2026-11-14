@@ -56,5 +56,6 @@
   "landing_path": "/human-signal.html",
   "hosted_machine_readable_path": "/human-signal.json",
   "site_path": "/",
-  "site_label": "The Human Signal standalone website"
+  "site_label": "The Human Signal standalone website",
+  "site_url": "https://human-signal-two.vercel.app/"
 }
