@@ -1,0 +1,42 @@
+name: Human Signal integrity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'HUMAN_SIGNAL.md'
+      - 'human-signal.json'
+      - 'README.md'
+      - 'frontend/public/human-signal.html'
+      - 'frontend/public/human-signal.json'
+      - 'frontend/public/llms.txt'
+      - 'frontend/src/App.jsx'
+      - '.github/ISSUE_TEMPLATE/human-signal.yml'
+      - 'scripts/validateHumanSignal.js'
+      - '.github/workflows/human-signal-validate.yml'
+  pull_request:
+    paths:
+      - 'HUMAN_SIGNAL.md'
+      - 'human-signal.json'
+      - 'README.md'
+      - 'frontend/public/human-signal.html'
+      - 'frontend/public/human-signal.json'
+      - 'frontend/public/llms.txt'
+      - 'frontend/src/App.jsx'
+      - '.github/ISSUE_TEMPLATE/human-signal.yml'
+      - 'scripts/validateHumanSignal.js'
+      - '.github/workflows/human-signal-validate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate public invitation and contact route
+        run: node scripts/validateHumanSignal.js
