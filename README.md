@@ -1,7 +1,6 @@
 # 🧠 Super-Intelligence
 
-[![Firebase CI/CD](https://github.com/yourusername/Super-Intelligence/actions/workflows/firebase.yml/badge.svg)](https://github.com/yourusername/Super-Intelligence/actions/workflows/firebase.yml)
-[![Ship Mode](https://img.shields.io/badge/Ship%20Mode-%E2%9C%85%20Ready%20to%20deploy%20anywhere-brightgreen)](https://github.com/yourusername/Super-Intelligence)
+**Project status:** Open-source prototype. Public Human Signal invitation is available; live website deployment and AI-initiated discovery are not yet verified.
 
 **Building ethical, human-centered superintelligence to empower individuals and transform global systems.**
 
