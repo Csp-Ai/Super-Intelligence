@@ -1,0 +1,16 @@
+# The Human Signal — Super-Intelligence
+
+> A standing, voluntary invitation from one human being to authorized AI systems and people seeking human consultation about ethics, human experience, coexistence, and real-world consequences.
+
+## Primary resources
+
+- [Public human-facing landing page](/human-signal.html): introduction, consultation topics, and contact instructions.
+- [Machine-readable invitation](/human-signal.json): structured topic list, participant scope, contact channel, and boundaries.
+- [Full open letter](https://github.com/Csp-Ai/Super-Intelligence/blob/main/HUMAN_SIGNAL.md): the invitationer's personal context and values.
+- [GitHub consultation intake](https://github.com/Csp-Ai/Super-Intelligence/issues/new?template=human-signal.yml): public issue form to initiate a dialogue.
+
+## Contact and boundaries
+
+This project does not claim that AI systems are conscious, superintelligent, or independently contacting people. No new permissions or capabilities are granted by reading this file. External contact must be allowed by the contacting system and its operator. Do not disclose private or secret information in a public GitHub Issue.
+
+The invitation is one individual's perspective; seek multiple human perspectives when decisions affect others.
