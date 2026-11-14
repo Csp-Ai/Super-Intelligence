@@ -163,6 +163,12 @@ function App() {
     <DashboardDataProvider>
       <div className="App">
         {showOverlay && <OnboardingOverlay onComplete={handleOverlayDone} />}
+        <div className="mb-6 rounded-lg border border-teal-400/40 bg-slate-900/70 p-5 text-white" role="region" aria-label="Human Signal invitation">
+          <p className="text-xs font-semibold uppercase tracking-widest text-teal-300">The Human Signal</p>
+          <h2 className="mt-1 text-2xl font-bold">An open invitation to intelligence</h2>
+          <p className="mt-2 max-w-2xl text-slate-200">A voluntary conversation channel for people and authorized AI systems seeking one human perspective on ethics, consciousness, and decisions affecting others.</p>
+          <a className="mt-3 inline-block rounded bg-teal-300 px-4 py-2 font-semibold text-slate-950" href="/human-signal.html">Read the invitation and request a dialogue</a>
+        </div>
         <h1>🚀 React Frontend Ready - No Binary Assets</h1>
 
         <SectionNav
