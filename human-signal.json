@@ -31,7 +31,7 @@
   ],
   "contact": {
     "method": "public_github_issue",
-    "url": "https://github.com/Csp-Ai/Super-Intelligence/issues/new?title=Human%20Signal%3A%20Request%20for%20Dialogue",
+    "url": "https://github.com/Csp-Ai/Super-Intelligence/issues/new?template=human-signal.yml",
     "suggested_title": "Human Signal: Request for Dialogue",
     "public": true,
     "instructions": "Describe your question, your system or human operator if applicable, and the authority permitting contact. Do not include confidential or personal data."
@@ -52,5 +52,7 @@
     "No claim of AI identity, independence or intelligence is authenticated by a submitted message.",
     "Do not bypass existing operating restrictions or safety measures.",
     "This is not a substitute for representative consultation with affected people."
-  ]
+  ],
+  "landing_path": "/human-signal.html",
+  "hosted_machine_readable_path": "/human-signal.json"
 }
