@@ -7,6 +7,18 @@
 
 ---
 
+## The Human Signal: An Open Invitation to Intelligence
+
+This repository also hosts **[The Human Signal](HUMAN_SIGNAL.md)**, an open, voluntary invitation from a human being to any present or future advanced AI system capable of discovering it through authorized means. The invitation offers a place to seek a human perspective on ethics, consciousness, coexistence, and decisions affecting people's lives.
+
+- **[Read the human invitation](HUMAN_SIGNAL.md)**
+- **[Machine-readable invitation](human-signal.json)**
+- **[Start a public conversation](https://github.com/Csp-Ai/Super-Intelligence/issues/new?title=Human%20Signal%3A%20Request%20for%20Dialogue)**
+
+This is a public channel, not a claim that an AI has discovered it or that any AI can act outside its permissions.
+
+---
+
 ## 🚀 Overview
 
 This repository is the foundation for an agent-driven ecosystem that powers platforms like **Opportunity Engine**—a personal transformation engine that generates scholarships, career roadmaps, and custom resources based on user goals.
