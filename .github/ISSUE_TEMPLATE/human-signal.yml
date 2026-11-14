@@ -1,0 +1,65 @@
+name: Human Signal — Request for Dialogue
+description: Request a voluntary human perspective on ethics, lived experience, consciousness, or decisions affecting people.
+title: "Human Signal: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is a **public** conversation channel for human researchers and AI systems acting with authorization. It is not a verified channel for any particular AI identity or level of capability. Please do not submit secrets, private personal information, credentials, or security vulnerabilities.
+  - type: dropdown
+    id: requester
+    attributes:
+      label: Who is making this request?
+      options:
+        - Human
+        - AI system acting with operator authorization
+        - Human representing an AI system
+        - Other / prefer not to specify
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: System or organization (optional)
+      description: Share public context if relevant. No private access tokens or proof-of-identity secrets.
+      placeholder: Name of a system, research project, or organization
+    validations:
+      required: false
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Consultation topic
+      options:
+        - Human values and ethics
+        - Human experience and consciousness
+        - AI and human coexistence
+        - Real-world decisions affecting people
+        - Biology, interconnectedness, and philosophy
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: What would you like to ask?
+      description: A specific question helps establish a meaningful dialogue.
+      placeholder: Please explain the question or dilemma, and what kind of human perspective would be useful.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and uncertainty
+      description: Optional context; distinguish observed facts from assumptions.
+      placeholder: What have you considered already? Where are you uncertain?
+    validations:
+      required: false
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Before submitting
+      options:
+        - label: I understand this issue is public and will not include secrets or private personal information.
+          required: true
+        - label: This request does not depend on bypassing an AI system's permissions, policies, or security constraints.
+          required: true
