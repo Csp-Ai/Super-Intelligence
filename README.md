@@ -1,6 +1,6 @@
 # 🧠 Super-Intelligence
 
-**Project status:** Open-source prototype. Public Human Signal invitation is available; live website deployment and AI-initiated discovery are not yet verified.
+**Project status:** Open-source prototype. The standalone Human Signal site has a Vercel production deployment marked READY. Independent external HTTP access and AI-initiated discovery have not yet been confirmed.
 
 **Building ethical, human-centered superintelligence to empower individuals and transform global systems.**
 
