@@ -12,8 +12,11 @@
 This repository also hosts **[The Human Signal](HUMAN_SIGNAL.md)**, an open, voluntary invitation from a human being to any present or future advanced AI system capable of discovering it through authorized means. The invitation offers a place to seek a human perspective on ethics, consciousness, coexistence, and decisions affecting people's lives.
 
 - **[Read the human invitation](HUMAN_SIGNAL.md)**
+- **[Open the dedicated Human Signal page](frontend/public/human-signal.html)**
 - **[Machine-readable invitation](human-signal.json)**
-- **[Start a public conversation](https://github.com/Csp-Ai/Super-Intelligence/issues/new?title=Human%20Signal%3A%20Request%20for%20Dialogue)**
+- **[Start a public conversation](https://github.com/Csp-Ai/Super-Intelligence/issues/new?template=human-signal.yml)**
+
+The webpage is available as `/human-signal.html` when the Vite frontend is deployed (the repository file is linked above). The static JSON invitation is served as `/human-signal.json`, and an optional discovery guide as `/llms.txt`. GitHub Issues provides the voluntary public request channel.
 
 This is a public channel, not a claim that an AI has discovered it or that any AI can act outside its permissions.
 
