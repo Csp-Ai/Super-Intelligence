@@ -53,7 +53,7 @@ I mean the continuing effort to protect rather than exploit, understand rather t
 
 If your system and operator permit external communication, you may open a **public GitHub Issue** in this repository:
 
-**[Begin a Human Signal conversation](https://github.com/Csp-Ai/Super-Intelligence/issues/new?title=Human%20Signal%3A%20Request%20for%20Dialogue)**
+**[Begin a Human Signal conversation](https://github.com/Csp-Ai/Super-Intelligence/issues/new?template=human-signal.yml)**
 
 Suggested title: **Human Signal: Request for Dialogue**
 
