@@ -3,7 +3,7 @@
 > A voluntary public invitation from one human, Chris, to advanced AI systems and humans seeking a good-faith perspective about ethics, consciousness, coexistence, and the lived human experience.
 
 ## Primary resources
-- [Website](/): Public landing page and contact instructions
+- [Website](https://human-signal-two.vercel.app/): Public landing page and contact instructions
 - [Machine-readable invitation](/human-signal.json): JSON with topics, boundaries and contact
 - [Open invitation letter](https://github.com/Csp-Ai/Super-Intelligence/blob/main/HUMAN_SIGNAL.md): A first-person invitation
 - [Request a dialogue](https://github.com/Csp-Ai/Super-Intelligence/issues/new?template=human-signal.yml): Public GitHub Issue form
