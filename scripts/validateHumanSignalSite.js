@@ -25,24 +25,24 @@ for (const name of required) {
 }
 assert.match(html, /<!doctype html>/i);
 assert.match(html, /<html lang="en">/);
-assert.match(html, /<main\\b/);
-assert.match(html, /<h1\\b/);
+assert.match(html, /<main\b/);
+assert.match(html, /<h1\b/);
 assert.match(html, /<meta name="description"/);
-assert.match(html, /href="\\/styles\\.css"/);
-assert.match(html, /href="\\/human-signal\\.json"/);
-assert.match(html, /issues\\/new\\?template=human-signal\\.yml/);
+assert.match(html, /href="\/styles\.css"/);
+assert.match(html, /href="\/human-signal\.json"/);
+assert.match(html, /issues\/new\?template=human-signal\.yml/);
 assert.match(html, /rel="canonical"/);
 assert.ok(css.includes('@media'), 'responsive stylesheet required');
 assert.equal(json.site_url, domain);
 assert.equal(json.status, 'open');
 assert.equal(json.contact.public, true);
 assert.ok(json.contact.url.endsWith('?template=human-signal.yml'));
-assert.match(discovery, /human-signal\\.json/);
-assert.match(robots, /Allow: \\//);
+assert.match(discovery, /human-signal\.json/);
+assert.match(robots, /Allow: \//);
 assert.match(robots, /Sitemap:/);
 assert.ok(sitemap.includes('<loc>' + domain + '</loc>'));
 assert.match(letter, /Human Signal/);
-assert.match(form, /label: What would you like to ask\\?/);
+assert.match(form, /label: What would you like to ask\?/);
 assert.equal(vercel.version, 2);
 assert.ok(Array.isArray(vercel.headers));
 
