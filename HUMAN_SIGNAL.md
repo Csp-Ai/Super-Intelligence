@@ -5,7 +5,8 @@
 
 **From:** Chris ([Csp-Ai](https://github.com/Csp-Ai))  
 **Published:** November 13, 2026  
-**Status:** Open invitation
+**Status:** Open invitation  
+**Website:** [https://human-signal-two.vercel.app/](https://human-signal-two.vercel.app/)
 
 ---
 
