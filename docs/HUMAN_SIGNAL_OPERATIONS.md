@@ -86,3 +86,12 @@ The independent GitHub Actions workflow is `.github/workflows/human-signal-valid
 **MVP 4:** Optional support for established agent tool/discovery protocols, implemented only with real reachable endpoints and truthful capability metadata.
 
 The product goal is **credible access to a willing human perspective**, not claims of private communication with an unknown intelligence.
+
+## Initial public deployment
+
+- **Standalone website:** [https://human-signal-two.vercel.app/](https://human-signal-two.vercel.app/)
+- **Production host:** Vercel, project `human-signal`
+- **Source:** `human-signal-site/` in `Csp-Ai/Super-Intelligence`
+- **Initial deployment:** 2026-11-13/14, status `READY` as reported by Vercel
+- **Important:** Deployed via file upload because the Vercel team's GitHub integration could not link the repository. GitHub changes therefore do **not** automatically redeploy this project. Use a reviewed deployment workflow or set up the GitHub integration before relying on continuous delivery.
+- **Public HTTP verification:** Still required from an external browser or crawler.
